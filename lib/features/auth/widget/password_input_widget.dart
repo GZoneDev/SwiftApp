@@ -5,6 +5,8 @@ class PasswordInputWidget extends StatefulWidget {
   final double width, height;
   final EdgeInsets margin, padding;
   final String placeholder;
+  final VoidCallback? onTap;
+  final TextEditingController? controller;
 
   const PasswordInputWidget({
     super.key,
@@ -13,6 +15,8 @@ class PasswordInputWidget extends StatefulWidget {
     this.height = 42,
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.only(bottom: 3, left: 16, right: 44),
+    this.onTap,
+    this.controller,
   });
 
   @override
@@ -36,7 +40,9 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
         children: [
           Container(
             padding: widget.padding,
-            child: TextField(
+            child: TextFormField(
+              controller: widget.controller,
+              onTap: widget.onTap,
               obscureText: _isObscured,
               decoration: InputDecoration(
                 hintText: widget.placeholder,
@@ -56,7 +62,7 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
             child: IconButton(
               onPressed: () => setState(() => _isObscured = !_isObscured),
               icon: Icon(
-                _isObscured ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+                _isObscured ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
                 size: 17,
                 color: Colors.black,
               ),

@@ -1,13 +1,18 @@
-class User {
-  String? username;
-  String? email;
-  String? password;
-  String? telephone;
+class LoginUser {
+  String email;
+  String password;
 
-  User({
-    this.username,
-    this.email,
-    this.telephone,
-    this.password,
+  LoginUser({required this.email, required this.password});
+}
+
+class RegisterUser extends LoginUser {
+  String username;
+  String phone;
+
+  RegisterUser({
+    required super.email,
+    required super.password,
+    required this.username,
+    required this.phone,
   });
 }

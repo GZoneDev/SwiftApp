@@ -3,8 +3,15 @@ part of 'auth_block.dart';
 abstract class AuthEvent {}
 
 class AuthLogin extends AuthEvent {
-  final String email;
-  final String password;
+  final LoginUser user;
 
-  AuthLogin({required this.email, required this.password});
+  AuthLogin({required this.user});
 }
+
+class AuthRegister extends AuthEvent {
+  final RegisterUser user;
+
+  AuthRegister({required this.user});
+}
+
+class AuthFailClear extends AuthEvent {}

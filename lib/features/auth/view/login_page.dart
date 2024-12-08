@@ -5,64 +5,95 @@ import 'package:receptico/core/asset/asset_path.dart';
 import 'package:receptico/core/router/router.dart';
 
 import '../block/block.dart';
-import '../widgets/widget.dart';
+import '../model/user.dart';
+import '../widget/widget.dart';
 
 @RoutePage()
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late bool _isError;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _isError = false;
+  }
+
+  void _clearFailMessage() {
+    if (_isError) {
+      _isError = false;
+      context.read<AuthBloc>().add(AuthFailClear());
+    }
+  }
+
+  void _submit() {
+    context.read<AuthBloc>().add(
+          AuthLogin(
+            user: LoginUser(
+              email: _emailController.text,
+              password: _passwordController.text,
+            ),
+          ),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand,
         children: [
-          const Positioned(
-            top: -95,
-            left: -73,
-            child: CircleWidget(width: 254, height: 254),
-          ),
-          const Positioned(
-            bottom: -34,
-            left: -47,
-            child: CircleWidget(width: 123, height: 123),
-          ),
-          const Positioned(
-            bottom: -72,
-            right: -41,
-            child: CircleWidget(width: 196, height: 196),
-          ),
+          LoginScreenBackgroundWidget(),
           Container(
             alignment: Alignment.center,
             child: SizedBox(
               width: 278,
-              height: 438,
+              height: 448,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const Text(
-                      'Вхід',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
+                    const TitleWidget(
+                      title: 'Вхід',
+                      subtitle: 'Увійдіть до облікового запису',
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Увійдіть до облікового запису',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    const TextInputWidget(placeholder: 'Email'),
                     const SizedBox(height: 16),
-                    PasswordInputWidget(placeholder: 'Пароль'),
+                    BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+                      if (state is AuthLoginFailure &&
+                          state.emailError != null) {
+                        _isError = true;
+                        return ErrorMessageWidget(
+                            errorMessage: state.emailError!);
+                      }
+                      return SizedBox(height: 16);
+                    }),
+                    TextInputWidget(
+                      controller: _emailController,
+                      placeholder: 'Email',
+                      onTap: _clearFailMessage,
+                    ),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        if (state is AuthLoginFailure &&
+                            state.passwordError != null) {
+                          _isError = true;
+                          return ErrorMessageWidget(
+                              errorMessage: state.passwordError!);
+                        }
+                        return SizedBox(height: 16);
+                      },
+                    ),
+                    PasswordInputWidget(
+                      controller: _passwordController,
+                      placeholder: 'Пароль',
+                      onTap: _clearFailMessage,
+                    ),
                     const SizedBox(height: 8),
                     Container(
                       margin: const EdgeInsets.only(bottom: 20),
@@ -76,53 +107,20 @@ class LoginPage extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 17,
-                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
                     ),
-                    BlocListener<AuthBloc, AuthState>(
-                      listener: (context, state) {
-                        if (state is AuthSuccess) {
-                          AutoRouter.of(context).push(StartRoute());
-                        }
-                      },
-                      child: Container(),
-                    ),
                     LinkButtonWidget(
                       text: 'Увійти',
-                      onPressed: () {
-                        context.read<AuthBloc>().add(
-                            AuthLogin(email: 'email', password: 'password'));
-                      },
+                      onPressed: _submit,
                     ),
                     const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Не маєте акаунту?',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        InkWell(
-                          onTap: () {
-                            AutoRouter.of(context).push(RegistrationRoute());
-                          },
-                          child: const Text(
-                            'Створити зараз',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ],
+                    FooterWidget(
+                      text: 'Не маєте акаунту?',
+                      linkText: 'Створити зараз',
+                      onTab: () =>
+                          AutoRouter.of(context).push(RegistrationRoute()),
                     ),
                     const SizedBox(height: 40),
                     Row(
@@ -150,6 +148,36 @@ class LoginPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class LoginScreenBackgroundWidget extends StatelessWidget {
+  const LoginScreenBackgroundWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        const Positioned(
+          top: -95,
+          left: -73,
+          child: CircleWidget(width: 254, height: 254),
+        ),
+        const Positioned(
+          bottom: -34,
+          left: -47,
+          child: CircleWidget(width: 123, height: 123),
+        ),
+        const Positioned(
+          bottom: -72,
+          right: -41,
+          child: CircleWidget(width: 196, height: 196),
+        ),
+      ],
     );
   }
 }
