@@ -6,10 +6,27 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
-class AuthSuccess extends AuthState {}
+class AuthLoaded extends AuthState {}
 
-class AuthFailure extends AuthState {
-  final String error;
+class AuthLoginSuccess extends AuthState {}
 
-  AuthFailure({required this.error});
+class AuthRegisterSuccess extends AuthState {}
+
+class AuthNotFail extends AuthState {}
+
+class AuthLoginFailure extends AuthState {
+  String? emailError, passwordError;
+
+  AuthLoginFailure({this.emailError, this.passwordError});
+}
+
+class AuthRegisterFailure extends AuthState {
+  String? emailError, passwordError, phoneError, usernameError;
+
+  AuthRegisterFailure({
+    this.emailError,
+    this.passwordError,
+    this.phoneError,
+    this.usernameError,
+  });
 }

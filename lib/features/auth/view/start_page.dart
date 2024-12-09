@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:receptico/core/asset/asset_path.dart';
 import 'package:receptico/core/router/router.dart';
 
-import '../widgets/widget.dart';
+import '../widget/widget.dart';
 
 @RoutePage()
 class StartPage extends StatelessWidget {

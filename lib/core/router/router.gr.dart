@@ -29,7 +29,7 @@ class AuthorizationRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RegistrationPage]
+/// [RegisterPage]
 class RegistrationRoute extends PageRouteInfo<void> {
   const RegistrationRoute({List<PageRouteInfo>? children})
       : super(
@@ -42,7 +42,7 @@ class RegistrationRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const RegistrationPage();
+      return const RegisterPage();
     },
   );
 }
