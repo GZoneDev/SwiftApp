@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var router = AutoRouter.of(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
             alignment: Alignment.center,
             child: SizedBox(
               width: 278,
-              height: 448,
+              height: 458,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -68,49 +69,43 @@ class _LoginPageState extends State<LoginPage> {
                       if (state is AuthLoginFailure &&
                           state.emailError != null) {
                         _isError = true;
-                        return ErrorMessageWidget(
-                            errorMessage: state.emailError!);
+                        return TextInputWidget(
+                          controller: _emailController,
+                          placeholder: 'Email',
+                          onTap: _clearFailMessage,
+                          errorMessage: state.emailError,
+                          margin: const EdgeInsets.only(bottom: 7),
+                        );
                       }
-                      return SizedBox(height: 16);
+                      return TextInputWidget(
+                        controller: _emailController,
+                        placeholder: 'Email',
+                        onTap: _clearFailMessage,
+                        margin: const EdgeInsets.only(bottom: 10),
+                      );
                     }),
-                    TextInputWidget(
-                      controller: _emailController,
-                      placeholder: 'Email',
-                      onTap: _clearFailMessage,
-                    ),
                     BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         if (state is AuthLoginFailure &&
                             state.passwordError != null) {
                           _isError = true;
-                          return ErrorMessageWidget(
-                              errorMessage: state.passwordError!);
+                          return PasswordInputWidget(
+                            controller: _passwordController,
+                            placeholderText: 'Пароль',
+                            onTap: _clearFailMessage,
+                            errorMessage: state.passwordError,
+                            helpWidget: LinkWidget(text: 'Забули пароль?'),
+                          );
                         }
-                        return SizedBox(height: 16);
+                        return PasswordInputWidget(
+                          controller: _passwordController,
+                          placeholderText: 'Пароль',
+                          onTap: _clearFailMessage,
+                          helpWidget: LinkWidget(text: 'Забули пароль?'),
+                        );
                       },
                     ),
-                    PasswordInputWidget(
-                      controller: _passwordController,
-                      placeholder: 'Пароль',
-                      onTap: _clearFailMessage,
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          debugPrint('Not created!');
-                        },
-                        child: const Text(
-                          'Забули пароль?',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 17,
-                          ),
-                        ),
-                      ),
-                    ),
+                    SizedBox(height: 22),
                     LinkButtonWidget(
                       text: 'Увійти',
                       onPressed: _submit,
@@ -119,8 +114,10 @@ class _LoginPageState extends State<LoginPage> {
                     FooterWidget(
                       text: 'Не маєте акаунту?',
                       linkText: 'Створити зараз',
-                      onTab: () =>
-                          AutoRouter.of(context).push(RegistrationRoute()),
+                      onTab: () {
+                        router.goTo(RegisterRoute());
+                        _clearFailMessage();
+                      },
                     ),
                     const SizedBox(height: 40),
                     Row(

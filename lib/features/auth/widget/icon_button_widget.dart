@@ -8,6 +8,7 @@ class IconButtonWidget extends StatelessWidget {
   final EdgeInsets padding;
   final double assetWidth, assetHeight;
   final String assetPath;
+  final Color color;
 
   const IconButtonWidget({
     super.key,
@@ -18,6 +19,7 @@ class IconButtonWidget extends StatelessWidget {
     this.assetWidth = 24,
     this.assetHeight = 24,
     this.borderRadius = 12,
+    this.color = Colors.white,
   });
 
   @override
@@ -26,7 +28,7 @@ class IconButtonWidget extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         padding: padding,
-        backgroundColor: Colors.white,
+        backgroundColor: color,
         fixedSize: size,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),

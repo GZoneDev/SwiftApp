@@ -1,4 +1,4 @@
-package com.GZone.receptico
+package com.gzone.receptico
 
 import io.flutter.embedding.android.FlutterActivity
 

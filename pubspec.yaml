@@ -24,6 +24,7 @@ dependencies:
   talker_dio_logger: ^4.5.2
   talker_bloc_logger: ^4.5.2
   auto_route: ^9.2.2
+  firebase_core: ^3.8.1
 
 dev_dependencies:
   flutter_test:
@@ -36,14 +37,16 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/icons/logo.svg
-    - assets/icons/google_logo.svg
-    - assets/icons/apple_logo.svg
+    - asset/icon/logo.svg
+    - asset/icon/google_logo.svg
+    - asset/icon/apple_logo.svg
   uses-material-design: true
   fonts:
     - family: SFProText
       fonts:
-        - asset: assets/fonts/SFProText-Regular.ttf
-        - asset: assets/fonts/SFProText-Bold.ttf
+        - asset: asset/font/SFProText-Regular.ttf
+          weight: 400
+        - asset: asset/font/SFProText-Bold.ttf
+          weight: 700
 flutter_intl:
   enabled: true

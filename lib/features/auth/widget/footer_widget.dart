@@ -13,16 +13,17 @@ class FooterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const spaceWidth = 8.0;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(text),
-        const SizedBox(width: 8),
+        const SizedBox(width: spaceWidth),
         InkWell(
           onTap: onTab,
           child: Text(
             linkText,
-            style: const TextStyle(fontWeight: FontWeight.w700),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ],

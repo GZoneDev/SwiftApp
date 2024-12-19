@@ -10,22 +10,24 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const height = 8.0, fontSizeTitle = 28.0, fontSizeSubtitle = 17.0;
     return Column(
       children: [
         Text(
           title,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
+            fontSize: fontSizeTitle,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: height),
         Text(
           subtitle,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 17,
+            fontSize: fontSizeSubtitle,
+            fontWeight: FontWeight.normal,
           ),
         ),
       ],

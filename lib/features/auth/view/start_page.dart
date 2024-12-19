@@ -13,6 +13,7 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
+    var router = AutoRouter.of(context);
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -59,15 +60,15 @@ class StartPage extends StatelessWidget {
                   LinkButtonWidget(
                     text: 'Увійти',
                     onPressed: () {
-                      AutoRouter.of(context).push(AuthorizationRoute());
+                      router.goTo(LoginRoute());
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   InkWell(
                     onTap: () {
-                      AutoRouter.of(context).push(RegistrationRoute());
+                      router.goTo(RegisterRoute());
                     },
-                    child: Text(
+                    child: const Text(
                       'Зареєструватися',
                       style: TextStyle(
                         color: Colors.white,

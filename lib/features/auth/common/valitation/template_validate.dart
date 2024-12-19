@@ -5,19 +5,19 @@ class TemplateValidate {
 
   static ValidationBuilder _email() {
     return ValidationBuilder()
-        .required('Поле не має бути пустим')
-        .email('Невірний формат');
+        .required('Введіть пошту ')
+        .email('Недійсна пошта');
   }
 
   static ValidationBuilder _phone() {
     return ValidationBuilder()
-        .required('Поле не має бути пустим')
-        .phone('Не вірний формат телефона');
+        .required('Введіть дійсний номер телефону')
+        .phone('Недійсний номер телефону');
   }
 
   static ValidationBuilder _password() {
     return ValidationBuilder()
-        .required('Поле не має бути пустим')
+        .required('Введіть пароль')
         .minLength(minPasswordLeng,
             'Пароль має бути не менше $minPasswordLeng символів')
         .regExp(

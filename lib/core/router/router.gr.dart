@@ -11,14 +11,14 @@ part of 'router.dart';
 
 /// generated route for
 /// [LoginPage]
-class AuthorizationRoute extends PageRouteInfo<void> {
-  const AuthorizationRoute({List<PageRouteInfo>? children})
+class LoginRoute extends PageRouteInfo<void> {
+  const LoginRoute({List<PageRouteInfo>? children})
       : super(
-          AuthorizationRoute.name,
+          LoginRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'AuthorizationRoute';
+  static const String name = 'LoginRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -30,14 +30,14 @@ class AuthorizationRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [RegisterPage]
-class RegistrationRoute extends PageRouteInfo<void> {
-  const RegistrationRoute({List<PageRouteInfo>? children})
+class RegisterRoute extends PageRouteInfo<void> {
+  const RegisterRoute({List<PageRouteInfo>? children})
       : super(
-          RegistrationRoute.name,
+          RegisterRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'RegistrationRoute';
+  static const String name = 'RegisterRoute';
 
   static PageInfo page = PageInfo(
     name,

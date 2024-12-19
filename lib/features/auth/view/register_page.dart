@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _isError = false;
   }
 
-  void _clearFailureMessage() {
+  void _clearFailMessage() {
     if (_isError) {
       _isError = false;
       context.read<AuthBloc>().add(AuthFailClear());
@@ -50,6 +50,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    var router = AutoRouter.of(context);
+    const marginTextInput = 10.0, marginTextInputError = 7.0;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthRegisterSuccess) {
@@ -64,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
               alignment: Alignment.center,
               child: SizedBox(
                 width: 278,
-                height: 435,
+                height: 520,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -72,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         title: 'Реєстрація',
                         subtitle: 'Створіть новий акаунт',
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 13),
                       BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                         if (state is AuthRegisterFailure &&
@@ -81,69 +83,107 @@ class _RegisterPageState extends State<RegisterPage> {
                           return ErrorMessageWidget(
                               errorMessage: state.usernameError!);
                         }
-                        return SizedBox(height: 16);
+                        return SizedBox(height: marginTextInput);
                       }),
-                      TextInputWidget(
-                        placeholder: 'Ім’я',
-                        controller: _usernameController,
-                        onTap: _clearFailureMessage,
-                      ),
+                      BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                        if (state is AuthRegisterFailure &&
+                            state.usernameError != null) {
+                          _isError = true;
+                          return TextInputWidget(
+                            placeholder: 'Ім’я',
+                            controller: _usernameController,
+                            onTap: _clearFailMessage,
+                            errorMessage: state.usernameError,
+                            margin: const EdgeInsets.only(
+                                bottom: marginTextInputError),
+                          );
+                        }
+                        return TextInputWidget(
+                          placeholder: 'Ім’я',
+                          controller: _usernameController,
+                          onTap: _clearFailMessage,
+                          margin:
+                              const EdgeInsets.only(bottom: marginTextInput),
+                        );
+                      }),
                       BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                         if (state is AuthRegisterFailure &&
                             state.emailError != null) {
                           _isError = true;
-                          return ErrorMessageWidget(
-                              errorMessage: state.emailError!);
+                          return TextInputWidget(
+                            placeholder: 'Email',
+                            controller: _emailController,
+                            onTap: _clearFailMessage,
+                            errorMessage: state.emailError,
+                            margin: const EdgeInsets.only(
+                                bottom: marginTextInputError),
+                          );
                         }
-                        return SizedBox(height: 16);
+                        return TextInputWidget(
+                          placeholder: 'Email',
+                          controller: _emailController,
+                          onTap: _clearFailMessage,
+                          margin:
+                              const EdgeInsets.only(bottom: marginTextInput),
+                        );
                       }),
-                      TextInputWidget(
-                        placeholder: 'Email',
-                        controller: _emailController,
-                        onTap: _clearFailureMessage,
-                      ),
                       BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                         if (state is AuthRegisterFailure &&
                             state.phoneError != null) {
                           _isError = true;
-                          return ErrorMessageWidget(
-                              errorMessage: state.phoneError!);
+                          return TextInputWidget(
+                            placeholder: 'Номер телефону',
+                            controller: _phoneController,
+                            onTap: _clearFailMessage,
+                            errorMessage: state.phoneError,
+                            margin: const EdgeInsets.only(
+                                bottom: marginTextInputError),
+                          );
                         }
-                        return SizedBox(height: 16);
+                        return TextInputWidget(
+                          placeholder: 'Номер телефону',
+                          controller: _phoneController,
+                          onTap: _clearFailMessage,
+                          margin:
+                              const EdgeInsets.only(bottom: marginTextInput),
+                        );
                       }),
-                      TextInputWidget(
-                        placeholder: 'Номер телефону',
-                        controller: _phoneController,
-                        onTap: _clearFailureMessage,
-                      ),
                       BlocBuilder<AuthBloc, AuthState>(
-                          builder: (context, state) {
-                        if (state is AuthRegisterFailure &&
-                            state.passwordError != null) {
-                          _isError = true;
-                          return ErrorMessageWidget(
-                              errorMessage: state.passwordError!);
-                        }
-                        return SizedBox(height: 16);
-                      }),
-                      PasswordInputWidget(
-                        placeholder: 'Пароль',
-                        controller: _passwordController,
-                        onTap: _clearFailureMessage,
+                        builder: (context, state) {
+                          if (state is AuthRegisterFailure &&
+                              state.passwordError != null) {
+                            _isError = true;
+                            return PasswordInputWidget(
+                              controller: _passwordController,
+                              placeholderText: 'Пароль',
+                              onTap: _clearFailMessage,
+                              errorMessage: state.passwordError,
+                              margin: const EdgeInsets.only(bottom: 22),
+                            );
+                          }
+                          return PasswordInputWidget(
+                            controller: _passwordController,
+                            placeholderText: 'Пароль',
+                            onTap: _clearFailMessage,
+                            margin: const EdgeInsets.only(bottom: 25),
+                          );
+                        },
                       ),
-                      SizedBox(height: 28),
                       LinkButtonWidget(
                         text: 'Створити',
                         onPressed: _submit,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       FooterWidget(
                         text: 'Вже маєте акаунт?',
                         linkText: 'Увійти',
-                        onTab: () =>
-                            AutoRouter.of(context).push(AuthorizationRoute()),
+                        onTab: () {
+                          router.goTo(LoginRoute());
+                          _clearFailMessage();
+                        },
                       ),
                     ],
                   ),

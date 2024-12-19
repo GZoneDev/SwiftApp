@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CircleWidget extends StatelessWidget {
-  final double width, height;
+  final double width, height, borderWidth;
+  final Color color;
 
   const CircleWidget({
     super.key,
     this.width = 100,
     this.height = 100,
+    this.color = Colors.white,
+    this.borderWidth = 8,
   });
 
   @override
@@ -17,8 +20,8 @@ class CircleWidget extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: Colors.white,
-          width: 8,
+          color: color,
+          width: borderWidth,
         ),
       ),
     );

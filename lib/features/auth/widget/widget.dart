@@ -6,3 +6,4 @@ export 'password_input_widget.dart';
 export 'title_widget.dart';
 export 'footer_widget.dart';
 export 'error_message_widget.dart';
+export 'link_widget.dart';

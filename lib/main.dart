@@ -9,8 +9,10 @@ import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 import 'package:receptico/app.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   final talker = TalkerFlutter.init();
   GetIt.I.registerSingleton(talker);
 
@@ -32,6 +34,9 @@ void main() async {
 
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     runApp(const App());
   }, (e, st) {
     GetIt.I<Talker>().handle(e, st);
