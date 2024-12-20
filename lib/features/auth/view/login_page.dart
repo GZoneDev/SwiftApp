@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late bool _isError;
+  AuthLoginFailure _authState = AuthLoginFailure();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   void _clearFailMessage() {
     if (_isError) {
       _isError = false;
-      context.read<AuthBloc>().add(AuthFailClear());
+      setState(() => _authState = AuthLoginFailure());
     }
   }
 
@@ -49,101 +50,86 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var router = AutoRouter.of(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          LoginScreenBackgroundWidget(),
-          Container(
-            alignment: Alignment.center,
-            child: SizedBox(
-              width: 278,
-              height: 458,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const TitleWidget(
-                      title: 'Вхід',
-                      subtitle: 'Увійдіть до облікового запису',
-                    ),
-                    const SizedBox(height: 16),
-                    BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-                      if (state is AuthLoginFailure &&
-                          state.emailError != null) {
-                        _isError = true;
-                        return TextInputWidget(
-                          controller: _emailController,
-                          placeholder: 'Email',
-                          onTap: _clearFailMessage,
-                          errorMessage: state.emailError,
-                          margin: const EdgeInsets.only(bottom: 7),
-                        );
-                      }
-                      return TextInputWidget(
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoginFailure) {
+            _isError = true;
+            setState(() => _authState = state);
+            return;
+          }
+        },
+        child: Stack(
+          children: [
+            LoginScreenBackgroundWidget(),
+            Container(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 278,
+                height: 458,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const TitleWidget(
+                        title: 'Вхід',
+                        subtitle: 'Увійдіть до облікового запису',
+                      ),
+                      const SizedBox(height: 16),
+                      TextInputWidget(
                         controller: _emailController,
                         placeholder: 'Email',
                         onTap: _clearFailMessage,
-                        margin: const EdgeInsets.only(bottom: 10),
-                      );
-                    }),
-                    BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        if (state is AuthLoginFailure &&
-                            state.passwordError != null) {
-                          _isError = true;
-                          return PasswordInputWidget(
-                            controller: _passwordController,
-                            placeholderText: 'Пароль',
-                            onTap: _clearFailMessage,
-                            errorMessage: state.passwordError,
-                            helpWidget: LinkWidget(text: 'Забули пароль?'),
-                          );
-                        }
-                        return PasswordInputWidget(
-                          controller: _passwordController,
-                          placeholderText: 'Пароль',
-                          onTap: _clearFailMessage,
-                          helpWidget: LinkWidget(text: 'Забули пароль?'),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 22),
-                    LinkButtonWidget(
-                      text: 'Увійти',
-                      onPressed: _submit,
-                    ),
-                    const SizedBox(height: 16),
-                    FooterWidget(
-                      text: 'Не маєте акаунту?',
-                      linkText: 'Створити зараз',
-                      onTab: () {
-                        router.goTo(RegisterRoute());
-                        _clearFailMessage();
-                      },
-                    ),
-                    const SizedBox(height: 40),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButtonWidget(
-                          assetPath: AssetPath.appleLogoPath,
-                          onPressed: () {
-                            debugPrint('Not created!');
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        IconButtonWidget(
-                          assetPath: AssetPath.googleLogoPath,
-                          onPressed: () {
-                            debugPrint('Not created!');
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                        errorMessage: _authState.emailError,
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        marginWithError: EdgeInsets.only(bottom: 7.0),
+                      ),
+                      PasswordInputWidget(
+                        controller: _passwordController,
+                        placeholderText: 'Пароль',
+                        onTap: _clearFailMessage,
+                        errorMessage: _authState.passwordError,
+                        helpWidget: LinkWidget(text: 'Забули пароль?'),
+                        margin: EdgeInsets.only(bottom: 25.0),
+                        marginWithError: EdgeInsets.only(bottom: 22.0),
+                      ),
+                      LinkButtonWidget(
+                        text: 'Увійти',
+                        onPressed: _submit,
+                      ),
+                      const SizedBox(height: 16),
+                      FooterWidget(
+                        text: 'Не маєте акаунту?',
+                        linkText: 'Створити зараз',
+                        onTab: () {
+                          router.goTo(RegisterRoute());
+                          _clearFailMessage();
+                        },
+                      ),
+                      const SizedBox(height: 40),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButtonWidget(
+                            assetPath: AssetPath.appleLogoPath,
+                            onPressed: () {
+                              debugPrint('Not created!');
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          IconButtonWidget(
+                            assetPath: AssetPath.googleLogoPath,
+                            onPressed: () {
+                              debugPrint('Not created!');
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

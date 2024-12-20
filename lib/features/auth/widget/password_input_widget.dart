@@ -5,7 +5,7 @@ import 'text_input_widget.dart';
 
 class PasswordInputWidget extends StatefulWidget {
   final double width, height, borderRadius, fontSize;
-  final EdgeInsets margin;
+  final EdgeInsets margin, marginWithError;
   final String placeholderText;
   final String? errorMessage;
   final Color placeholderColor, inputTextColor, backgroundColor;
@@ -20,6 +20,7 @@ class PasswordInputWidget extends StatefulWidget {
     this.height = 42,
     this.borderRadius = 8,
     this.fontSize = 17,
+    this.marginWithError = const EdgeInsets.all(0),
     this.margin = const EdgeInsets.all(0),
     this.placeholderColor = const Color(0xFF8E8E93),
     this.inputTextColor = Colors.black,
@@ -41,10 +42,12 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
   Widget build(BuildContext context) {
     const padding = EdgeInsets.only(left: 16, right: 44);
     return Container(
-      margin: widget.margin,
+      margin:
+          widget.errorMessage == null ? widget.margin : widget.marginWithError,
       child: Stack(
         children: [
           TextInputWidget(
+            controller: widget.controller,
             placeholder: widget.placeholderText,
             obscureText: _isObscured,
             padding: padding,

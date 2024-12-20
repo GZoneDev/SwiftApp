@@ -13,5 +13,3 @@ class AuthRegister extends AuthEvent {
 
   AuthRegister({required this.user});
 }
-
-class AuthFailClear extends AuthEvent {}
