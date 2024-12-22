@@ -18,13 +18,13 @@ class LinkWidget extends StatelessWidget {
     const fontSize = 12.0;
     return Container(
       margin: margin,
-      alignment: Alignment.centerRight,
+      alignment: Alignment.topRight,
       child: InkWell(
         onTap: onTap,
         child: Text(
           text,
           style: TextStyle(
-            color: fontColor ,
+            color: fontColor,
             fontSize: fontSize,
           ),
         ),

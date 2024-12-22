@@ -1,11 +1,11 @@
-import 'package:form_validator/form_validator.dart';
+import 'package:receptico/common/valitation/validation_builder.dart';
 
 class TemplateValidate {
   static const int minPasswordLeng = 6;
 
   static ValidationBuilder _email() {
     return ValidationBuilder()
-        .required('Введіть пошту ')
+        .required('Введіть пошту')
         .email('Недійсна пошта');
   }
 
@@ -29,21 +29,32 @@ class TemplateValidate {
             'Пароль повинен містити хоча б один спеціальний символ');
   }
 
-  static String? emailValidate(String? value) {
-    final validateEmail = TemplateValidate._email().build();
+  static ValidationBuilder _username() {
+    return ValidationBuilder().required('Введіть Ваше ім’я').minLength(
+        minPasswordLeng, 'Пароль має бути не менше $minPasswordLeng символів');
+  }
+
+  static String? emailValidate(String value) {
+    final validateEmail = _email().build();
     final result = validateEmail(value);
     return result;
   }
 
-  static String? passwordValidate(String? value) {
-    final validatePassword = TemplateValidate._password().build();
+  static String? phoneValidate(String value) {
+    final validatePhone = _phone().build();
+    final result = validatePhone(value);
+    return result;
+  }
+
+  static String? passwordValidate(String value) {
+    final validatePassword = _password().build();
     final result = validatePassword(value);
     return result;
   }
 
-  static String? phoneValidate(String? value) {
-    final validatePhone = TemplateValidate._phone().build();
-    final result = validatePhone(value);
+  static String? usernameValidate(String value) {
+    final validateUsername = _username().build();
+    final result = validateUsername(value);
     return result;
   }
 }

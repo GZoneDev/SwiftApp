@@ -12,8 +12,6 @@ class AuthLoginSuccess extends AuthState {}
 
 class AuthRegisterSuccess extends AuthState {}
 
-class AuthNotFail extends AuthState {}
-
 class AuthLoginFailure extends AuthState {
   String? emailError, passwordError;
 
