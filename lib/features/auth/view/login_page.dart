@@ -55,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AuthLoginFailure) {
             _isError = true;
             setState(() => _authState = state);
-            return;
           }
         },
         child: Stack(
@@ -91,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                         margin: EdgeInsets.only(bottom: 25.0),
                         marginWithError: EdgeInsets.only(bottom: 22.0),
                       ),
-                      LinkButtonWidget(
+                      TextButtonWidget(
                         text: 'Увійти',
                         onPressed: _submit,
                       ),

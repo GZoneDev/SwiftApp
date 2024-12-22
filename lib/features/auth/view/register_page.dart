@@ -114,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         margin: const EdgeInsets.only(bottom: 25.0),
                         marginWithError: const EdgeInsets.only(bottom: 22.0),
                       ),
-                      LinkButtonWidget(
+                      TextButtonWidget(
                         text: 'Створити',
                         onPressed: _submit,
                       ),

@@ -57,7 +57,7 @@ class StartPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  LinkButtonWidget(
+                  TextButtonWidget(
                     text: 'Увійти',
                     onPressed: () {
                       router.goTo(LoginRoute());

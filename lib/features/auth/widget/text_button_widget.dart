@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LinkButtonWidget extends StatelessWidget {
+class TextButtonWidget extends StatelessWidget {
   final VoidCallback onPressed;
   final double wight, height, fontSize, borderRadius;
   final Color backgroundColor, fontColor;
   final EdgeInsets padding;
   final String text;
 
-  const LinkButtonWidget({
+  const TextButtonWidget({
     super.key,
     required this.onPressed,
     required this.text,
