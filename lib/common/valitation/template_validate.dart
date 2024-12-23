@@ -31,7 +31,8 @@ class TemplateValidate {
 
   static ValidationBuilder _username() {
     return ValidationBuilder().required('Введіть Ваше ім’я').minLength(
-        minPasswordLeng, 'Пароль має бути не менше $minPasswordLeng символів');
+        minPasswordLeng,
+        'Ім’я не може бути меньшим ніж $minPasswordLeng символів');
   }
 
   static String? emailValidate(String value) {
