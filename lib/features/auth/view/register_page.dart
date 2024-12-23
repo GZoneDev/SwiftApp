@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/generated/l10n.dart';
 
 import '../block/auth_block.dart';
 import '../model/user.dart';
@@ -53,7 +54,8 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     const marginTextInput = EdgeInsets.only(bottom: 10.0),
         marginTextInputWithError = EdgeInsets.only(bottom: 7.0);
-    var router = AutoRouter.of(context);
+    final router = AutoRouter.of(context);
+    final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthRegisterSuccess) {
@@ -77,13 +79,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const TitleWidget(
-                        title: 'Реєстрація',
-                        subtitle: 'Створіть новий акаунт',
+                      TitleWidget(
+                        title: localization.registerTitle,
+                        subtitle: localization.registerSubtitle,
                       ),
                       const SizedBox(height: 13),
                       TextInputWidget(
-                        placeholder: 'Ім’я',
+                        placeholder: localization.namePlaceholder,
                         controller: _usernameController,
                         onTap: _clearFailMessage,
                         errorMessage: _authState.usernameError,
@@ -91,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         marginWithError: marginTextInputWithError,
                       ),
                       TextInputWidget(
-                        placeholder: 'Email',
+                        placeholder: localization.emailPlaceholder,
                         controller: _emailController,
                         onTap: _clearFailMessage,
                         errorMessage: _authState.emailError,
@@ -99,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         marginWithError: marginTextInputWithError,
                       ),
                       TextInputWidget(
-                        placeholder: 'Номер телефону',
+                        placeholder: localization.phonePlaceholder,
                         controller: _phoneController,
                         onTap: _clearFailMessage,
                         errorMessage: _authState.phoneError,
@@ -108,20 +110,20 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       PasswordInputWidget(
                         controller: _passwordController,
-                        placeholderText: 'Пароль',
+                        placeholderText: localization.passwordPlaceholder,
                         onTap: _clearFailMessage,
                         errorMessage: _authState.passwordError,
                         margin: const EdgeInsets.only(bottom: 25.0),
                         marginWithError: const EdgeInsets.only(bottom: 22.0),
                       ),
                       TextButtonWidget(
-                        text: 'Створити',
+                        text: S.of(context).registerButton,
                         onPressed: _submit,
                       ),
                       const SizedBox(height: 16),
                       FooterWidget(
-                        text: 'Вже маєте акаунт?',
-                        linkText: 'Увійти',
+                        text: S.of(context).accountQuestion,
+                        linkText: localization.loginLink,
                         onTab: () {
                           router.goTo(LoginRoute());
                           _clearFailMessage();

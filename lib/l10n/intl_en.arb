@@ -1,1 +1,19 @@
-{}
+{
+  "loginTitle": "Sign in",
+  "loginSubtitle": "Log in to your account",
+  "emailPlaceholder": "Email",
+  "passwordPlaceholder": "Password",
+  "forgottenPassword": "Forgot your password?",
+  "loginButton": "Sign in",
+  "noAccountQuestion": "Don't have an account?",
+  "createAccount": "Create now",
+  "wantToCookQuestion": "Do you want to cook something?",
+  "registerLink": "Sign up",
+  "registerTitle": "Registration",
+  "registerSubtitle": "Create a new account",
+  "namePlaceholder": "Name",
+  "phonePlaceholder": "Phone",
+  "registerButton": "Create",
+  "accountQuestion": "Already have an account?",
+  "loginLink": "Sign in"
+}

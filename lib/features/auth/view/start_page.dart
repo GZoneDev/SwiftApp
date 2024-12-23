@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:receptico/core/asset/asset_path.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/generated/l10n.dart';
 
 import '../widget/widget.dart';
 
@@ -13,7 +14,8 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
-    var router = AutoRouter.of(context);
+    final router = AutoRouter.of(context);
+    final localization = S.of(context);
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -45,10 +47,10 @@ class StartPage extends StatelessWidget {
                       height: 282,
                     ),
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(bottom: 34.0),
                     child: Text(
-                      'Хочеш Щось Приготувати?',
+                      localization.wantToCookQuestion,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 34,
@@ -58,7 +60,7 @@ class StartPage extends StatelessWidget {
                     ),
                   ),
                   TextButtonWidget(
-                    text: 'Увійти',
+                    text: localization.loginButton,
                     onPressed: () {
                       router.goTo(LoginRoute());
                     },
@@ -68,8 +70,8 @@ class StartPage extends StatelessWidget {
                     onTap: () {
                       router.goTo(RegisterRoute());
                     },
-                    child: const Text(
-                      'Зареєструватися',
+                    child: Text(
+                      localization.registerLink,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 17,

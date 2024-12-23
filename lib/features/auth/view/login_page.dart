@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/core/asset/asset_path.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/generated/l10n.dart';
 
 import '../block/block.dart';
 import '../model/user.dart';
@@ -48,7 +49,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var router = AutoRouter.of(context);
+    final router = AutoRouter.of(context);
+    final localization = S.of(context);
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -68,14 +70,14 @@ class _LoginPageState extends State<LoginPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const TitleWidget(
-                        title: 'Вхід',
-                        subtitle: 'Увійдіть до облікового запису',
+                      TitleWidget(
+                        title: localization.loginTitle,
+                        subtitle: localization.loginSubtitle,
                       ),
                       const SizedBox(height: 16),
                       TextInputWidget(
                         controller: _emailController,
-                        placeholder: 'Email',
+                        placeholder: localization.emailPlaceholder,
                         onTap: _clearFailMessage,
                         errorMessage: _authState.emailError,
                         margin: EdgeInsets.only(bottom: 10.0),
@@ -83,21 +85,22 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       PasswordInputWidget(
                         controller: _passwordController,
-                        placeholderText: 'Пароль',
+                        placeholderText: localization.passwordPlaceholder,
                         onTap: _clearFailMessage,
                         errorMessage: _authState.passwordError,
-                        helpWidget: LinkWidget(text: 'Забули пароль?'),
+                        helpWidget:
+                            LinkWidget(text: localization.forgottenPassword),
                         margin: EdgeInsets.only(bottom: 25.0),
                         marginWithError: EdgeInsets.only(bottom: 22.0),
                       ),
                       TextButtonWidget(
-                        text: 'Увійти',
+                        text: localization.loginButton,
                         onPressed: _submit,
                       ),
                       const SizedBox(height: 16),
                       FooterWidget(
-                        text: 'Не маєте акаунту?',
-                        linkText: 'Створити зараз',
+                        text: localization.noAccountQuestion,
+                        linkText: localization.createAccount,
                         onTab: () {
                           router.goTo(RegisterRoute());
                           _clearFailMessage();

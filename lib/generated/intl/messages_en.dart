@@ -21,5 +21,30 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accountQuestion":
+            MessageLookupByLibrary.simpleMessage("Already have an account?"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("Create now"),
+        "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
+        "forgottenPassword":
+            MessageLookupByLibrary.simpleMessage("Forgot your password?"),
+        "loginButton": MessageLookupByLibrary.simpleMessage("Sign in"),
+        "loginLink": MessageLookupByLibrary.simpleMessage("Log in"),
+        "loginSubtitle":
+            MessageLookupByLibrary.simpleMessage("Log in to your account"),
+        "loginTitle": MessageLookupByLibrary.simpleMessage("Sign in"),
+        "namePlaceholder": MessageLookupByLibrary.simpleMessage("Name"),
+        "noAccountQuestion":
+            MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
+        "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("Password"),
+        "phonePlaceholder":
+            MessageLookupByLibrary.simpleMessage("Phone number"),
+        "registerButton": MessageLookupByLibrary.simpleMessage("Create"),
+        "registerLink": MessageLookupByLibrary.simpleMessage("Sign up"),
+        "registerSubtitle":
+            MessageLookupByLibrary.simpleMessage("Create a new account"),
+        "registerTitle": MessageLookupByLibrary.simpleMessage("Registration"),
+        "wantToCookQuestion": MessageLookupByLibrary.simpleMessage(
+            "Do you want to cook something?")
+      };
 }

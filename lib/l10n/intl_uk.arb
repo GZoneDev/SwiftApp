@@ -1,1 +1,19 @@
-{}
+{
+  "loginTitle": "Вхід",
+  "loginSubtitle": "Увійдіть до облікового запису",
+  "emailPlaceholder": "Email",
+  "passwordPlaceholder": "Пароль",
+  "forgottenPassword": "Забули пароль?",
+  "loginButton": "Увійти",
+  "noAccountQuestion": "Не маєте акаунту?",
+  "createAccount": "Створити зараз",
+  "wantToCookQuestion": "Хочеш Щось Приготувати?",
+  "registerLink": "Зареєструватися",
+  "registerTitle": "Реєстрація",
+  "registerSubtitle": "Створіть новий акаунт",
+  "namePlaceholder": "Ім’я",
+  "phonePlaceholder": "Номер телефону",
+  "registerButton": "Створити",
+  "accountQuestion": "Вже маєте акаунт?",
+  "loginLink": "Увійти"
+}
