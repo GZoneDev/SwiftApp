@@ -127,4 +127,10 @@ lib/generated_plugin_registrant.dart
 .history
 .ionide
 
+# Firebase related files
+lib/firebase_options.dart
+firebase.json
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
 # End of https://www.toptal.com/developers/gitignore/api/dart,flutter,visualstudiocode,git

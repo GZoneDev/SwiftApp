@@ -24,6 +24,7 @@ dependencies:
   talker_dio_logger: ^4.5.2
   talker_bloc_logger: ^4.5.2
   auto_route: ^9.2.2
+  firebase_core: ^3.8.1
 
 dev_dependencies:
   flutter_test:

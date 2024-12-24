@@ -75,7 +75,7 @@ final lightTheme = ThemeData(
     bodyMedium: TextStyle(
       fontFamily: 'SFProText',
       fontSize: 15,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.normal,
       color: Colors.white,
     ),
   ),
