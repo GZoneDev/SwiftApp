@@ -20,30 +20,53 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(email) =>
+      "If the account ${email} exists, password recovery instructions will be sent to your email.";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accountQuestion":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
+        "confirmPasswordChangeButton":
+            MessageLookupByLibrary.simpleMessage("Change password "),
+        "confirmPasswordPlaceholder":
+            MessageLookupByLibrary.simpleMessage("Confirm password"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create now"),
-        "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
+        "emailOrPhonePlaceholder":
+            MessageLookupByLibrary.simpleMessage("Email/Phone"),
         "forgottenPassword":
-            MessageLookupByLibrary.simpleMessage("Forgot your password?"),
+            MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "loginButton": MessageLookupByLibrary.simpleMessage("Sign in"),
-        "loginLink": MessageLookupByLibrary.simpleMessage("Log in"),
+        "loginLink": MessageLookupByLibrary.simpleMessage("Sign in"),
         "loginSubtitle":
             MessageLookupByLibrary.simpleMessage("Log in to your account"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Sign in"),
         "namePlaceholder": MessageLookupByLibrary.simpleMessage("Name"),
+        "newPasswordPlaceholder":
+            MessageLookupByLibrary.simpleMessage("New password"),
         "noAccountQuestion":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
         "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("Password"),
-        "phonePlaceholder":
-            MessageLookupByLibrary.simpleMessage("Phone number"),
-        "registerButton": MessageLookupByLibrary.simpleMessage("Create"),
+        "registerButton": MessageLookupByLibrary.simpleMessage("Sign up"),
         "registerLink": MessageLookupByLibrary.simpleMessage("Sign up"),
         "registerSubtitle":
             MessageLookupByLibrary.simpleMessage("Create a new account"),
-        "registerTitle": MessageLookupByLibrary.simpleMessage("Registration"),
+        "registerTitle": MessageLookupByLibrary.simpleMessage("Sign up"),
+        "requiredEmailError":
+            MessageLookupByLibrary.simpleMessage("Введіть пошту"),
+        "restoreEmailMessage": m0,
+        "restorePasswordButton":
+            MessageLookupByLibrary.simpleMessage("Restore password"),
+        "restorePasswordSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Enter the Email or phone number you used to register and we will send you instructions."),
+        "restorePasswordTitle":
+            MessageLookupByLibrary.simpleMessage("Restore password"),
+        "returnToLoginLink":
+            MessageLookupByLibrary.simpleMessage("Return to login"),
+        "smsCodePlaceholder":
+            MessageLookupByLibrary.simpleMessage("Confirmation code"),
+        "smsSubtitle": MessageLookupByLibrary.simpleMessage(
+            "An SMS message with a confirmation code to recover your password has been sent to your phone number."),
         "wantToCookQuestion": MessageLookupByLibrary.simpleMessage(
             "Do you want to cook something?")
       };

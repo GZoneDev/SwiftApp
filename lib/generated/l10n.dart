@@ -70,16 +70,6 @@ class S {
     );
   }
 
-  /// `Email`
-  String get emailPlaceholder {
-    return Intl.message(
-      'Email',
-      name: 'emailPlaceholder',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Password`
   String get passwordPlaceholder {
     return Intl.message(
@@ -90,10 +80,10 @@ class S {
     );
   }
 
-  /// `Forgot your password?`
+  /// `Forgot password?`
   String get forgottenPassword {
     return Intl.message(
-      'Forgot your password?',
+      'Forgot password?',
       name: 'forgottenPassword',
       desc: '',
       args: [],
@@ -150,10 +140,10 @@ class S {
     );
   }
 
-  /// `Registration`
+  /// `Sign up`
   String get registerTitle {
     return Intl.message(
-      'Registration',
+      'Sign up',
       name: 'registerTitle',
       desc: '',
       args: [],
@@ -180,20 +170,10 @@ class S {
     );
   }
 
-  /// `Phone number`
-  String get phonePlaceholder {
-    return Intl.message(
-      'Phone number',
-      name: 'phonePlaceholder',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Create`
+  /// `Sign up`
   String get registerButton {
     return Intl.message(
-      'Create',
+      'Sign up',
       name: 'registerButton',
       desc: '',
       args: [],
@@ -210,11 +190,131 @@ class S {
     );
   }
 
-  /// `Log in`
+  /// `Sign in`
   String get loginLink {
     return Intl.message(
-      'Log in',
+      'Sign in',
       name: 'loginLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email/Phone`
+  String get emailOrPhonePlaceholder {
+    return Intl.message(
+      'Email/Phone',
+      name: 'emailOrPhonePlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore password`
+  String get restorePasswordButton {
+    return Intl.message(
+      'Restore password',
+      name: 'restorePasswordButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Return to login`
+  String get returnToLoginLink {
+    return Intl.message(
+      'Return to login',
+      name: 'returnToLoginLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An SMS message with a confirmation code to recover your password has been sent to your phone number.`
+  String get smsSubtitle {
+    return Intl.message(
+      'An SMS message with a confirmation code to recover your password has been sent to your phone number.',
+      name: 'smsSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New password`
+  String get newPasswordPlaceholder {
+    return Intl.message(
+      'New password',
+      name: 'newPasswordPlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmation code`
+  String get smsCodePlaceholder {
+    return Intl.message(
+      'Confirmation code',
+      name: 'smsCodePlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm password`
+  String get confirmPasswordPlaceholder {
+    return Intl.message(
+      'Confirm password',
+      name: 'confirmPasswordPlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change password `
+  String get confirmPasswordChangeButton {
+    return Intl.message(
+      'Change password ',
+      name: 'confirmPasswordChangeButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore password`
+  String get restorePasswordTitle {
+    return Intl.message(
+      'Restore password',
+      name: 'restorePasswordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the Email or phone number you used to register and we will send you instructions.`
+  String get restorePasswordSubtitle {
+    return Intl.message(
+      'Enter the Email or phone number you used to register and we will send you instructions.',
+      name: 'restorePasswordSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If the account {email} exists, password recovery instructions will be sent to your email.`
+  String restoreEmailMessage(String email) {
+    return Intl.message(
+      'If the account $email exists, password recovery instructions will be sent to your email.',
+      name: 'restoreEmailMessage',
+      desc: '',
+      args: [email],
+    );
+  }
+
+  /// `Введіть пошту`
+  String get requiredEmailError {
+    return Intl.message(
+      'Введіть пошту',
+      name: 'requiredEmailError',
       desc: '',
       args: [],
     );

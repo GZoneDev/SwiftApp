@@ -1,7 +1,7 @@
 {
+  "@@locale": "uk",
   "loginTitle": "Вхід",
   "loginSubtitle": "Увійдіть до облікового запису",
-  "emailPlaceholder": "Email",
   "passwordPlaceholder": "Пароль",
   "forgottenPassword": "Забули пароль?",
   "loginButton": "Увійти",
@@ -12,8 +12,25 @@
   "registerTitle": "Реєстрація",
   "registerSubtitle": "Створіть новий акаунт",
   "namePlaceholder": "Ім’я",
-  "phonePlaceholder": "Номер телефону",
   "registerButton": "Створити",
   "accountQuestion": "Вже маєте акаунт?",
-  "loginLink": "Увійти"
+  "loginLink": "Увійти",
+  "emailOrPhonePlaceholder": "Email/Телефон",
+  "restorePasswordButton": "Відновлення паролю",
+  "returnToLoginLink": "Повернутися до входу",
+  "smsSubtitle": "На Ваш номер телефону відправлено SMS-повідомлення з кодом підтвердження для відновлення пароля",
+  "newPasswordPlaceholder": "Новий пароль",
+  "smsCodePlaceholder": "Код підтвердження",
+  "confirmPasswordPlaceholder": "Підтвердження паролю",
+  "confirmPasswordChangeButton": "Підвердити зміну пароля",
+  "restorePasswordTitle": "Відновлення паролю",
+  "restorePasswordSubtitle": "Введіть Email або номер телефону, який Ви використовували для реєстрації, і ми надішлемо Вам інструкцію",
+  "restoreEmailMessage": "Якщо обліковий запис “{email}” існує, на електронну пошту буде надіслано інструкцію з відновлення паролю.",
+  "@restoreEmailMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
 }

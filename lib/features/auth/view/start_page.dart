@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:receptico/core/asset/asset_path.dart';
+import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 
@@ -42,34 +42,31 @@ class StartPage extends StatelessWidget {
                       bottom: orientation == Orientation.portrait ? 60.0 : 0,
                     ),
                     child: SvgPicture.asset(
-                      AssetPath.logoPath,
+                      context.assetPath.logo,
                       width: 282,
                       height: 282,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 34.0),
-                    child: Text(
-                      localization.wantToCookQuestion,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 34,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
+                    child: SizedBox(
+                      width: 235,
+                      child: Text(
+                        localization.wantToCookQuestion,
+                        textAlign: TextAlign.center,
+                        style: context.font.displayLarge,
                       ),
                     ),
                   ),
                   TextButtonWidget(
+                    width: 278,
+                    height: 50,
                     text: localization.loginButton,
-                    onPressed: () {
-                      router.goTo(LoginRoute());
-                    },
+                    onPressed: () => router.navigate(const LoginRoute()),
                   ),
                   const SizedBox(height: 16),
                   InkWell(
-                    onTap: () {
-                      router.goTo(RegisterRoute());
-                    },
+                    onTap: () => router.navigate(const RegisterRoute()),
                     child: Text(
                       localization.registerLink,
                       style: TextStyle(

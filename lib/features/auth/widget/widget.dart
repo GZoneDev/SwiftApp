@@ -6,3 +6,5 @@ export 'password_input_widget.dart';
 export 'title_widget.dart';
 export 'footer_widget.dart';
 export 'link_widget.dart';
+export 'screen_background_widget.dart';
+export 'back_link_widget.dart';

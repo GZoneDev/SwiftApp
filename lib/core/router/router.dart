@@ -8,24 +8,15 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(page: StartRoute.page, path: '/'),
-        AutoRoute(page: LoginRoute.page),
-        AutoRoute(page: RegisterRoute.page),
+        AutoRoute(page: LoginRoute.page, path: '/login'),
+        AutoRoute(page: RegisterRoute.page, path: '/register'),
+        AutoRoute(page: RestorePasswordRoute.page, path: '/restorePasword'),
+        AutoRoute(page: RestorePhoneRoute.page, path: '/restorePasword/phone'),
+        AutoRoute(page: RestoreEmailRoute.page, path: '/restorePasword/email'),
       ];
 
   @override
   List<AutoRouteGuard> get guards => [
         // optionally add root guards here
       ];
-}
-
-extension RoutePageExtensions on StackRouter {
-  void goTo(PageRouteInfo routeToPush) {
-    final int routeLength = stack.length;
-
-    if (routeLength > 1 &&
-        stack[routeLength - 2].name == routeToPush.routeName) {
-      back();
-    }
-    push(routeToPush);
-  }
 }

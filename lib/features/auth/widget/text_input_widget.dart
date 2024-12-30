@@ -1,61 +1,61 @@
 import 'package:flutter/material.dart';
 
 class TextInputWidget extends StatelessWidget {
-  final double width, height, fontSize, borderRadius;
-  final Color placeholderColor, inputTextColor, backgroundColor;
-  final EdgeInsets margin, marginWithError, padding;
-  final String placeholder;
+  final double width, height;
+  final EdgeInsets margin, marginWithError;
+  final EdgeInsets? padding;
   final VoidCallback? onTap;
   final TextEditingController? controller;
-  final String? errorMessage;
-  final bool obscureText;
+  final String? errorMessage, placeholder;
+  final bool obscureText, readOnly;
   final Widget? helpWidget;
 
   const TextInputWidget({
     super.key,
-    required this.placeholder,
+    this.placeholder,
     this.width = 278,
     this.height = 42,
-    this.borderRadius = 8,
-    this.fontSize = 17,
     this.marginWithError = const EdgeInsets.all(0),
     this.margin = const EdgeInsets.all(0),
-    this.padding = const EdgeInsets.only(left: 16, right: 16),
-    this.placeholderColor = const Color(0xFF8E8E93),
-    this.inputTextColor = Colors.black,
-    this.backgroundColor = Colors.white,
+    this.padding,
     this.onTap,
     this.controller,
     this.errorMessage,
     this.obscureText = false,
     this.helpWidget,
+    this.readOnly = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    const marginBackground = EdgeInsets.only(top: 3);
-    const errorColor = Colors.red;
-    const borderWidth = 1.0,
-        errorLeftPadding = 8.0,
+    const errorLeftPadding = 8.0,
         errorTopPadding = 2.0,
-        errorFontSize = 12.0,
         widthErrorMessageWithHelpWidget = 150.0;
+    final border = errorMessage != null
+        ? Theme.of(context).inputDecorationTheme.errorBorder
+        : null;
+    final textStyleError = Theme.of(context).inputDecorationTheme.errorStyle;
     return Container(
       margin: errorMessage == null ? margin : marginWithError,
       child: Stack(
         children: [
           Column(
             children: [
-              Container(
-                margin: marginBackground,
+              SizedBox(
                 width: width,
                 height: height,
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  border: errorMessage != null
-                      ? Border.all(color: errorColor, width: borderWidth)
-                      : null,
+                child: TextFormField(
+                  readOnly: readOnly,
+                  controller: controller,
+                  onTap: onTap,
+                  obscureText: obscureText,
+                  decoration: InputDecoration(
+                    contentPadding: padding,
+                    hintText: placeholder,
+                    border: border,
+                    focusedBorder: border,
+                    enabledBorder: border,
+                  ),
                 ),
               ),
               Row(
@@ -72,10 +72,7 @@ class TextInputWidget extends StatelessWidget {
                                 : widthErrorMessageWithHelpWidget,
                             child: Text(
                               errorMessage!,
-                              style: TextStyle(
-                                fontSize: errorFontSize,
-                                color: errorColor,
-                              ),
+                              style: textStyleError,
                             ))
                         : null,
                   ),
@@ -84,30 +81,6 @@ class TextInputWidget extends StatelessWidget {
               ),
               Container(child: errorMessage == null ? helpWidget : null),
             ],
-          ),
-          Container(
-            padding: padding,
-            child: TextFormField(
-              controller: controller,
-              onTap: onTap,
-              obscureText: obscureText,
-              style: TextStyle(
-                color: inputTextColor,
-                fontSize: fontSize,
-                fontWeight: FontWeight.normal,
-              ),
-              decoration: InputDecoration(
-                hintText: placeholder,
-                hintStyle: TextStyle(
-                  color: placeholderColor,
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.normal,
-                ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-              ),
-            ),
           ),
         ],
       ),

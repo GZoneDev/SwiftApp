@@ -40,7 +40,9 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    const padding = EdgeInsets.only(left: 16, right: 44);
+    const offset = Offset(0, 0);
+    const padding = EdgeInsets.only(left: 16, right: 44, top: 10, bottom: 10),
+        iconPadding = EdgeInsets.only(bottom: 9);
     return Container(
       margin:
           widget.errorMessage == null ? widget.margin : widget.marginWithError,
@@ -57,12 +59,16 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
           ),
           Container(
             alignment: Alignment.centerRight,
-            child: IconButton(
-              onPressed: () => setState(() => _isObscured = !_isObscured),
-              icon: Icon(
-                _isObscured ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-                size: widget.fontSize,
-                color: widget.inputTextColor,
+            child: Transform.translate(
+              offset: offset,
+              child: IconButton(
+                padding: iconPadding,
+                onPressed: () => setState(() => _isObscured = !_isObscured),
+                icon: Icon(
+                  _isObscured ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
+                  size: widget.fontSize,
+                  color: widget.inputTextColor,
+                ),
               ),
             ),
           ),

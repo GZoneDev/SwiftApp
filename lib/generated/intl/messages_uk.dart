@@ -20,12 +20,20 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'uk';
 
+  static String m0(email) =>
+      "Якщо обліковий запис “${email}” існує, на електронну пошту буде надіслано інструкцію з відновлення паролю.";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accountQuestion":
             MessageLookupByLibrary.simpleMessage("Вже маєте акаунт?"),
+        "confirmPasswordChangeButton":
+            MessageLookupByLibrary.simpleMessage("Підвердити зміну пароля"),
+        "confirmPasswordPlaceholder":
+            MessageLookupByLibrary.simpleMessage("Підтвердження паролю"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Створити зараз"),
-        "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
+        "emailOrPhonePlaceholder":
+            MessageLookupByLibrary.simpleMessage("Email/Телефон"),
         "forgottenPassword":
             MessageLookupByLibrary.simpleMessage("Забули пароль?"),
         "loginButton": MessageLookupByLibrary.simpleMessage("Увійти"),
@@ -34,16 +42,31 @@ class MessageLookup extends MessageLookupByLibrary {
             "Увійдіть до облікового запису"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Вхід"),
         "namePlaceholder": MessageLookupByLibrary.simpleMessage("Ім’я"),
+        "newPasswordPlaceholder":
+            MessageLookupByLibrary.simpleMessage("Новий пароль"),
         "noAccountQuestion":
             MessageLookupByLibrary.simpleMessage("Не маєте акаунту?"),
         "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("Пароль"),
-        "phonePlaceholder":
-            MessageLookupByLibrary.simpleMessage("Номер телефону"),
         "registerButton": MessageLookupByLibrary.simpleMessage("Створити"),
         "registerLink": MessageLookupByLibrary.simpleMessage("Зареєструватися"),
         "registerSubtitle":
             MessageLookupByLibrary.simpleMessage("Створіть новий акаунт"),
         "registerTitle": MessageLookupByLibrary.simpleMessage("Реєстрація"),
+        "requiredEmailError":
+            MessageLookupByLibrary.simpleMessage("Введіть пошту"),
+        "restoreEmailMessage": m0,
+        "restorePasswordButton":
+            MessageLookupByLibrary.simpleMessage("Відновлення паролю"),
+        "restorePasswordSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Введіть Email або номер телефону, який Ви використовували для реєстрації, і ми надішлемо Вам інструкцію"),
+        "restorePasswordTitle":
+            MessageLookupByLibrary.simpleMessage("Відновлення паролю"),
+        "returnToLoginLink":
+            MessageLookupByLibrary.simpleMessage("Повернутися до входу"),
+        "smsCodePlaceholder":
+            MessageLookupByLibrary.simpleMessage("Код підтвердження"),
+        "smsSubtitle": MessageLookupByLibrary.simpleMessage(
+            "На Ваш номер телефону відправлено SMS-повідомлення з кодом підтвердження для відновлення пароля"),
         "wantToCookQuestion":
             MessageLookupByLibrary.simpleMessage("Хочеш Щось Приготувати?")
       };

@@ -7,7 +7,7 @@ import 'package:receptico/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import 'features/auth/block/block.dart';
+import 'features/auth/bloc/bloc.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -36,6 +36,7 @@ class _AppState extends State<App> {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+        locale: Locale('uk'),
         supportedLocales: S.delegate.supportedLocales,
         title: 'Flutter Demo',
         theme: lightTheme,

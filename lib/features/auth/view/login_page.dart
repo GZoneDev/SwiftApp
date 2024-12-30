@@ -1,12 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receptico/core/asset/asset_path.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
+import 'package:receptico/core/UI/theme.dart';
 
-import '../block/block.dart';
-import '../model/user.dart';
+import '../bloc/bloc.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -19,9 +18,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late bool _isError;
-  AuthLoginFailure _authState = AuthLoginFailure();
-  final _emailController = TextEditingController();
+  AuthLoginFailState _authState = AuthLoginFailState();
+  final _emailOrPhoneController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -32,17 +33,16 @@ class _LoginPageState extends State<LoginPage> {
   void _clearFailMessage() {
     if (_isError) {
       _isError = false;
-      setState(() => _authState = AuthLoginFailure());
+      setState(() => _authState = AuthLoginFailState());
     }
   }
 
   void _submit() {
+    _formKey.currentState!.validate();
     context.read<AuthBloc>().add(
-          AuthLogin(
-            user: LoginUser(
-              email: _emailController.text,
-              password: _passwordController.text,
-            ),
+          AuthLoginEvent(
+            emailOrPhone: _passwordController.text,
+            password: _passwordController.text,
           ),
         );
   }
@@ -51,81 +51,85 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     final localization = S.of(context);
-    return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthLoginFailure) {
-            _isError = true;
-            setState(() => _authState = state);
-          }
-        },
-        child: Stack(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthLoginFailState) {
+          _isError = true;
+          setState(() => _authState = state);
+        }
+      },
+      child: Scaffold(
+        body: Stack(
           children: [
-            LoginScreenBackgroundWidget(),
-            Container(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 278,
-                height: 458,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TitleWidget(
-                        title: localization.loginTitle,
-                        subtitle: localization.loginSubtitle,
-                      ),
-                      const SizedBox(height: 16),
-                      TextInputWidget(
-                        controller: _emailController,
-                        placeholder: localization.emailPlaceholder,
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.emailError,
-                        margin: EdgeInsets.only(bottom: 10.0),
-                        marginWithError: EdgeInsets.only(bottom: 7.0),
-                      ),
-                      PasswordInputWidget(
-                        controller: _passwordController,
-                        placeholderText: localization.passwordPlaceholder,
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.passwordError,
-                        helpWidget:
-                            LinkWidget(text: localization.forgottenPassword),
-                        margin: EdgeInsets.only(bottom: 25.0),
-                        marginWithError: EdgeInsets.only(bottom: 22.0),
-                      ),
-                      TextButtonWidget(
-                        text: localization.loginButton,
-                        onPressed: _submit,
-                      ),
-                      const SizedBox(height: 16),
-                      FooterWidget(
-                        text: localization.noAccountQuestion,
-                        linkText: localization.createAccount,
-                        onTab: () {
-                          router.goTo(RegisterRoute());
-                          _clearFailMessage();
-                        },
-                      ),
-                      const SizedBox(height: 40),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButtonWidget(
-                            assetPath: AssetPath.appleLogoPath,
-                            onPressed: () {
-                              debugPrint('Not created!');
-                            },
+            const ScreenBackgroundWidget(),
+            Form(
+              key: _formKey,
+              child: Container(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 278,
+                  height: 458,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TitleWidget(
+                          title: localization.loginTitle,
+                          subtitle: localization.loginSubtitle,
+                        ),
+                        const SizedBox(height: 16),
+                        TextInputWidget(
+                          controller: _emailOrPhoneController,
+                          placeholder: localization.emailOrPhonePlaceholder,
+                          onTap: _clearFailMessage,
+                          errorMessage: _authState.emailOrPhoneError,
+                          margin: EdgeInsets.only(bottom: 16.0),
+                          marginWithError: EdgeInsets.only(bottom: 10.0),
+                        ),
+                        PasswordInputWidget(
+                          controller: _passwordController,
+                          placeholderText: localization.passwordPlaceholder,
+                          onTap: _clearFailMessage,
+                          errorMessage: _authState.passwordError,
+                          helpWidget: LinkWidget(
+                            text: localization.forgottenPassword,
+                            onTap: () =>
+                                router.navigate(const RestorePasswordRoute()),
                           ),
-                          const SizedBox(width: 8),
-                          IconButtonWidget(
-                            assetPath: AssetPath.googleLogoPath,
-                            onPressed: () {
-                              debugPrint('Not created!');
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                          margin: EdgeInsets.only(bottom: 22.0),
+                          marginWithError: EdgeInsets.only(bottom: 22.0),
+                        ),
+                        TextButtonWidget(
+                          height: 50,
+                          text: localization.loginButton,
+                          onPressed: _submit,
+                        ),
+                        const SizedBox(height: 16),
+                        FooterWidget(
+                          text: localization.noAccountQuestion,
+                          linkText: localization.createAccount,
+                          onTab: () => router.navigate(const RegisterRoute()),
+                        ),
+                        const SizedBox(height: 40),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButtonWidget(
+                              assetPath: context.assetPath.appleLogo,
+                              onPressed: () {
+                                debugPrint('Not created!');
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            IconButtonWidget(
+                              assetPath: context.assetPath.googleLogo,
+                              onPressed: () {
+                                debugPrint('Not created!');
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -133,36 +137,6 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class LoginScreenBackgroundWidget extends StatelessWidget {
-  const LoginScreenBackgroundWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        const Positioned(
-          top: -95,
-          left: -73,
-          child: CircleWidget(width: 254, height: 254),
-        ),
-        const Positioned(
-          bottom: -34,
-          left: -47,
-          child: CircleWidget(width: 123, height: 123),
-        ),
-        const Positioned(
-          bottom: -72,
-          right: -41,
-          child: CircleWidget(width: 196, height: 196),
-        ),
-      ],
     );
   }
 }

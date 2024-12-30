@@ -48,6 +48,63 @@ class RegisterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [RestoreEmailPage]
+class RestoreEmailRoute extends PageRouteInfo<void> {
+  const RestoreEmailRoute({List<PageRouteInfo>? children})
+      : super(
+          RestoreEmailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RestoreEmailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestoreEmailPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RestorePasswordPage]
+class RestorePasswordRoute extends PageRouteInfo<void> {
+  const RestorePasswordRoute({List<PageRouteInfo>? children})
+      : super(
+          RestorePasswordRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RestorePasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestorePasswordPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RestorePhonePage]
+class RestorePhoneRoute extends PageRouteInfo<void> {
+  const RestorePhoneRoute({List<PageRouteInfo>? children})
+      : super(
+          RestorePhoneRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RestorePhoneRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestorePhonePage();
+    },
+  );
+}
+
+/// generated route for
 /// [StartPage]
 class StartRoute extends PageRouteInfo<void> {
   const StartRoute({List<PageRouteInfo>? children})

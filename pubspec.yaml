@@ -37,9 +37,10 @@ dev_dependencies:
 
 flutter:
   assets:
-    - asset/icon/logo.svg
-    - asset/icon/google_logo.svg
-    - asset/icon/apple_logo.svg
+    - asset/icon/static/google_logo.svg
+    - asset/icon/static/logo.svg
+    - asset/icon/static/apple_logo.svg
+
   uses-material-design: true
   fonts:
     - family: SFProText
@@ -50,3 +51,5 @@ flutter:
           weight: 700
 flutter_intl:
   enabled: true
+  arb-dir: lib/l10n
+  output-dir: lib/generated

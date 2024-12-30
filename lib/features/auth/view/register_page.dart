@@ -4,8 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 
-import '../block/auth_block.dart';
-import '../model/user.dart';
+import '../bloc/auth_bloc.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -18,10 +17,9 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   late bool _isError;
-  AuthRegisterFailure _authState = AuthRegisterFailure();
+  AuthRegisterFailState _authState = AuthRegisterFailState();
   final _usernameController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _emailController = TextEditingController();
+  final _emailOrPhoneController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
@@ -33,35 +31,32 @@ class _RegisterPageState extends State<RegisterPage> {
   void _clearFailMessage() {
     if (_isError) {
       _isError = false;
-      setState(() => _authState = AuthRegisterFailure());
+      setState(() => _authState = AuthRegisterFailState());
     }
   }
 
   void _submit() {
     context.read<AuthBloc>().add(
-          AuthRegister(
-            user: RegisterUser(
-              email: _emailController.text,
-              username: _usernameController.text,
-              phone: _phoneController.text,
-              password: _passwordController.text,
-            ),
+          AuthRegisterEvent(
+            username: _usernameController.text,
+            emailOrPhone: _passwordController.text,
+            password: _passwordController.text,
           ),
         );
   }
 
   @override
   Widget build(BuildContext context) {
-    const marginTextInput = EdgeInsets.only(bottom: 10.0),
-        marginTextInputWithError = EdgeInsets.only(bottom: 7.0);
+    const marginTextInput = EdgeInsets.only(bottom: 16.0),
+        marginTextInputWithError = EdgeInsets.only(bottom: 10.0);
     final router = AutoRouter.of(context);
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthRegisterSuccess) {
-          router.goTo(StartRoute());
+        if (state is AuthRegisterSuccessState) {
+          router.navigate(const StartRoute());
         }
-        if (state is AuthRegisterFailure) {
+        if (state is AuthRegisterFailState) {
           _isError = true;
           setState(() => _authState = state);
           return;
@@ -70,12 +65,12 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         body: Stack(
           children: [
-            RegisterScreenWidget(),
+            const ScreenBackgroundWidget(IsMirrored: true),
             Container(
               alignment: Alignment.center,
               child: SizedBox(
                 width: 278,
-                height: 520,
+                height: 400,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -93,18 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         marginWithError: marginTextInputWithError,
                       ),
                       TextInputWidget(
-                        placeholder: localization.emailPlaceholder,
-                        controller: _emailController,
+                        placeholder: localization.emailOrPhonePlaceholder,
+                        controller: _emailOrPhoneController,
                         onTap: _clearFailMessage,
-                        errorMessage: _authState.emailError,
-                        margin: marginTextInput,
-                        marginWithError: marginTextInputWithError,
-                      ),
-                      TextInputWidget(
-                        placeholder: localization.phonePlaceholder,
-                        controller: _phoneController,
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.phoneError,
+                        errorMessage: _authState.emailOrPhoneError,
                         margin: marginTextInput,
                         marginWithError: marginTextInputWithError,
                       ),
@@ -117,17 +104,15 @@ class _RegisterPageState extends State<RegisterPage> {
                         marginWithError: const EdgeInsets.only(bottom: 22.0),
                       ),
                       TextButtonWidget(
-                        text: S.of(context).registerButton,
+                        height: 50,
+                        text: localization.registerButton,
                         onPressed: _submit,
                       ),
                       const SizedBox(height: 16),
                       FooterWidget(
-                        text: S.of(context).accountQuestion,
+                        text: localization.accountQuestion,
                         linkText: localization.loginLink,
-                        onTab: () {
-                          router.goTo(LoginRoute());
-                          _clearFailMessage();
-                        },
+                        onTab: () => router.navigate(const LoginRoute()),
                       ),
                     ],
                   ),
@@ -137,36 +122,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class RegisterScreenWidget extends StatelessWidget {
-  const RegisterScreenWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        const Positioned(
-          top: -95,
-          right: -76,
-          child: CircleWidget(width: 254, height: 254),
-        ),
-        const Positioned(
-          bottom: -34,
-          right: -37,
-          child: CircleWidget(width: 123, height: 123),
-        ),
-        const Positioned(
-          bottom: -71,
-          left: -33,
-          child: CircleWidget(width: 196, height: 196),
-        ),
-      ],
     );
   }
 }
