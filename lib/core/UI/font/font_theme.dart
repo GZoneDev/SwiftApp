@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class FontTheme extends ThemeExtension<FontTheme> {
   final TextStyle? displayLarge;
@@ -136,5 +138,13 @@ extension FontThemeExtension on BuildContext {
 }
 
 extension SafeTextStyle on TextStyle? {
-  TextStyle get safe => this ?? TextStyle();
+  TextStyle get safe {
+    if (this == null) {
+      final errorLocation = StackTrace.current.toString().split('\n')[1];
+      final error =
+          'Error: NULL font used. Initialize variable in ThemeBuilder. \n$errorLocation';
+      GetIt.I<Talker>().handle(error);
+    }
+    return this ?? TextStyle();
+  }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receptico/core/UI/color/color_theme.dart';
-import 'package:receptico/core/UI/font/font_theme.dart';
+import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 

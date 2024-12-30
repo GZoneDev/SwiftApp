@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receptico/core/UI/color/color_theme.dart';
+import 'package:receptico/core/UI/color/palette.dart';
 import 'theme_builder.dart';
 
 final lightTheme = ThemeBuilder(
