@@ -11,12 +11,6 @@ class TemplateValidate {
         .email(localization.invalidEmailError);
   }
 
-  static ValidationBuilder _phone(S localization) {
-    return ValidationBuilder()
-        .required(localization.requiredError)
-        .phone(localization.invalidPhoneError);
-  }
-
   static ValidationBuilder _password(S localization) {
     return ValidationBuilder()
         .required(localization.requiredError)
@@ -40,19 +34,6 @@ class TemplateValidate {
     final validateEmail = _email(localization).build();
     final result = validateEmail(value ?? _defoult);
     return result;
-  }
-
-  static String? phoneValidate(String? value, S localization) {
-    final validatePhone = _phone(localization).build();
-    final result = validatePhone(value ?? _defoult);
-    return result;
-  }
-
-  static String? emailOrPhoneValidate(String? value, S localization) {
-    final emailEror = emailValidate(value, localization);
-    final phoneError = phoneValidate(value, localization);
-
-    return emailEror == null || phoneError == null ? null : emailEror;
   }
 
   static String? passwordValidate(String? value, S localization) {

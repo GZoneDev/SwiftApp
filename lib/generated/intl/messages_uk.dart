@@ -42,16 +42,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "createAccount": MessageLookupByLibrary.simpleMessage("Створити зараз"),
         "emailExistError": MessageLookupByLibrary.simpleMessage(
             "Цей електронний лист вже використовується"),
-        "emailOrPhonePlaceholder":
-            MessageLookupByLibrary.simpleMessage("Email/Телефон"),
+        "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
         "forgottenPassword":
             MessageLookupByLibrary.simpleMessage("Забули пароль?"),
         "invalidCharacterEnteredError":
             MessageLookupByLibrary.simpleMessage("Введено недійсний символ"),
         "invalidEmailError":
             MessageLookupByLibrary.simpleMessage("Недійсна пошта"),
-        "invalidPhoneError":
-            MessageLookupByLibrary.simpleMessage("Недійсний номер телефону"),
         "invalidVerificationCodeError":
             MessageLookupByLibrary.simpleMessage("Невірний код підтвердження"),
         "loginButton": MessageLookupByLibrary.simpleMessage("Увійти"),
@@ -97,8 +94,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Повернутися до входу"),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Код підтвердження"),
-        "smsSubtitle": MessageLookupByLibrary.simpleMessage(
-            "На Ваш номер телефону відправлено SMS-повідомлення з кодом підтвердження для відновлення пароля"),
         "tryAgainButton":
             MessageLookupByLibrary.simpleMessage("Спробувати знову"),
         "userDisabledError":

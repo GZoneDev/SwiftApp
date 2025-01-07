@@ -42,16 +42,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "createAccount": MessageLookupByLibrary.simpleMessage("Create now"),
         "emailExistError":
             MessageLookupByLibrary.simpleMessage("Email already in use"),
-        "emailOrPhonePlaceholder":
-            MessageLookupByLibrary.simpleMessage("Email/Phone"),
+        "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
         "forgottenPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "invalidCharacterEnteredError":
             MessageLookupByLibrary.simpleMessage("Invalid character entered"),
         "invalidEmailError":
             MessageLookupByLibrary.simpleMessage("Invalid email"),
-        "invalidPhoneError":
-            MessageLookupByLibrary.simpleMessage("Invalid phone number"),
         "invalidVerificationCodeError":
             MessageLookupByLibrary.simpleMessage("Invalid verification code"),
         "loginButton": MessageLookupByLibrary.simpleMessage("Sign in"),
@@ -97,8 +94,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Return to login"),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Confirmation code"),
-        "smsSubtitle": MessageLookupByLibrary.simpleMessage(
-            "An SMS message with a confirmation code to recover your password has been sent to your phone number."),
         "tryAgainButton": MessageLookupByLibrary.simpleMessage("Try again"),
         "userDisabledError":
             MessageLookupByLibrary.simpleMessage("User disabled"),

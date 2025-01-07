@@ -41,20 +41,10 @@ class AuthRestoreFailState extends AuthState {
   AuthRestoreFailState({this.emailOrPhoneError});
 }
 
-class AuthRestorePhoneFailState extends AuthState {
-  String? code, password, confirmPassword;
-
-  AuthRestorePhoneFailState({
-    required this.code,
-    required this.password,
-    required this.confirmPassword,
-  });
-}
-
 class AuthFailState extends AuthState {
   AuthFailState({super.errors});
 }
 
-class AuthEmailOrPhoneFailState extends AuthFailState {}
+class AuthEmailFailState extends AuthFailState {}
 
 class AuthPasswordFailState extends AuthFailState {}

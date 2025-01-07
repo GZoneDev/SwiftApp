@@ -17,7 +17,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: LoginRoute.page, path: '/login'),
         AutoRoute(page: RegisterRoute.page, path: '/register'),
         AutoRoute(page: RestorePasswordRoute.page, path: '/restorePasword'),
-        AutoRoute(page: RestorePhoneRoute.page, path: '/restorePasword/phone'),
         AutoRoute(page: SendEmailRoute.page, path: '/sendEmail'),
         AutoRoute(
           page: TempLogoutRoute.page,

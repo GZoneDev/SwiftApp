@@ -9,11 +9,10 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 enum EBlocError {
-  emailOrPhone,
+  email,
   username,
   password,
   confirmPassword,
-  smsCode,
 }
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -24,10 +23,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // Start validation
   AuthBloc() : super(AuthInitialState()) {
-    on<AuthEmailOrPhoneValidateEvent>((event, emit) {
-      final errorMessage = TemplateValidate.emailOrPhoneValidate(
-          event.value, event.localization);
-      _emitFail(EBlocError.emailOrPhone, errorMessage, emit);
+    on<AuthEmailValidateEvent>((event, emit) {
+      final errorMessage =
+          TemplateValidate.emailValidate(event.value, event.localization);
+      _emitFail(EBlocError.email, errorMessage, emit);
     });
 
     on<AuthPasswordValidateEvent>((event, emit) {
@@ -47,12 +46,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final errorMessage =
           TemplateValidate.usernameValidate(event.value, event.localization);
       _emitFail(EBlocError.username, errorMessage, emit);
-    });
-
-    on<AuthSMSCodeValidateEvent>((event, emit) {
-      final errorMessage =
-          TemplateValidate.usernameValidate(event.value, event.localization);
-      _emitFail(EBlocError.smsCode, errorMessage, emit);
     });
     // End validation
 
@@ -82,8 +75,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (isVerified) {
         emit(AuthLoginSuccessState());
       } else {
-        _emitFail(EBlocError.emailOrPhone,
-            event.localization.userNoVerifiedError, emit);
+        _emitFail(
+            EBlocError.email, event.localization.userNoVerifiedError, emit);
       }
     });
 
@@ -117,25 +110,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final isVerified = await _authEmail.isEmailVerified();
 
-      if (isVerified) {
-        emit(AuthRestoreSuccessState(event.emailOrPhone));
-      } else {
-        _emitFail(EBlocError.emailOrPhone,
-            event.localization.userNoVerifiedError, emit);
-      }
-    });
-
-    on<AuthRestorePhoneEvent>((event, emit) async {
-      if (_errors.isNotEmpty) {
-        emit(AuthFailState(errors: _errors));
-        return;
-      }
-
-      emit(AuthLoadingState());
-
-      await Future.delayed(const Duration(seconds: 2));
-
-      emit(AuthLoadedState());
+      isVerified
+          ? emit(AuthRestoreSuccessState(event.emailOrPhone))
+          : _emitFail(
+              EBlocError.email, event.localization.userNoVerifiedError, emit);
     });
 
     on<AuthGoogleSingInEvent>((event, emit) async {
@@ -161,22 +139,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case FirebaseAuthError.success:
         break;
       case FirebaseAuthError.userDisabled:
-        _emitFail(
-            EBlocError.emailOrPhone, localithation.userDisabledError, emit);
+        _emitFail(EBlocError.email, localithation.userDisabledError, emit);
         break;
       case FirebaseAuthError.userNotFound:
-        _emitFail(
-            EBlocError.emailOrPhone, localithation.userNotFoundError, emit);
+        _emitFail(EBlocError.email, localithation.userNotFoundError, emit);
         break;
       case FirebaseAuthError.wrongPassword:
         _emitFail(EBlocError.password, localithation.wrongPasswordError, emit);
         break;
       case FirebaseAuthError.emailAlreadyInUse:
-        _emitFail(EBlocError.emailOrPhone, localithation.emailExistError, emit);
+        _emitFail(EBlocError.email, localithation.emailExistError, emit);
         break;
       case FirebaseAuthError.invalidEmail:
-        _emitFail(
-            EBlocError.emailOrPhone, localithation.invalidEmailError, emit);
+        _emitFail(EBlocError.email, localithation.invalidEmailError, emit);
         break;
       case FirebaseAuthError.operationNotAllowed:
         // TODO: Handle this case.
@@ -188,13 +163,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // TODO: Handle this case.
         throw UnimplementedError();
       case FirebaseAuthError.resetUserNotFound:
-        _emitFail(
-            EBlocError.emailOrPhone, localithation.userNotFoundError, emit);
+        _emitFail(EBlocError.email, localithation.userNotFoundError, emit);
         break;
       case FirebaseAuthError.invalidVerificationCode:
-        _emitFail(EBlocError.smsCode,
-            localithation.invalidVerificationCodeError, emit);
-        break;
+        // TODO: Handle this case.
+        throw UnimplementedError();
       case FirebaseAuthError.invalidVerificationId:
         // TODO: Handle this case.
         throw UnimplementedError();

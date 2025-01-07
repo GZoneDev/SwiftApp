@@ -86,25 +86,6 @@ class RestorePasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RestorePhonePage]
-class RestorePhoneRoute extends PageRouteInfo<void> {
-  const RestorePhoneRoute({List<PageRouteInfo>? children})
-      : super(
-          RestorePhoneRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RestorePhoneRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const RestorePhonePage();
-    },
-  );
-}
-
-/// generated route for
 /// [SendEmailPage]
 class SendEmailRoute extends PageRouteInfo<void> {
   const SendEmailRoute({List<PageRouteInfo>? children})

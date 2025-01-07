@@ -37,18 +37,6 @@ class AuthRestoreEvent extends AuthEvent {
   });
 }
 
-class AuthRestorePhoneEvent extends AuthEvent {
-  final String code, password, confirmPassword;
-  final S localization;
-
-  AuthRestorePhoneEvent({
-    required this.code,
-    required this.password,
-    required this.confirmPassword,
-    required this.localization,
-  });
-}
-
 class AuthRouteEvent extends AuthEvent {}
 
 class AuthValidateEvent extends AuthEvent {
@@ -61,9 +49,8 @@ class AuthValidateEvent extends AuthEvent {
   });
 }
 
-class AuthEmailOrPhoneValidateEvent extends AuthValidateEvent {
-  AuthEmailOrPhoneValidateEvent(
-      {required super.value, required super.localization});
+class AuthEmailValidateEvent extends AuthValidateEvent {
+  AuthEmailValidateEvent({required super.value, required super.localization});
 }
 
 class AuthPasswordValidateEvent extends AuthValidateEvent {
@@ -83,10 +70,6 @@ class AuthConfirmPasswordValidateEvent extends AuthValidateEvent {
 class AuthUsernameValidateEvent extends AuthValidateEvent {
   AuthUsernameValidateEvent(
       {required super.value, required super.localization});
-}
-
-class AuthSMSCodeValidateEvent extends AuthValidateEvent {
-  AuthSMSCodeValidateEvent({required super.value, required super.localization});
 }
 
 class AuthGoogleSingInEvent extends AuthEvent {}

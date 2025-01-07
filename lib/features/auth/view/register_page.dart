@@ -44,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String? _emailOrPhoneValidate(String? value) {
     context.read<AuthBloc>().add(
-          AuthEmailOrPhoneValidateEvent(
+          AuthEmailValidateEvent(
             value: value,
             localization: S.of(context),
           ),
@@ -83,11 +83,15 @@ class _RegisterPageState extends State<RegisterPage> {
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthClearFailState) _clearForm();
+        switch (state.runtimeType) {
+          case const (AuthClearFailState):
+            _clearForm();
+            break;
 
-        if (state is AuthRegisterSuccessState) {
-          router.navigate(const SendEmailRoute());
-          _clearForm();
+          case const (AuthRegisterSuccessState):
+            router.navigate(const SendEmailRoute());
+            _clearForm();
+            break;
         }
       },
       child: WillPopScope(
@@ -120,10 +124,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           onChanged: _usernameValidate,
                         ),
                         SelectorTextInputWidget(
-                          placeholder: localization.emailOrPhonePlaceholder,
+                          placeholder: localization.emailPlaceholder,
                           controller: _controllers[EInput.emailOrPhone],
-                          selector: (state) =>
-                              state.errors?[EBlocError.emailOrPhone],
+                          selector: (state) => state.errors?[EBlocError.email],
                           onChanged: _emailOrPhoneValidate,
                         ),
                         SelectorPasswordInputWidget(

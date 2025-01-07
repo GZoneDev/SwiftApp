@@ -28,7 +28,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
 
   String? _emailOrPhoneValidate(String? value) {
     context.read<AuthBloc>().add(
-          AuthEmailOrPhoneValidateEvent(
+          AuthEmailValidateEvent(
             value: value,
             localization: S.of(context),
           ),
@@ -54,11 +54,15 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthClearFailState) _clearForm();
+        switch (state.runtimeType) {
+          case const (AuthClearFailState):
+            _clearForm();
+            break;
 
-        if (state is AuthRestoreSuccessState) {
-          router.navigate(const SendEmailRoute());
-          _clearForm();
+          case const (AuthRestoreSuccessState):
+            router.navigate(const SendEmailRoute());
+            _clearForm();
+            break;
         }
       },
       child: WillPopScope(
@@ -88,10 +92,9 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                           child: Column(
                             children: [
                               SelectorTextInputWidget(
-                                placeholder:
-                                    localization.emailOrPhonePlaceholder,
+                                placeholder: localization.emailPlaceholder,
                                 selector: (state) =>
-                                    state.errors?[EBlocError.emailOrPhone],
+                                    state.errors?[EBlocError.email],
                                 controller: _emailOrPhoneController,
                                 onChanged: _emailOrPhoneValidate,
                                 margin: EdgeInsets.only(bottom: 22.0),

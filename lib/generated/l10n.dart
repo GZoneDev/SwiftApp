@@ -200,11 +200,11 @@ class S {
     );
   }
 
-  /// `Email/Phone`
-  String get emailOrPhonePlaceholder {
+  /// `Email`
+  String get emailPlaceholder {
     return Intl.message(
-      'Email/Phone',
-      name: 'emailOrPhonePlaceholder',
+      'Email',
+      name: 'emailPlaceholder',
       desc: '',
       args: [],
     );
@@ -225,16 +225,6 @@ class S {
     return Intl.message(
       'Return to login',
       name: 'returnToLoginLink',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `An SMS message with a confirmation code to recover your password has been sent to your phone number.`
-  String get smsSubtitle {
-    return Intl.message(
-      'An SMS message with a confirmation code to recover your password has been sent to your phone number.',
-      name: 'smsSubtitle',
       desc: '',
       args: [],
     );
@@ -335,16 +325,6 @@ class S {
     return Intl.message(
       'Invalid email',
       name: 'invalidEmailError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invalid phone number`
-  String get invalidPhoneError {
-    return Intl.message(
-      'Invalid phone number',
-      name: 'invalidPhoneError',
       desc: '',
       args: [],
     );
