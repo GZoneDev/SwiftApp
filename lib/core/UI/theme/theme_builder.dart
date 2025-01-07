@@ -45,13 +45,13 @@ class ThemeBuilder {
         enabledBorder: inputTextBorder,
         focusedErrorBorder: inputTextErrorBorder,
         errorBorder: inputTextErrorBorder,
-        errorStyle: Font.caption1.textStyle(color: colorTheme.font.error),
-        hintStyle: Font.body.textStyle(color: colorTheme.font.hint),
+        errorStyle: EFont.caption1.textStyle(color: colorTheme.font.error),
+        hintStyle: EFont.body.textStyle(color: colorTheme.font.hint),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           textStyle: WidgetStateProperty.all(
-            Font.body.textStyle(color: colorTheme.font.elevatedButton),
+            EFont.body.textStyle(color: colorTheme.font.elevatedButton),
           ),
           padding: WidgetStateProperty.all(elevatedButtonPadding),
           backgroundColor:
@@ -63,7 +63,7 @@ class ThemeBuilder {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          textStyle: WidgetStateProperty.all(Font.headline.textStyle()),
+          textStyle: WidgetStateProperty.all(EFont.headline.textStyle()),
           foregroundColor: WidgetStateProperty.all(colorTheme.font.textButton),
           backgroundColor:
               WidgetStateProperty.all(colorTheme.background.textButton),
@@ -80,38 +80,38 @@ class ThemeBuilder {
         Asset(assetDirectory: assetThemeDirectory),
         colorTheme,
         FontTheme(
-          displayLarge: Font.title1.textStyle(color: colorTheme.font.main),
-          title1: Font.title1.textStyle(color: colorTheme.font.main),
-          title2: Font.title2.textStyle(color: colorTheme.font.main),
-          title3: Font.title3.textStyle(color: colorTheme.font.main),
-          headline: Font.headline.textStyle(color: colorTheme.font.main),
-          body: Font.body.textStyle(color: colorTheme.font.main),
-          callout: Font.callout.textStyle(color: colorTheme.font.main),
-          subhead: Font.subhead.textStyle(color: colorTheme.font.main),
-          footnote: Font.footnote.textStyle(color: colorTheme.font.main),
-          caption1: Font.caption1.textStyle(color: colorTheme.font.main),
-          caption2: Font.caption2.textStyle(color: colorTheme.font.main),
-          displayLargeBold: Font.displayLarge.textStyle(
+          displayLarge: EFont.title1.textStyle(color: colorTheme.font.main),
+          title1: EFont.title1.textStyle(color: colorTheme.font.main),
+          title2: EFont.title2.textStyle(color: colorTheme.font.main),
+          title3: EFont.title3.textStyle(color: colorTheme.font.main),
+          headline: EFont.headline.textStyle(color: colorTheme.font.main),
+          body: EFont.body.textStyle(color: colorTheme.font.main),
+          callout: EFont.callout.textStyle(color: colorTheme.font.main),
+          subhead: EFont.subhead.textStyle(color: colorTheme.font.main),
+          footnote: EFont.footnote.textStyle(color: colorTheme.font.main),
+          caption1: EFont.caption1.textStyle(color: colorTheme.font.main),
+          caption2: EFont.caption2.textStyle(color: colorTheme.font.main),
+          displayLargeBold: EFont.displayLarge.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          title1Bold: Font.title1.textStyle(
+          title1Bold: EFont.title1.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          title2Bold: Font.title2.textStyle(
+          title2Bold: EFont.title2.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          title3Bold: Font.title3.textStyle(
+          title3Bold: EFont.title3.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          headlineBold: Font.headline.textStyle(
+          headlineBold: EFont.headline.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          bodyBold: Font.body.textStyle(
+          bodyBold: EFont.body.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          calloutBold: Font.callout.textStyle(
+          calloutBold: EFont.callout.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          subheadBold: Font.subhead.textStyle(
+          subheadBold: EFont.subhead.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          footnoteBold: Font.footnote.textStyle(
+          footnoteBold: EFont.footnote.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          caption1Bold: Font.caption1.textStyle(
+          caption1Bold: EFont.caption1.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
-          caption2Bold: Font.caption2.textStyle(
+          caption2Bold: EFont.caption2.textStyle(
               color: colorTheme.font.main, fontWeight: FontWeight.bold),
         ),
       ],

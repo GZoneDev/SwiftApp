@@ -6,6 +6,7 @@ class Palette {
   final Color? warning;
   final Color? hint;
   final Color? input;
+  final Color? link;
   final Color? textButton;
   final Color? elevatedButton;
   final Color? floatingActionButton;
@@ -19,6 +20,7 @@ class Palette {
     this.warning,
     this.hint,
     this.input,
+    this.link,
     this.textButton,
     this.elevatedButton,
     this.floatingActionButton,
@@ -27,13 +29,13 @@ class Palette {
     this.dashboarPhone,
   });
 
-  @override
   Palette copyWith({
     Color? main,
     Color? error,
     Color? warning,
     Color? hint,
     Color? input,
+    Color? link,
     Color? textButton,
     Color? elevatedButton,
     Color? floatingActionButton,
@@ -47,6 +49,7 @@ class Palette {
       warning: warning ?? this.warning,
       hint: hint ?? this.hint,
       input: input ?? this.input,
+      link: link ?? this.link,
       textButton: textButton ?? this.textButton,
       elevatedButton: elevatedButton ?? this.elevatedButton,
       floatingActionButton: floatingActionButton ?? this.floatingActionButton,
@@ -63,6 +66,7 @@ class Palette {
       warning: Color.lerp(x?.warning, y?.warning, t),
       hint: Color.lerp(x?.hint, y?.hint, t),
       input: Color.lerp(x?.input, y?.input, t),
+      link: Color.lerp(x?.link, y?.link, t),
       textButton: Color.lerp(x?.textButton, y?.textButton, t),
       elevatedButton: Color.lerp(x?.elevatedButton, y?.elevatedButton, t),
       floatingActionButton:

@@ -20,6 +20,12 @@ class _AppState extends State<App> {
   final _appRouter = AppRouter();
 
   @override
+  void dispose() {
+    _appRouter.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [

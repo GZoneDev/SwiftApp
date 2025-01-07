@@ -8,3 +8,7 @@ export 'footer_widget.dart';
 export 'link_widget.dart';
 export 'screen_background_widget.dart';
 export 'back_link_widget.dart';
+export 'loading_widget.dart';
+export 'selector_password_input_widget.dart';
+export 'selector_text_input_widget.dart';
+export 'fail_catch_widget.dart';

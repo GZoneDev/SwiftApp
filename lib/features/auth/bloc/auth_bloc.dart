@@ -1,45 +1,230 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/common/valitation/template_validate.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receptico/generated/l10n.dart';
+
+import '../service/service.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
+enum EBlocError {
+  emailOrPhone,
+  username,
+  password,
+  confirmPassword,
+  smsCode,
+}
+
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final IAuthEmailService _authEmail = AuthEmailService();
+  final IAuthGoogleService _authGoogle = AuthGoogleService();
+
+  final Map<EBlocError, String?> _errors = <EBlocError, String?>{};
+
+  // Start validation
   AuthBloc() : super(AuthInitialState()) {
-    on<AuthLoginEvent>((event, emit) {
-      // final resultEmailOrPhone =
-      //     TemplateValidate.emailValidate(event.emailOrPhone);
-      // final resultPassword = TemplateValidate.passwordValidate(event.password);
-
-      // AuthLoginFailState state = AuthLoginFailState();
-      // state.emailOrPhoneError = "resultEmailOrPhone";
-      // state.passwordError = "resultPassword";
-
-      // if (state.containsError()) {
-      //   emit(state);
-      //   return;
-      // }
-
-      // emit(AuthLoginSuccessState());
+    on<AuthEmailOrPhoneValidateEvent>((event, emit) {
+      final errorMessage = TemplateValidate.emailOrPhoneValidate(
+          event.value, event.localization);
+      _emitFail(EBlocError.emailOrPhone, errorMessage, emit);
     });
 
-    on<AuthRegisterEvent>((event, emit) {
-      // final resultUsername = TemplateValidate.usernameValidate(event.username);
-      // final resultEmailOrPhone =
-      //     TemplateValidate.emailValidate(event.emailOrPhone);
-      // final resultPassword = TemplateValidate.passwordValidate(event.password);
-
-      // AuthRegisterFailState state = AuthRegisterFailState();
-      // state.emailOrPhoneError = resultEmailOrPhone;
-      // state.passwordError = resultPassword;
-      // state.usernameError = resultUsername;
-
-      // if (state.containsError()) {
-      //   emit(state);
-      //   return;
-      // }
-
-      emit(AuthRegisterSuccessState());
+    on<AuthPasswordValidateEvent>((event, emit) {
+      final errorMessage =
+          TemplateValidate.passwordValidate(event.value, event.localization);
+      _emitFail(EBlocError.password, errorMessage, emit);
     });
+
+    on<AuthConfirmPasswordValidateEvent>((event, emit) {
+      final errorMessage = event.value == event.confirmValue
+          ? null
+          : event.localization.passwordsNoMatchError;
+      _emitFail(EBlocError.confirmPassword, errorMessage, emit);
+    });
+
+    on<AuthUsernameValidateEvent>((event, emit) {
+      final errorMessage =
+          TemplateValidate.usernameValidate(event.value, event.localization);
+      _emitFail(EBlocError.username, errorMessage, emit);
+    });
+
+    on<AuthSMSCodeValidateEvent>((event, emit) {
+      final errorMessage =
+          TemplateValidate.usernameValidate(event.value, event.localization);
+      _emitFail(EBlocError.smsCode, errorMessage, emit);
+    });
+    // End validation
+
+    on<AuthRouteEvent>((event, emit) {
+      _errors.clear();
+      emit(AuthClearFailState());
+    });
+
+    on<AuthLoginEvent>((event, emit) async {
+      if (_errors.isNotEmpty) {
+        emit(AuthFailState(errors: _errors));
+        return;
+      }
+
+      emit(AuthLoadingState());
+
+      final result =
+          await _authEmail.loginWithEmail(event.emailOrPhone, event.password);
+
+      if (!result.isSuccess) {
+        _throwFail(result, event.localization, emit);
+        return;
+      }
+
+      final isVerified = await _authEmail.isEmailVerified();
+
+      if (isVerified) {
+        emit(AuthLoginSuccessState());
+      } else {
+        _emitFail(EBlocError.emailOrPhone,
+            event.localization.userNoVerifiedError, emit);
+      }
+    });
+
+    on<AuthRegisterEvent>((event, emit) async {
+      if (_errors.isNotEmpty) {
+        emit(AuthFailState(errors: _errors));
+        return;
+      }
+
+      emit(AuthLoadingState());
+
+      final result = await _authEmail.registerWithEmail(
+          event.emailOrPhone, event.password);
+
+      result.isSuccess
+          ? emit(AuthRegisterSuccessState(event.emailOrPhone))
+          : _throwFail(result, event.localization, emit);
+    });
+
+    on<AuthRestoreEvent>((event, emit) async {
+      if (_errors.isNotEmpty) {
+        emit(AuthFailState(errors: _errors));
+        return;
+      }
+
+      emit(AuthLoadingState());
+
+      final result = await _authEmail.resetPassword(event.emailOrPhone);
+
+      if (!result.isSuccess) _throwFail(result, event.localization, emit);
+
+      final isVerified = await _authEmail.isEmailVerified();
+
+      if (isVerified) {
+        emit(AuthRestoreSuccessState(event.emailOrPhone));
+      } else {
+        _emitFail(EBlocError.emailOrPhone,
+            event.localization.userNoVerifiedError, emit);
+      }
+    });
+
+    on<AuthRestorePhoneEvent>((event, emit) async {
+      if (_errors.isNotEmpty) {
+        emit(AuthFailState(errors: _errors));
+        return;
+      }
+
+      emit(AuthLoadingState());
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      emit(AuthLoadedState());
+    });
+
+    on<AuthGoogleSingInEvent>((event, emit) async {
+      emit(AuthLoadingState());
+
+      final result = await _authGoogle.signInWithGoogle();
+
+      result ? emit(AuthLoginSuccessState()) : emit(AuthLoadedState());
+    });
+  }
+
+  void _emitFail(
+      final EBlocError type, final String? message, Emitter<AuthState> emit) {
+    if (_errors[type] != message) {
+      message == null ? _errors.remove(type) : _errors[type] = message;
+      emit(AuthFailState(errors: _errors));
+    }
+  }
+
+  void _throwFail(
+      FirebaseAuthError error, S localithation, Emitter<AuthState> emit) {
+    switch (error) {
+      case FirebaseAuthError.success:
+        break;
+      case FirebaseAuthError.userDisabled:
+        _emitFail(
+            EBlocError.emailOrPhone, localithation.userDisabledError, emit);
+        break;
+      case FirebaseAuthError.userNotFound:
+        _emitFail(
+            EBlocError.emailOrPhone, localithation.userNotFoundError, emit);
+        break;
+      case FirebaseAuthError.wrongPassword:
+        _emitFail(EBlocError.password, localithation.wrongPasswordError, emit);
+        break;
+      case FirebaseAuthError.emailAlreadyInUse:
+        _emitFail(EBlocError.emailOrPhone, localithation.emailExistError, emit);
+        break;
+      case FirebaseAuthError.invalidEmail:
+        _emitFail(
+            EBlocError.emailOrPhone, localithation.invalidEmailError, emit);
+        break;
+      case FirebaseAuthError.operationNotAllowed:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.weakPassword:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.resetInvalidEmail:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.resetUserNotFound:
+        _emitFail(
+            EBlocError.emailOrPhone, localithation.userNotFoundError, emit);
+        break;
+      case FirebaseAuthError.invalidVerificationCode:
+        _emitFail(EBlocError.smsCode,
+            localithation.invalidVerificationCodeError, emit);
+        break;
+      case FirebaseAuthError.invalidVerificationId:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.quotaExceeded:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.credentialAlreadyInUse:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.phoneOperationNotAllowed:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.requiresRecentLogin:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.tooManyRequests:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.invalidCredential:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.networkRequestFailed:
+        emit(AuthNetworkFailState());
+        break;
+      case FirebaseAuthError.internalError:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case FirebaseAuthError.unknown:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
   }
 }

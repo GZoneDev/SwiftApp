@@ -1,79 +1,69 @@
-import 'package:flutter/material.dart';
 import 'package:receptico/common/valitation/validation_builder.dart';
+import 'package:receptico/generated/l10n.dart';
 
 class TemplateValidate {
+  static const _defoult = '';
   static const int minPasswordLeng = 6;
-  BuildContext context;
 
-  TemplateValidate(this.context);
-
-  ValidationBuilder _email() {
+  static ValidationBuilder _email(S localization) {
     return ValidationBuilder()
-        .required('Поле не має бути пустим')
-        .email('Недійсна пошта');
+        .required(localization.requiredError)
+        .email(localization.invalidEmailError);
   }
 
-  ValidationBuilder _phone() {
+  static ValidationBuilder _phone(S localization) {
     return ValidationBuilder()
-        .required('Поле не має бути пустим')
-        .phone('Недійсний номер телефону');
+        .required(localization.requiredError)
+        .phone(localization.invalidPhoneError);
   }
 
-  ValidationBuilder _password() {
+  static ValidationBuilder _password(S localization) {
     return ValidationBuilder()
-        .required('Поле не має бути пустим')
-        .minLength(minPasswordLeng,
-            'Пароль має бути не менше $minPasswordLeng символів')
+        .required(localization.requiredError)
+        .minLength(
+            minPasswordLeng, localization.minPasswordLengError(minPasswordLeng))
+        .regExp(RegExp(r'[A-Z]'), localization.passwordUppercaseError)
+        .regExp(RegExp(r'[a-z]'), localization.passwordLowercaseError)
+        .regExp(RegExp(r'[0-9]'), localization.passwordNumberError)
         .regExp(
-            RegExp(r'[A-Z]'), 'Пароль має містити принаймні одну велику літеру')
-        .regExp(
-            RegExp(r'[a-z]'), 'Пароль має містити принаймні одну малу літеру')
-        .regExp(RegExp(r'[0-9]'), 'Пароль повинен містити хоча б одне число')
-        .regExp(RegExp(r'[\W_]'),
-            'Пароль повинен містити хоча б один спеціальний символ');
+            RegExp(r'[._\/\\-]'), localization.passwordSpecialCharacterError)
+        .regExp(RegExp(r'^[a-zA-Z0-9._\/\\-]*$'),
+            localization.invalidCharacterEnteredError);
   }
 
-  ValidationBuilder _username() {
-    return ValidationBuilder().required('Поле не має бути пустим').minLength(
-        minPasswordLeng,
-        'Ім’я не може бути меньшим ніж $minPasswordLeng символів');
+  static ValidationBuilder _username(S localization) {
+    return ValidationBuilder().required(localization.requiredError).minLength(
+        minPasswordLeng, localization.minUsernameLengError(minPasswordLeng));
   }
 
-  String? emailOrPhoneValidate(String value) {
-    final validateEmail = _email().build();
-    final validatePhone = _phone().build();
-    final resultEmail = validateEmail(value);
-    final resultPhone = validatePhone(value);
-    if (resultEmail == null) {
-      return null;
-    } else if (resultPhone == null) {
-      return null;
-    }
-
-    return resultEmail ?? resultPhone;
-  }
-
-  String? emailValidate(String value) {
-    final validateEmail = _email().build();
-    final result = validateEmail(value);
+  static String? emailValidate(String? value, S localization) {
+    final validateEmail = _email(localization).build();
+    final result = validateEmail(value ?? _defoult);
     return result;
   }
 
-  String? phoneValidate(String value) {
-    final validatePhone = _phone().build();
-    final result = validatePhone(value);
+  static String? phoneValidate(String? value, S localization) {
+    final validatePhone = _phone(localization).build();
+    final result = validatePhone(value ?? _defoult);
     return result;
   }
 
-  String? passwordValidate(String value) {
-    final validatePassword = _password().build();
-    final result = validatePassword(value);
+  static String? emailOrPhoneValidate(String? value, S localization) {
+    final emailEror = emailValidate(value, localization);
+    final phoneError = phoneValidate(value, localization);
+
+    return emailEror == null || phoneError == null ? null : emailEror;
+  }
+
+  static String? passwordValidate(String? value, S localization) {
+    final validatePassword = _password(localization).build();
+    final result = validatePassword(value ?? _defoult);
     return result;
   }
 
-  String? usernameValidate(String value) {
-    final validateUsername = _username().build();
-    final result = validateUsername(value);
+  static String? usernameValidate(String? value, S localization) {
+    final validateUsername = _username(localization).build();
+    final result = validateUsername(value ?? _defoult);
     return result;
   }
 }

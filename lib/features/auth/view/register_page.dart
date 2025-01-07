@@ -5,6 +5,7 @@ import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 
 import '../bloc/auth_bloc.dart';
+import '../common/enum.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -16,110 +17,145 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late bool _isError;
-  AuthRegisterFailState _authState = AuthRegisterFailState();
-  final _usernameController = TextEditingController();
-  final _emailOrPhoneController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final Map<EInput, TextEditingController> _controllers = {
+    EInput.username: TextEditingController(),
+    EInput.emailOrPhone: TextEditingController(),
+    EInput.password: TextEditingController(),
+  };
+
+  void _clearForm() =>
+      _controllers.forEach((key, controller) => controller.clear());
 
   @override
-  void initState() {
-    super.initState();
-    _isError = false;
+  void dispose() {
+    _controllers.forEach((key, controller) => controller.dispose());
+    super.dispose();
   }
 
-  void _clearFailMessage() {
-    if (_isError) {
-      _isError = false;
-      setState(() => _authState = AuthRegisterFailState());
-    }
+  String? _usernameValidate(String? value) {
+    context.read<AuthBloc>().add(
+          AuthUsernameValidateEvent(
+            value: value,
+            localization: S.of(context),
+          ),
+        );
+    return value;
+  }
+
+  String? _emailOrPhoneValidate(String? value) {
+    context.read<AuthBloc>().add(
+          AuthEmailOrPhoneValidateEvent(
+            value: value,
+            localization: S.of(context),
+          ),
+        );
+    return value;
+  }
+
+  String? _passwordValidate(String? value) {
+    context.read<AuthBloc>().add(
+          AuthPasswordValidateEvent(
+            value: value,
+            localization: S.of(context),
+          ),
+        );
+    return value;
   }
 
   void _submit() {
+    _usernameValidate(_controllers[EInput.username]?.text);
+    _emailOrPhoneValidate(_controllers[EInput.emailOrPhone]?.text);
+    _passwordValidate(_controllers[EInput.password]?.text);
+
     context.read<AuthBloc>().add(
           AuthRegisterEvent(
-            username: _usernameController.text,
-            emailOrPhone: _passwordController.text,
-            password: _passwordController.text,
+            username: _controllers[EInput.username]?.text ?? '',
+            emailOrPhone: _controllers[EInput.emailOrPhone]?.text ?? '',
+            password: _controllers[EInput.password]?.text ?? '',
+            localization: S.of(context),
           ),
         );
   }
 
   @override
   Widget build(BuildContext context) {
-    const marginTextInput = EdgeInsets.only(bottom: 16.0),
-        marginTextInputWithError = EdgeInsets.only(bottom: 10.0);
     final router = AutoRouter.of(context);
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        if (state is AuthClearFailState) _clearForm();
+
         if (state is AuthRegisterSuccessState) {
-          router.navigate(const StartRoute());
-        }
-        if (state is AuthRegisterFailState) {
-          _isError = true;
-          setState(() => _authState = state);
-          return;
+          router.navigate(const SendEmailRoute());
+          _clearForm();
         }
       },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            const ScreenBackgroundWidget(IsMirrored: true),
-            Container(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 278,
-                height: 400,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TitleWidget(
-                        title: localization.registerTitle,
-                        subtitle: localization.registerSubtitle,
-                      ),
-                      const SizedBox(height: 13),
-                      TextInputWidget(
-                        placeholder: localization.namePlaceholder,
-                        controller: _usernameController,
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.usernameError,
-                        margin: marginTextInput,
-                        marginWithError: marginTextInputWithError,
-                      ),
-                      TextInputWidget(
-                        placeholder: localization.emailOrPhonePlaceholder,
-                        controller: _emailOrPhoneController,
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.emailOrPhoneError,
-                        margin: marginTextInput,
-                        marginWithError: marginTextInputWithError,
-                      ),
-                      PasswordInputWidget(
-                        controller: _passwordController,
-                        placeholderText: localization.passwordPlaceholder,
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.passwordError,
-                        margin: const EdgeInsets.only(bottom: 25.0),
-                        marginWithError: const EdgeInsets.only(bottom: 22.0),
-                      ),
-                      TextButtonWidget(
-                        height: 50,
-                        text: localization.registerButton,
-                        onPressed: _submit,
-                      ),
-                      const SizedBox(height: 16),
-                      FooterWidget(
-                        text: localization.accountQuestion,
-                        linkText: localization.loginLink,
-                        onTab: () => router.navigate(const LoginRoute()),
-                      ),
-                    ],
+      child: WillPopScope(
+        onWillPop: () async {
+          context.read<AuthBloc>().add(AuthRouteEvent());
+          return true;
+        },
+        child: Scaffold(
+          body: Stack(
+            children: [
+              const ScreenBackgroundWidget(IsMirrored: true),
+              Container(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 278,
+                  height: 430,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TitleWidget(
+                          title: localization.registerTitle,
+                          subtitle: localization.registerSubtitle,
+                        ),
+                        const SizedBox(height: 13),
+                        SelectorTextInputWidget(
+                          placeholder: localization.namePlaceholder,
+                          controller: _controllers[EInput.username],
+                          selector: (state) =>
+                              state.errors?[EBlocError.username],
+                          onChanged: _usernameValidate,
+                        ),
+                        SelectorTextInputWidget(
+                          placeholder: localization.emailOrPhonePlaceholder,
+                          controller: _controllers[EInput.emailOrPhone],
+                          selector: (state) =>
+                              state.errors?[EBlocError.emailOrPhone],
+                          onChanged: _emailOrPhoneValidate,
+                        ),
+                        SelectorPasswordInputWidget(
+                          placeholder: localization.passwordPlaceholder,
+                          controller: _controllers[EInput.password],
+                          selector: (state) =>
+                              state.errors?[EBlocError.password],
+                          onChanged: _passwordValidate,
+                        ),
+                        TextButtonWidget(
+                          height: 50,
+                          text: localization.registerButton,
+                          onPressed: _submit,
+                        ),
+                        const SizedBox(height: 16),
+                        FooterWidget(
+                          text: localization.accountQuestion,
+                          linkText: localization.loginLink,
+                          onTab: () {
+                            context.read<AuthBloc>().add(AuthRouteEvent());
+                            router.navigate(const LoginRoute());
+                            _clearForm();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              LoadingWidget(),
+            ],
+          ),
         ),
       ),
     );

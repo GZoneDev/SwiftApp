@@ -143,7 +143,7 @@ extension SafeTextStyle on TextStyle? {
       final errorLocation = StackTrace.current.toString().split('\n')[1];
       final error =
           'Error: NULL font used. Initialize variable in ThemeBuilder. \n$errorLocation';
-      GetIt.I<Talker>().handle(error);
+      GetIt.I<Talker>().critical(error);
     }
     return this ?? TextStyle();
   }

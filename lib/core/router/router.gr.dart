@@ -10,6 +10,25 @@
 part of 'router.dart';
 
 /// generated route for
+/// [FailPage]
+class FailRoute extends PageRouteInfo<void> {
+  const FailRoute({List<PageRouteInfo>? children})
+      : super(
+          FailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const FailPage();
+    },
+  );
+}
+
+/// generated route for
 /// [LoginPage]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
@@ -43,25 +62,6 @@ class RegisterRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const RegisterPage();
-    },
-  );
-}
-
-/// generated route for
-/// [RestoreEmailPage]
-class RestoreEmailRoute extends PageRouteInfo<void> {
-  const RestoreEmailRoute({List<PageRouteInfo>? children})
-      : super(
-          RestoreEmailRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RestoreEmailRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const RestoreEmailPage();
     },
   );
 }
@@ -105,6 +105,25 @@ class RestorePhoneRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SendEmailPage]
+class SendEmailRoute extends PageRouteInfo<void> {
+  const SendEmailRoute({List<PageRouteInfo>? children})
+      : super(
+          SendEmailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SendEmailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SendEmailPage();
+    },
+  );
+}
+
+/// generated route for
 /// [StartPage]
 class StartRoute extends PageRouteInfo<void> {
   const StartRoute({List<PageRouteInfo>? children})
@@ -119,6 +138,25 @@ class StartRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const StartPage();
+    },
+  );
+}
+
+/// generated route for
+/// [TempLogoutPage]
+class TempLogoutRoute extends PageRouteInfo<void> {
+  const TempLogoutRoute({List<PageRouteInfo>? children})
+      : super(
+          TempLogoutRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TempLogoutRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TempLogoutPage();
     },
   );
 }

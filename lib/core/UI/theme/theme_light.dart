@@ -15,6 +15,7 @@ final lightTheme = ThemeBuilder(
       input: Colors.black,
       error: Colors.red,
       hint: const Color(0xFF8E8E93),
+      link: Colors.white,
     ),
     background: Palette(
       scaffold: const Color(0xFFFFC60F),
@@ -23,12 +24,14 @@ final lightTheme = ThemeBuilder(
       input: Colors.white,
       dashboarPhone: const Color(0xFFF1E3B6),
       dashboarEmail: const Color(0xFF5AC8FA),
+      hint: const Color(0xFFFFC60F),
     ),
     border: Palette(
       error: Colors.red,
       input: Colors.white,
       dashboarPhone: const Color(0xFF8E8E93),
       dashboarEmail: const Color(0xFF007AFF),
+      hint: Colors.white,
     ),
   ),
 ).build();

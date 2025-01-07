@@ -310,11 +310,201 @@ class S {
     );
   }
 
-  /// `Введіть пошту`
-  String get requiredEmailError {
+  /// `The field must not be empty.`
+  String get requiredError {
     return Intl.message(
-      'Введіть пошту',
-      name: 'requiredEmailError',
+      'The field must not be empty.',
+      name: 'requiredError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match`
+  String get passwordsNoMatchError {
+    return Intl.message(
+      'Passwords do not match',
+      name: 'passwordsNoMatchError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid email`
+  String get invalidEmailError {
+    return Intl.message(
+      'Invalid email',
+      name: 'invalidEmailError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid phone number`
+  String get invalidPhoneError {
+    return Intl.message(
+      'Invalid phone number',
+      name: 'invalidPhoneError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least {min} characters long`
+  String minPasswordLengError(int min) {
+    return Intl.message(
+      'Password must be at least $min characters long',
+      name: 'minPasswordLengError',
+      desc: '',
+      args: [min],
+    );
+  }
+
+  /// `Password must contain at least one uppercase letter`
+  String get passwordUppercaseError {
+    return Intl.message(
+      'Password must contain at least one uppercase letter',
+      name: 'passwordUppercaseError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must contain at least one lowercase letter`
+  String get passwordLowercaseError {
+    return Intl.message(
+      'Password must contain at least one lowercase letter',
+      name: 'passwordLowercaseError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must contain at least one number`
+  String get passwordNumberError {
+    return Intl.message(
+      'Password must contain at least one number',
+      name: 'passwordNumberError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must contain at least one special character (_-./\)`
+  String get passwordSpecialCharacterError {
+    return Intl.message(
+      'Password must contain at least one special character (_-./\\)',
+      name: 'passwordSpecialCharacterError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Username must be at least {min} characters long`
+  String minUsernameLengError(int min) {
+    return Intl.message(
+      'Username must be at least $min characters long',
+      name: 'minUsernameLengError',
+      desc: '',
+      args: [min],
+    );
+  }
+
+  /// `Oops, something went wrong`
+  String get oopsTitle {
+    return Intl.message(
+      'Oops, something went wrong',
+      name: 'oopsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try again`
+  String get tryAgainButton {
+    return Intl.message(
+      'Try again',
+      name: 'tryAgainButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If the account “{email}” exists, instructions for verifying the email will be sent to your email.`
+  String confirmEmailMessage(String email) {
+    return Intl.message(
+      'If the account “$email” exists, instructions for verifying the email will be sent to your email.',
+      name: 'confirmEmailMessage',
+      desc: '',
+      args: [email],
+    );
+  }
+
+  /// `User not verified`
+  String get userNoVerifiedError {
+    return Intl.message(
+      'User not verified',
+      name: 'userNoVerifiedError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User disabled`
+  String get userDisabledError {
+    return Intl.message(
+      'User disabled',
+      name: 'userDisabledError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User not found`
+  String get userNotFoundError {
+    return Intl.message(
+      'User not found',
+      name: 'userNotFoundError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wrong password`
+  String get wrongPasswordError {
+    return Intl.message(
+      'Wrong password',
+      name: 'wrongPasswordError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email already in use`
+  String get emailExistError {
+    return Intl.message(
+      'Email already in use',
+      name: 'emailExistError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid verification code`
+  String get invalidVerificationCodeError {
+    return Intl.message(
+      'Invalid verification code',
+      name: 'invalidVerificationCodeError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid character entered`
+  String get invalidCharacterEnteredError {
+    return Intl.message(
+      'Invalid character entered',
+      name: 'invalidCharacterEnteredError',
       desc: '',
       args: [],
     );

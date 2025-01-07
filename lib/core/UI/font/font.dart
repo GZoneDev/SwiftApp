@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Font {
+enum EFont {
   displayLarge(34.0),
   title1(28.0),
   title2(22.0),
@@ -17,5 +17,5 @@ enum Font {
   TextStyle textStyle(
           {Color? color, FontWeight? fontWeight = FontWeight.normal}) =>
       TextStyle(fontSize: size, fontWeight: fontWeight, color: color);
-  const Font(this.size);
+  const EFont(this.size);
 }

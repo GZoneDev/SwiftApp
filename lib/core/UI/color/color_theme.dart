@@ -50,7 +50,7 @@ extension SafeColor on Color? {
       final errorLocation = StackTrace.current.toString().split('\n')[1];
       final error =
           'Error: NULL color used. Initialize variable in ThemeBuilder. \n$errorLocation';
-      GetIt.I<Talker>().handle(error);
+      GetIt.I<Talker>().critical(error);
     }
     return this ?? Colors.transparent;
   }

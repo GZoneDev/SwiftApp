@@ -1,6 +1,9 @@
 part of 'auth_bloc.dart';
 
-abstract class AuthState {}
+abstract class AuthState {
+  final Map<EBlocError, String?>? errors;
+  AuthState({this.errors});
+}
 
 class AuthInitialState extends AuthState {}
 
@@ -10,37 +13,32 @@ class AuthLoadedState extends AuthState {}
 
 class AuthLoginSuccessState extends AuthState {}
 
-class AuthRegisterSuccessState extends AuthState {}
+class AuthRegisterSuccessState extends AuthState {
+  final String email;
+  AuthRegisterSuccessState(this.email);
+}
+
+class AuthRestoreSuccessState extends AuthState {
+  final String email;
+  AuthRestoreSuccessState(this.email);
+}
+
+class AuthNetworkFailState extends AuthState {}
 
 class AuthLoginFailState extends AuthState {
   String? emailOrPhoneError, passwordError;
 
   AuthLoginFailState({this.emailOrPhoneError, this.passwordError});
 
-  bool containsError() => emailOrPhoneError != null || passwordError != null;
+  get containsError => emailOrPhoneError != null || passwordError != null;
 }
 
-class AuthRegisterFailState extends AuthState {
-  String? emailOrPhoneError, passwordError, usernameError;
-
-  AuthRegisterFailState({
-    this.emailOrPhoneError,
-    this.passwordError,
-    this.usernameError,
-  });
-
-  bool containsError() =>
-      emailOrPhoneError != null ||
-      passwordError != null ||
-      usernameError != null;
-}
+class AuthClearFailState extends AuthState {}
 
 class AuthRestoreFailState extends AuthState {
   String? emailOrPhoneError;
 
   AuthRestoreFailState({this.emailOrPhoneError});
-
-  bool containsError() => emailOrPhoneError != null;
 }
 
 class AuthRestorePhoneFailState extends AuthState {
@@ -51,7 +49,12 @@ class AuthRestorePhoneFailState extends AuthState {
     required this.password,
     required this.confirmPassword,
   });
-
-  bool containsError() =>
-      code != null || password != null || confirmPassword != null;
 }
+
+class AuthFailState extends AuthState {
+  AuthFailState({super.errors});
+}
+
+class AuthEmailOrPhoneFailState extends AuthFailState {}
+
+class AuthPasswordFailState extends AuthFailState {}

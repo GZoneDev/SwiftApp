@@ -1,21 +1,19 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:receptico/core/UI/theme.dart';
-import 'package:receptico/core/router/router.dart';
-import 'package:receptico/generated/l10n.dart';
 
 import '../widget/widget.dart';
 
 @RoutePage()
-class StartPage extends StatelessWidget {
-  const StartPage({super.key});
+class TempLogoutPage extends StatelessWidget {
+  const TempLogoutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
     final router = AutoRouter.of(context);
-    final localization = S.of(context);
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -52,7 +50,8 @@ class StartPage extends StatelessWidget {
                     child: SizedBox(
                       width: 235,
                       child: Text(
-                        localization.wantToCookQuestion,
+                        FirebaseAuth.instance.currentUser?.email ??
+                            'User logout',
                         textAlign: TextAlign.center,
                         style: context.font.displayLarge,
                       ),
@@ -61,16 +60,11 @@ class StartPage extends StatelessWidget {
                   TextButtonWidget(
                     width: 278,
                     height: 50,
-                    text: localization.loginButton,
-                    onPressed: () => router.navigate(const LoginRoute()),
-                  ),
-                  const SizedBox(height: 16),
-                  InkWell(
-                    onTap: () => router.navigate(const RegisterRoute()),
-                    child: Text(
-                      localization.registerLink,
-                      style: context.font.headline,
-                    ),
+                    text: 'Logout',
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
+                      router.back();
+                    },
                   ),
                 ],
               ),

@@ -16,93 +16,113 @@ class RestorePasswordPage extends StatefulWidget {
 }
 
 class _RestorePasswordPageState extends State<RestorePasswordPage> {
-  late bool _isError;
-  AuthLoginFailState _authState = AuthLoginFailState();
   final _emailOrPhoneController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    _isError = false;
+  void dispose() {
+    _emailOrPhoneController.dispose();
+    super.dispose();
   }
 
-  void _clearFailMessage() {
-    if (_isError) {
-      _isError = false;
-      //setState(() => _authState = AuthLoginFailure());
-    }
+  void _clearForm() => _emailOrPhoneController.clear();
+
+  String? _emailOrPhoneValidate(String? value) {
+    context.read<AuthBloc>().add(
+          AuthEmailOrPhoneValidateEvent(
+            value: value,
+            localization: S.of(context),
+          ),
+        );
+    return value;
   }
 
   void _submit() {
-    // context.read<AuthBloc>().add(
-    //       AuthLogin(
-    //         user: LoginUser(
-    //           email: _emailController.text,
-    //         ),
-    //       ),
-    //     );
+    _emailOrPhoneValidate(_emailOrPhoneController.text);
+
+    context.read<AuthBloc>().add(
+          AuthRestoreEvent(
+            emailOrPhone: _emailOrPhoneController.text,
+            localization: S.of(context),
+            router: AutoRouter.of(context),
+          ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     final localization = S.of(context);
-    return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthLoginFailState) {
-            _isError = true;
-            setState(() => _authState = state);
-          }
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthClearFailState) _clearForm();
+
+        if (state is AuthRestoreSuccessState) {
+          router.navigate(const SendEmailRoute());
+          _clearForm();
+        }
+      },
+      child: WillPopScope(
+        onWillPop: () async {
+          context.read<AuthBloc>().add(AuthRouteEvent());
+          return true;
         },
-        child: Stack(
-          children: [
-            const ScreenBackgroundWidget(),
-            Container(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 350,
-                height: 458,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TitleWidget(
-                        title: localization.restorePasswordTitle,
-                        subtitle: localization.restorePasswordSubtitle,
-                      ),
-                      const SizedBox(height: 37),
-                      SizedBox(
-                        width: 278,
-                        child: Column(
-                          children: [
-                            TextInputWidget(
-                              controller: _emailOrPhoneController,
-                              placeholder: localization.emailOrPhonePlaceholder,
-                              onTap: _clearFailMessage,
-                              errorMessage: _authState.emailOrPhoneError,
-                              margin: EdgeInsets.only(bottom: 19.0),
-                              marginWithError: EdgeInsets.only(bottom: 16.0),
-                            ),
-                            TextButtonWidget(
-                              height: 50,
-                              text: localization.restorePasswordButton,
-                              onPressed: () => router.navigate(
-                                  const RestorePhoneRoute()), //_submit,
-                            ),
-                            const SizedBox(height: 22),
-                            BackLinkWidget(
-                              text: localization.returnToLoginLink,
-                              onTap: () => router.navigate(const LoginRoute()),
-                            ),
-                          ],
+        child: Scaffold(
+          body: Stack(
+            children: [
+              const ScreenBackgroundWidget(),
+              Container(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 350,
+                  height: 458,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TitleWidget(
+                          title: localization.restorePasswordTitle,
+                          subtitle: localization.restorePasswordSubtitle,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 37),
+                        SizedBox(
+                          width: 278,
+                          child: Column(
+                            children: [
+                              SelectorTextInputWidget(
+                                placeholder:
+                                    localization.emailOrPhonePlaceholder,
+                                selector: (state) =>
+                                    state.errors?[EBlocError.emailOrPhone],
+                                controller: _emailOrPhoneController,
+                                onChanged: _emailOrPhoneValidate,
+                                margin: EdgeInsets.only(bottom: 22.0),
+                                marginWithError: EdgeInsets.only(bottom: 16.0),
+                              ),
+                              TextButtonWidget(
+                                height: 50,
+                                text: localization.restorePasswordButton,
+                                onPressed: _submit,
+                              ),
+                              const SizedBox(height: 22),
+                              BackLinkWidget(
+                                text: localization.returnToLoginLink,
+                                onTap: () {
+                                  router.navigate(const LoginRoute());
+                                  context
+                                      .read<AuthBloc>()
+                                      .add(AuthRouteEvent());
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              LoadingWidget(),
+            ],
+          ),
         ),
       ),
     );

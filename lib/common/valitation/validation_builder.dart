@@ -1,6 +1,6 @@
 class ValidationBuilder {
   static final RegExp _defaultEmailRegExp = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$"); //^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$
   static final RegExp _defaultPhoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
 
   final List<String? Function(String)> _validators = [];

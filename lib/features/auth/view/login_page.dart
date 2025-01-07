@@ -6,6 +6,7 @@ import 'package:receptico/generated/l10n.dart';
 import 'package:receptico/core/UI/theme.dart';
 
 import '../bloc/bloc.dart';
+import '../common/enum_input.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -17,32 +18,49 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late bool _isError;
-  AuthLoginFailState _authState = AuthLoginFailState();
-  final _emailOrPhoneController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
+  final Map<EInput, TextEditingController> _controllers = {
+    EInput.emailOrPhone: TextEditingController(),
+    EInput.password: TextEditingController(),
+  };
 
   @override
-  void initState() {
-    super.initState();
-    _isError = false;
+  void dispose() {
+    _controllers.forEach((key, controller) => controller.dispose());
+    super.dispose();
   }
 
-  void _clearFailMessage() {
-    if (_isError) {
-      _isError = false;
-      setState(() => _authState = AuthLoginFailState());
-    }
+  void _clearForm() =>
+      _controllers.forEach((key, controller) => controller.clear());
+
+  String? _emailOrPhoneValidate(String? value) {
+    context.read<AuthBloc>().add(
+          AuthEmailOrPhoneValidateEvent(
+            value: value,
+            localization: S.of(context),
+          ),
+        );
+    return value;
+  }
+
+  String? _passwordValidate(String? value) {
+    context.read<AuthBloc>().add(
+          AuthPasswordValidateEvent(
+            value: value,
+            localization: S.of(context),
+          ),
+        );
+    return value;
   }
 
   void _submit() {
-    _formKey.currentState!.validate();
+    _emailOrPhoneValidate(_controllers[EInput.emailOrPhone]?.text);
+    _passwordValidate(_controllers[EInput.password]?.text);
+
     context.read<AuthBloc>().add(
           AuthLoginEvent(
-            emailOrPhone: _passwordController.text,
-            password: _passwordController.text,
+            emailOrPhone: _controllers[EInput.emailOrPhone]?.text ?? '',
+            password: _controllers[EInput.password]?.text ?? '',
+            localization: S.of(context),
           ),
         );
   }
@@ -53,88 +71,115 @@ class _LoginPageState extends State<LoginPage> {
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthLoginFailState) {
-          _isError = true;
-          setState(() => _authState = state);
+        if (state is AuthClearFailState) {
+          _clearForm();
+        }
+
+        if (state is AuthLoginSuccessState) {
+          _clearForm();
+          //TODO: Need change routering profile page
+          router.navigateNamed('/temp');
         }
       },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            const ScreenBackgroundWidget(),
-            Form(
-              key: _formKey,
-              child: Container(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 278,
-                  height: 458,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TitleWidget(
-                          title: localization.loginTitle,
-                          subtitle: localization.loginSubtitle,
-                        ),
-                        const SizedBox(height: 16),
-                        TextInputWidget(
-                          controller: _emailOrPhoneController,
-                          placeholder: localization.emailOrPhonePlaceholder,
-                          onTap: _clearFailMessage,
-                          errorMessage: _authState.emailOrPhoneError,
-                          margin: EdgeInsets.only(bottom: 16.0),
-                          marginWithError: EdgeInsets.only(bottom: 10.0),
-                        ),
-                        PasswordInputWidget(
-                          controller: _passwordController,
-                          placeholderText: localization.passwordPlaceholder,
-                          onTap: _clearFailMessage,
-                          errorMessage: _authState.passwordError,
-                          helpWidget: LinkWidget(
-                            text: localization.forgottenPassword,
-                            onTap: () =>
-                                router.navigate(const RestorePasswordRoute()),
+      child: WillPopScope(
+        onWillPop: () async {
+          context.read<AuthBloc>().add(AuthRouteEvent());
+          return true;
+        },
+        child: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFFFFC60F),
+                  Color(0xFFFF9F0A),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Stack(
+              children: [
+                const ScreenBackgroundWidget(),
+                Container(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 278,
+                    height: 458,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          TitleWidget(
+                            title: localization.loginTitle,
+                            subtitle: localization.loginSubtitle,
                           ),
-                          margin: EdgeInsets.only(bottom: 22.0),
-                          marginWithError: EdgeInsets.only(bottom: 22.0),
-                        ),
-                        TextButtonWidget(
-                          height: 50,
-                          text: localization.loginButton,
-                          onPressed: _submit,
-                        ),
-                        const SizedBox(height: 16),
-                        FooterWidget(
-                          text: localization.noAccountQuestion,
-                          linkText: localization.createAccount,
-                          onTab: () => router.navigate(const RegisterRoute()),
-                        ),
-                        const SizedBox(height: 40),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButtonWidget(
-                              assetPath: context.assetPath.appleLogo,
-                              onPressed: () {
-                                debugPrint('Not created!');
+                          const SizedBox(height: 16),
+                          SelectorTextInputWidget(
+                            placeholder: localization.emailOrPhonePlaceholder,
+                            selector: (state) =>
+                                state.errors?[EBlocError.emailOrPhone],
+                            controller: _controllers[EInput.emailOrPhone],
+                            onChanged: _emailOrPhoneValidate,
+                          ),
+                          SelectorPasswordInputWidget(
+                            placeholder: localization.passwordPlaceholder,
+                            selector: (state) =>
+                                state.errors?[EBlocError.password],
+                            controller: _controllers[EInput.password],
+                            onChanged: _passwordValidate,
+                            margin: EdgeInsets.only(bottom: 22.0),
+                            helpWidget: LinkWidget(
+                              text: localization.forgottenPassword,
+                              onTap: () {
+                                router.navigate(const RestorePasswordRoute());
+                                context.read<AuthBloc>().add(AuthRouteEvent());
                               },
                             ),
-                            const SizedBox(width: 8),
-                            IconButtonWidget(
-                              assetPath: context.assetPath.googleLogo,
-                              onPressed: () {
-                                debugPrint('Not created!');
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          TextButtonWidget(
+                            height: 50,
+                            text: localization.loginButton,
+                            onPressed: _submit,
+                          ),
+                          const SizedBox(height: 16),
+                          FooterWidget(
+                            text: localization.noAccountQuestion,
+                            linkText: localization.createAccount,
+                            onTab: () {
+                              router.navigate(const RegisterRoute());
+                              context.read<AuthBloc>().add(AuthRouteEvent());
+                            },
+                          ),
+                          const SizedBox(height: 40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 8,
+                            children: [
+                              IconButtonWidget(
+                                assetPath: context.assetPath.appleLogo,
+                                onPressed: () {
+                                  debugPrint('Not created!');
+                                },
+                              ),
+                              IconButtonWidget(
+                                assetPath: context.assetPath.googleLogo,
+                                onPressed: () {
+                                  context
+                                      .read<AuthBloc>()
+                                      .add(AuthGoogleSingInEvent());
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+                LoadingWidget(),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
