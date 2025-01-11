@@ -111,5 +111,13 @@
   "invalidVerificationCodeError": "Invalid verification code",
   "@invalidVerificationCodeError": {},
   "invalidCharacterEnteredError": "Invalid character entered",
-  "@invalidCharacterEnteredError": {}
+  "@invalidCharacterEnteredError": {},
+  "sendAgainButton": "Send again",
+  "@sendAgainButton": {},
+  "weakPasswordError": "Weak password",
+  "@weakPasswordError": {},
+  "credentialAlreadyInUse": "Account already in use",
+  "@credentialAlreadyInUse": {},
+  "tryAgainMessage": "Try again through",
+  "@tryAgainMessage": {}
 }

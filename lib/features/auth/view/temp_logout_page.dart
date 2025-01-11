@@ -2,7 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme.dart';
+import 'package:receptico/core/authorization/authorization.dart';
 
 import '../widget/widget.dart';
 
@@ -14,7 +16,7 @@ class TempLogoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
     final router = AutoRouter.of(context);
-    return Scaffold(
+    return ScaffoldWithGradientWidget(
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -62,7 +64,7 @@ class TempLogoutPage extends StatelessWidget {
                     height: 50,
                     text: 'Logout',
                     onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
+                      await GetIt.I<IAuthorization>().signOut();
                       router.back();
                     },
                   ),

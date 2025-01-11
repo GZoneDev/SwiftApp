@@ -26,19 +26,19 @@ class AuthRestoreSuccessState extends AuthState {
 class AuthNetworkFailState extends AuthState {}
 
 class AuthLoginFailState extends AuthState {
-  String? emailOrPhoneError, passwordError;
+  String? emailError, passwordError;
 
-  AuthLoginFailState({this.emailOrPhoneError, this.passwordError});
+  AuthLoginFailState({this.emailError, this.passwordError});
 
-  get containsError => emailOrPhoneError != null || passwordError != null;
+  get containsError => emailError != null || passwordError != null;
 }
 
 class AuthClearFailState extends AuthState {}
 
 class AuthRestoreFailState extends AuthState {
-  String? emailOrPhoneError;
+  String? emailError;
 
-  AuthRestoreFailState({this.emailOrPhoneError});
+  AuthRestoreFailState({this.emailError});
 }
 
 class AuthFailState extends AuthState {
@@ -48,3 +48,12 @@ class AuthFailState extends AuthState {
 class AuthEmailFailState extends AuthFailState {}
 
 class AuthPasswordFailState extends AuthFailState {}
+
+class AuthCountdownUpdatedState extends AuthState {
+  final int remainingSeconds;
+  AuthCountdownUpdatedState(this.remainingSeconds);
+}
+
+class AuthCountdownCompleteState extends AuthState {}
+
+class AuthShowWaitMessageState extends AuthState {}

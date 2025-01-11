@@ -1,27 +1,60 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/features/auth/auth.dart';
-
 import 'package:receptico/features/auth/view/temp_logout_page.dart';
 
 part 'router.gr.dart';
 
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
-  final AuthGuard authGuard = AuthGuard();
+  final AuthGuard _authGuard;
+
+  AppRouter(final IAuthorization auth) : _authGuard = AuthGuard(auth);
 
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: StartRoute.page, path: '/'),
-        AutoRoute(page: FailRoute.page, path: '/fail'),
-        AutoRoute(page: LoginRoute.page, path: '/login'),
-        AutoRoute(page: RegisterRoute.page, path: '/register'),
-        AutoRoute(page: RestorePasswordRoute.page, path: '/restorePasword'),
-        AutoRoute(page: SendEmailRoute.page, path: '/sendEmail'),
-        AutoRoute(
+        CustomRoute(
+          page: StartRoute.page,
+          path: '/',
+          transitionsBuilder: TransitionsBuilders.slideBottom,
+          durationInMilliseconds: 500,
+        ),
+        CustomRoute(
+          page: FailRoute.page,
+          path: '/fail',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 500,
+        ),
+        CustomRoute(
+          page: LoginRoute.page,
+          path: '/login',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 500,
+        ),
+        CustomRoute(
+          page: RegisterRoute.page,
+          path: '/register',
+          transitionsBuilder: TransitionsBuilders.zoomIn,
+          durationInMilliseconds: 500,
+        ),
+        CustomRoute(
+          page: RestorePasswordRoute.page,
+          path: '/restorePasword',
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 500,
+        ),
+        CustomRoute(
+          page: SendEmailRoute.page,
+          path: '/sendEmail',
+          transitionsBuilder: TransitionsBuilders.slideRight,
+          durationInMilliseconds: 500,
+        ),
+        CustomRoute(
           page: TempLogoutRoute.page,
           path: '/temp',
-          guards: [authGuard],
+          guards: [_authGuard],
+          transitionsBuilder: TransitionsBuilders.slideBottom,
+          durationInMilliseconds: 500,
         ),
       ];
 
@@ -32,11 +65,13 @@ class AppRouter extends RootStackRouter {
 }
 
 class AuthGuard extends AutoRouteGuard {
+  final IAuthorization _auth;
+
+  AuthGuard(this._auth);
+
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    /// TODO: fix this authentication method
-    final authenticated = FirebaseAuth.instance.currentUser != null;
-    if (authenticated) {
+    if (_auth.isAuthorization) {
       resolver.next(true);
     } else {
       resolver.redirect(LoginRoute());

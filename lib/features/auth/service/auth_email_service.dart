@@ -54,13 +54,39 @@ enum FirebaseAuthError {
 abstract interface class IAuthEmailService {
   Future<FirebaseAuthError> registerWithEmail(String email, String password);
   Future<FirebaseAuthError> loginWithEmail(String email, String password);
-  Future<FirebaseAuthError> resetPassword(String email);
+  Future<FirebaseAuthError> sendResetPasswordEmail(String email);
+  Future<FirebaseAuthError> resendVerificationEmail();
   Future<bool> isEmailVerified();
 }
 
 class AuthEmailService implements IAuthEmailService {
   final _auth = FirebaseAuth.instance;
   final _loger = GetIt.I<Talker>();
+
+  @override
+  Future<FirebaseAuthError> resendVerificationEmail() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+
+        _loger.log('Verification email resent to: ${user.email}');
+        return FirebaseAuthError.success;
+      } else if (user == null) {
+        _loger.error('No user is currently logged in');
+        return FirebaseAuthError.userNotFound;
+      } else {
+        _loger.log('Email is already verified');
+        return FirebaseAuthError.emailAlreadyInUse;
+      }
+    } on FirebaseAuthException catch (e) {
+      _loger.error('Error resending verification email: $e');
+      return FirebaseAuthError.fromCode(e.code);
+    } catch (e) {
+      _loger.error('Error resending verification email: $e');
+      return FirebaseAuthError.unknown;
+    }
+  }
 
   @override
   Future<FirebaseAuthError> registerWithEmail(
@@ -80,6 +106,9 @@ class AuthEmailService implements IAuthEmailService {
     } on FirebaseAuthException catch (e) {
       _loger.error(e.message);
       return FirebaseAuthError.fromCode(e.code);
+    } catch (e) {
+      _loger.error('Error registration email/password: $e');
+      return FirebaseAuthError.unknown;
     }
   }
 
@@ -96,22 +125,14 @@ class AuthEmailService implements IAuthEmailService {
     } on FirebaseAuthException catch (e) {
       _loger.error(e.message);
       return FirebaseAuthError.fromCode(e.code);
-    }
-  }
-
-  Future<bool> isEmailRegistered(String email) async {
-    try {
-      final signInMethods = await _auth.fetchSignInMethodsForEmail(email);
-      _loger.log('Sign-in methods for $email: $signInMethods');
-      return signInMethods.isNotEmpty;
-    } on FirebaseAuthException catch (e) {
-      _loger.error(e.message);
-      return false;
+    } catch (e) {
+      _loger.error('Error login email/password: $e');
+      return FirebaseAuthError.unknown;
     }
   }
 
   @override
-  Future<FirebaseAuthError> resetPassword(final String email) async {
+  Future<FirebaseAuthError> sendResetPasswordEmail(final String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
       _loger.log('Password reset email sent to $email');
@@ -119,6 +140,9 @@ class AuthEmailService implements IAuthEmailService {
     } on FirebaseAuthException catch (e) {
       _loger.error(e.message);
       return FirebaseAuthError.fromCode(e.code);
+    } catch (e) {
+      _loger.error('Error sent password reset email: $e');
+      return FirebaseAuthError.unknown;
     }
   }
 
@@ -132,10 +156,5 @@ class AuthEmailService implements IAuthEmailService {
     }
 
     return false;
-  }
-
-  Future<void> signOut() async {
-    await _auth.signOut();
-    _loger.log('User signed out');
   }
 }

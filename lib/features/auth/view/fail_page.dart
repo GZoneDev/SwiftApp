@@ -15,7 +15,7 @@ class FailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final localithation = S.of(context);
     final router = AutoRouter.of(context);
-    return Scaffold(
+    return ScaffoldWithGradientWidget(
       body: Stack(
         alignment: Alignment.center,
         children: [

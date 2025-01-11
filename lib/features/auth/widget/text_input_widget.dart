@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextInputWidget extends StatefulWidget {
   final double? width, height;
@@ -68,6 +69,9 @@ class _TextInputWidgetState extends State<TextInputWidget> {
             height: widget.height,
             width: widget.width,
             child: TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9@._-]'))
+              ],
               readOnly: widget.readOnly,
               controller: widget.controller,
               obscureText: widget.obscureText,

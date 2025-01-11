@@ -19,9 +19,7 @@ class TemplateValidate {
         .regExp(RegExp(r'[A-Z]'), localization.passwordUppercaseError)
         .regExp(RegExp(r'[a-z]'), localization.passwordLowercaseError)
         .regExp(RegExp(r'[0-9]'), localization.passwordNumberError)
-        .regExp(
-            RegExp(r'[._\/\\-]'), localization.passwordSpecialCharacterError)
-        .regExp(RegExp(r'^[a-zA-Z0-9._\/\\-]*$'),
+        .regExp(RegExp(r'^[a-zA-Z0-9]*$'),
             localization.invalidCharacterEnteredError);
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme/theme_light.dart';
+import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,7 +18,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final _appRouter = AppRouter();
+  final _appRouter = AppRouter(GetIt.I<IAuthorization>());
 
   @override
   void dispose() {
@@ -29,8 +30,10 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(create: (_) => AuthBloc()),
-        // Add BLoC .....
+        BlocProvider<AuthBloc>(
+          create: (context) => GetIt.I<AuthBloc>(),
+          // Add BLoC .....
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.config(
@@ -46,6 +49,10 @@ class _AppState extends State<App> {
         supportedLocales: S.delegate.supportedLocales,
         title: 'Flutter Demo',
         theme: lightTheme,
+        builder: (context, child) {
+          context.read<AuthBloc>().updateLocalization(S.of(context));
+          return child!;
+        },
       ),
     );
   }

@@ -40,6 +40,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmPasswordPlaceholder":
             MessageLookupByLibrary.simpleMessage("Confirm password"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create now"),
+        "credentialAlreadyInUse":
+            MessageLookupByLibrary.simpleMessage("Account already in use"),
         "emailExistError":
             MessageLookupByLibrary.simpleMessage("Email already in use"),
         "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
@@ -92,9 +94,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Restore password"),
         "returnToLoginLink":
             MessageLookupByLibrary.simpleMessage("Return to login"),
+        "sendAgainButton": MessageLookupByLibrary.simpleMessage("Send again"),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Confirmation code"),
         "tryAgainButton": MessageLookupByLibrary.simpleMessage("Try again"),
+        "tryAgainMessage":
+            MessageLookupByLibrary.simpleMessage("Try again through"),
         "userDisabledError":
             MessageLookupByLibrary.simpleMessage("User disabled"),
         "userNoVerifiedError":
@@ -103,6 +108,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("User not found"),
         "wantToCookQuestion": MessageLookupByLibrary.simpleMessage(
             "Do you want to cook something?"),
+        "weakPasswordError":
+            MessageLookupByLibrary.simpleMessage("Weak password"),
         "wrongPasswordError":
             MessageLookupByLibrary.simpleMessage("Wrong password")
       };

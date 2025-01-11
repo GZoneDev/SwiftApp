@@ -111,5 +111,13 @@
   "invalidVerificationCodeError": "Невірний код підтвердження",
   "@invalidVerificationCodeError": {},
   "invalidCharacterEnteredError": "Введено недійсний символ",
-  "@invalidCharacterEnteredError": {}
+  "@invalidCharacterEnteredError": {},
+  "sendAgainButton": "Надіслати знову",
+  "@sendAgainButton": {},
+  "weakPasswordError": "Слабкий пароль",
+  "@weakPasswordError": {},
+  "credentialAlreadyInUse": "Аккаунт вже використовується",
+  "@credentialAlreadyInUse": {},
+  "tryAgainMessage": "Спробуйте знову через",
+  "@tryAgainMessage": {}
 }

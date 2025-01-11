@@ -489,6 +489,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Send again`
+  String get sendAgainButton {
+    return Intl.message(
+      'Send again',
+      name: 'sendAgainButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weak password`
+  String get weakPasswordError {
+    return Intl.message(
+      'Weak password',
+      name: 'weakPasswordError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account already in use`
+  String get credentialAlreadyInUse {
+    return Intl.message(
+      'Account already in use',
+      name: 'credentialAlreadyInUse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try again through`
+  String get tryAgainMessage {
+    return Intl.message(
+      'Try again through',
+      name: 'tryAgainMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

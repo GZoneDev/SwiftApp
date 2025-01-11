@@ -40,6 +40,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmPasswordPlaceholder":
             MessageLookupByLibrary.simpleMessage("Підтвердження паролю"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Створити зараз"),
+        "credentialAlreadyInUse": MessageLookupByLibrary.simpleMessage(
+            "Аккаунт вже використовується"),
         "emailExistError": MessageLookupByLibrary.simpleMessage(
             "Цей електронний лист вже використовується"),
         "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
@@ -92,10 +94,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Відновлення паролю"),
         "returnToLoginLink":
             MessageLookupByLibrary.simpleMessage("Повернутися до входу"),
+        "sendAgainButton":
+            MessageLookupByLibrary.simpleMessage("Надіслати знову"),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Код підтвердження"),
         "tryAgainButton":
             MessageLookupByLibrary.simpleMessage("Спробувати знову"),
+        "tryAgainMessage":
+            MessageLookupByLibrary.simpleMessage("Спробуйте знову через"),
         "userDisabledError":
             MessageLookupByLibrary.simpleMessage("Користувач заблокований"),
         "userNoVerifiedError":
@@ -104,6 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Користувача не знайдено"),
         "wantToCookQuestion":
             MessageLookupByLibrary.simpleMessage("Хочеш Щось Приготувати?"),
+        "weakPasswordError":
+            MessageLookupByLibrary.simpleMessage("Слабкий пароль"),
         "wrongPasswordError":
             MessageLookupByLibrary.simpleMessage("Невірний пароль")
       };

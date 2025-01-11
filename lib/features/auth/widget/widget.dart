@@ -12,3 +12,5 @@ export 'loading_widget.dart';
 export 'selector_password_input_widget.dart';
 export 'selector_text_input_widget.dart';
 export 'fail_catch_widget.dart';
+export 'timer_button_widget.dart';
+export 'scaffold_with_gradient_widget.dart';

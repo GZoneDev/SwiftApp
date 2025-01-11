@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme.dart';
+import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 
@@ -16,7 +18,12 @@ class StartPage extends StatelessWidget {
     Orientation orientation = MediaQuery.of(context).orientation;
     final router = AutoRouter.of(context);
     final localization = S.of(context);
-    return Scaffold(
+
+    if (GetIt.I<IAuthorization>().isAuthorization) {
+      router.pushNamed('/temp');
+    }
+
+    return ScaffoldWithGradientWidget(
       body: Stack(
         fit: StackFit.expand,
         children: [

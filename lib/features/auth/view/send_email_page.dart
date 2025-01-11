@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme.dart';
+import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 
@@ -17,13 +19,19 @@ class SendEmailPage extends StatefulWidget {
 }
 
 class _SendEmailPageState extends State<SendEmailPage> {
-  String? title, message;
+  String title = '', message = '';
+  VoidCallback onPressed = () {};
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     final localithation = S.of(context);
-    return Scaffold(
+    return ScaffoldWithGradientWidget(
       body: Stack(
         children: [
           const ScreenBackgroundWidget(),
@@ -35,20 +43,30 @@ class _SendEmailPageState extends State<SendEmailPage> {
               child: SingleChildScrollView(
                 child: BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
-                    if (state is AuthRestoreSuccessState) {
-                      title = localithation.restorePasswordTitle;
-                      message = localithation.restoreEmailMessage(state.email);
-                    }
+                    switch (state.runtimeType) {
+                      case const (AuthRestoreSuccessState):
+                        final s = state as AuthRestoreSuccessState;
+                        title = localithation.restorePasswordTitle;
+                        message = localithation.restoreEmailMessage(s.email);
+                        onPressed = () => context
+                            .read<AuthBloc>()
+                            .add(AuthSendRestoreEmailEvent(s.email));
 
-                    if (state is AuthRegisterSuccessState) {
-                      title = localithation.registerTitle;
-                      message = localithation.confirmEmailMessage(state.email);
+                        break;
+                      case const (AuthRegisterSuccessState):
+                        final s = state as AuthRegisterSuccessState;
+                        title = localithation.registerTitle;
+                        message = localithation.confirmEmailMessage(s.email);
+                        onPressed = () => context
+                            .read<AuthBloc>()
+                            .add(AuthSendRegisterEmailEvent(s.email));
+                        break;
                     }
 
                     return Column(
                       children: [
                         Text(
-                          title ?? '',
+                          title,
                           style: context.font.title1Bold,
                         ),
                         const SizedBox(height: 32),
@@ -67,9 +85,14 @@ class _SendEmailPageState extends State<SendEmailPage> {
                           child: BlocBuilder<AuthBloc, AuthState>(
                             builder: (context, state) => Text(
                               textAlign: TextAlign.center,
-                              message ?? '',
+                              message,
                             ),
                           ),
+                        ),
+                        const SizedBox(height: 16),
+                        TimerButtonWidget(
+                          text: localithation.sendAgainButton,
+                          onPressed: onPressed,
                         ),
                         const SizedBox(height: 22),
                         Container(
@@ -77,7 +100,11 @@ class _SendEmailPageState extends State<SendEmailPage> {
                           alignment: Alignment.center,
                           child: BackLinkWidget(
                             text: localithation.returnToLoginLink,
-                            onTap: () => router.navigate(const LoginRoute()),
+                            onTap: () async {
+                              await GetIt.I<IAuthorization>().signOut();
+                              router.popForced();
+                              router.navigate(const LoginRoute());
+                            },
                           ),
                         ),
                       ],

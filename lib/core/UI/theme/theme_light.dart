@@ -25,6 +25,8 @@ final lightTheme = ThemeBuilder(
       dashboarPhone: const Color(0xFFF1E3B6),
       dashboarEmail: const Color(0xFF5AC8FA),
       hint: const Color(0xFFFFC60F),
+      themeGradientTop: Color(0xFFFFC60F),
+      themeGradientBottom: Color(0xFFFF9F0A),
     ),
     border: Palette(
       error: Colors.red,

@@ -11,6 +11,8 @@ class Palette {
   final Color? elevatedButton;
   final Color? floatingActionButton;
   final Color? scaffold;
+  final Color? themeGradientTop;
+  final Color? themeGradientBottom;
   final Color? dashboarEmail;
   final Color? dashboarPhone;
 
@@ -25,6 +27,8 @@ class Palette {
     this.elevatedButton,
     this.floatingActionButton,
     this.scaffold,
+    this.themeGradientTop,
+    this.themeGradientBottom,
     this.dashboarEmail,
     this.dashboarPhone,
   });
@@ -40,6 +44,8 @@ class Palette {
     Color? elevatedButton,
     Color? floatingActionButton,
     Color? scaffold,
+    Color? themeGradientTop,
+    Color? themeGradientBottom,
     Color? dashboarEmail,
     Color? dashboarPhone,
   }) {
@@ -54,6 +60,8 @@ class Palette {
       elevatedButton: elevatedButton ?? this.elevatedButton,
       floatingActionButton: floatingActionButton ?? this.floatingActionButton,
       scaffold: scaffold ?? this.scaffold,
+      themeGradientTop: themeGradientTop ?? this.themeGradientTop,
+      themeGradientBottom: themeGradientBottom ?? this.themeGradientBottom,
       dashboarEmail: dashboarEmail ?? this.dashboarEmail,
       dashboarPhone: dashboarPhone ?? this.dashboarPhone,
     );
@@ -72,6 +80,9 @@ class Palette {
       floatingActionButton:
           Color.lerp(x?.floatingActionButton, y?.floatingActionButton, t),
       scaffold: Color.lerp(x?.scaffold, y?.scaffold, t),
+      themeGradientTop: Color.lerp(x?.themeGradientTop, y?.themeGradientTop, t),
+      themeGradientBottom:
+          Color.lerp(x?.themeGradientBottom, y?.themeGradientBottom, t),
       dashboarEmail: Color.lerp(x?.dashboarEmail, y?.dashboarEmail, t),
       dashboarPhone: Color.lerp(x?.dashboarPhone, y?.dashboarPhone, t),
     );

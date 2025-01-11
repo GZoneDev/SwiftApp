@@ -6,6 +6,7 @@ import 'package:receptico/generated/l10n.dart';
 
 import '../bloc/auth_bloc.dart';
 import '../common/enum.dart';
+import '../common/mixin.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -16,7 +17,8 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage>
+    with ValidateMixin, ShowTimerDialogueMixin {
   final Map<EInput, TextEditingController> _controllers = {
     EInput.username: TextEditingController(),
     EInput.emailOrPhone: TextEditingController(),
@@ -32,47 +34,16 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  String? _usernameValidate(String? value) {
-    context.read<AuthBloc>().add(
-          AuthUsernameValidateEvent(
-            value: value,
-            localization: S.of(context),
-          ),
-        );
-    return value;
-  }
-
-  String? _emailOrPhoneValidate(String? value) {
-    context.read<AuthBloc>().add(
-          AuthEmailValidateEvent(
-            value: value,
-            localization: S.of(context),
-          ),
-        );
-    return value;
-  }
-
-  String? _passwordValidate(String? value) {
-    context.read<AuthBloc>().add(
-          AuthPasswordValidateEvent(
-            value: value,
-            localization: S.of(context),
-          ),
-        );
-    return value;
-  }
-
   void _submit() {
-    _usernameValidate(_controllers[EInput.username]?.text);
-    _emailOrPhoneValidate(_controllers[EInput.emailOrPhone]?.text);
-    _passwordValidate(_controllers[EInput.password]?.text);
+    usernameValidate(_controllers[EInput.username]?.text);
+    emailValidate(_controllers[EInput.emailOrPhone]?.text);
+    passwordValidate(_controllers[EInput.password]?.text);
 
     context.read<AuthBloc>().add(
           AuthRegisterEvent(
             username: _controllers[EInput.username]?.text ?? '',
-            emailOrPhone: _controllers[EInput.emailOrPhone]?.text ?? '',
+            email: _controllers[EInput.emailOrPhone]?.text ?? '',
             password: _controllers[EInput.password]?.text ?? '',
-            localization: S.of(context),
           ),
         );
   }
@@ -92,73 +63,69 @@ class _RegisterPageState extends State<RegisterPage> {
             router.navigate(const SendEmailRoute());
             _clearForm();
             break;
+
+          case const (AuthShowWaitMessageState):
+            showTimedDialog(context);
+            break;
         }
       },
-      child: WillPopScope(
-        onWillPop: () async {
-          context.read<AuthBloc>().add(AuthRouteEvent());
-          return true;
-        },
-        child: Scaffold(
-          body: Stack(
-            children: [
-              const ScreenBackgroundWidget(IsMirrored: true),
-              Container(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 278,
-                  height: 430,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TitleWidget(
-                          title: localization.registerTitle,
-                          subtitle: localization.registerSubtitle,
-                        ),
-                        const SizedBox(height: 13),
-                        SelectorTextInputWidget(
-                          placeholder: localization.namePlaceholder,
-                          controller: _controllers[EInput.username],
-                          selector: (state) =>
-                              state.errors?[EBlocError.username],
-                          onChanged: _usernameValidate,
-                        ),
-                        SelectorTextInputWidget(
-                          placeholder: localization.emailPlaceholder,
-                          controller: _controllers[EInput.emailOrPhone],
-                          selector: (state) => state.errors?[EBlocError.email],
-                          onChanged: _emailOrPhoneValidate,
-                        ),
-                        SelectorPasswordInputWidget(
-                          placeholder: localization.passwordPlaceholder,
-                          controller: _controllers[EInput.password],
-                          selector: (state) =>
-                              state.errors?[EBlocError.password],
-                          onChanged: _passwordValidate,
-                        ),
-                        TextButtonWidget(
-                          height: 50,
-                          text: localization.registerButton,
-                          onPressed: _submit,
-                        ),
-                        const SizedBox(height: 16),
-                        FooterWidget(
-                          text: localization.accountQuestion,
-                          linkText: localization.loginLink,
-                          onTab: () {
-                            context.read<AuthBloc>().add(AuthRouteEvent());
-                            router.navigate(const LoginRoute());
-                            _clearForm();
-                          },
-                        ),
-                      ],
-                    ),
+      child: ScaffoldWithGradientWidget(
+        body: Stack(
+          children: [
+            const ScreenBackgroundWidget(IsMirrored: true),
+            Container(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 278,
+                height: 430,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TitleWidget(
+                        title: localization.registerTitle,
+                        subtitle: localization.registerSubtitle,
+                      ),
+                      const SizedBox(height: 13),
+                      SelectorTextInputWidget(
+                        placeholder: localization.namePlaceholder,
+                        controller: _controllers[EInput.username],
+                        selector: (state) => state.errors?[EBlocError.username],
+                        onChanged: usernameValidate,
+                      ),
+                      SelectorTextInputWidget(
+                        placeholder: localization.emailPlaceholder,
+                        controller: _controllers[EInput.emailOrPhone],
+                        selector: (state) => state.errors?[EBlocError.email],
+                        onChanged: emailValidate,
+                      ),
+                      SelectorPasswordInputWidget(
+                        placeholder: localization.passwordPlaceholder,
+                        controller: _controllers[EInput.password],
+                        selector: (state) => state.errors?[EBlocError.password],
+                        onChanged: passwordValidate,
+                      ),
+                      TextButtonWidget(
+                        height: 50,
+                        text: localization.registerButton,
+                        onPressed: _submit,
+                      ),
+                      const SizedBox(height: 16),
+                      FooterWidget(
+                        text: localization.accountQuestion,
+                        linkText: localization.loginLink,
+                        onTab: () {
+                          context.read<AuthBloc>().add(AuthRouteEvent());
+                          router.navigate(const LoginRoute());
+                          _clearForm();
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
-              LoadingWidget(),
-            ],
-          ),
+            ),
+            LoadingWidget(),
+          ],
         ),
       ),
     );

@@ -6,7 +6,8 @@ import 'package:receptico/generated/l10n.dart';
 import 'package:receptico/core/UI/theme.dart';
 
 import '../bloc/bloc.dart';
-import '../common/enum_input.dart';
+import '../common/enum/enum_input.dart';
+import '../common/mixin.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -17,7 +18,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with ValidateMixin {
   final Map<EInput, TextEditingController> _controllers = {
     EInput.emailOrPhone: TextEditingController(),
     EInput.password: TextEditingController(),
@@ -32,35 +33,14 @@ class _LoginPageState extends State<LoginPage> {
   void _clearForm() =>
       _controllers.forEach((key, controller) => controller.clear());
 
-  String? _emailOrPhoneValidate(String? value) {
-    context.read<AuthBloc>().add(
-          AuthEmailValidateEvent(
-            value: value,
-            localization: S.of(context),
-          ),
-        );
-    return value;
-  }
-
-  String? _passwordValidate(String? value) {
-    context.read<AuthBloc>().add(
-          AuthPasswordValidateEvent(
-            value: value,
-            localization: S.of(context),
-          ),
-        );
-    return value;
-  }
-
   void _submit() {
-    _emailOrPhoneValidate(_controllers[EInput.emailOrPhone]?.text);
-    _passwordValidate(_controllers[EInput.password]?.text);
+    emailValidate(_controllers[EInput.emailOrPhone]?.text);
+    passwordValidate(_controllers[EInput.password]?.text);
 
     context.read<AuthBloc>().add(
           AuthLoginEvent(
-            emailOrPhone: _controllers[EInput.emailOrPhone]?.text ?? '',
+            email: _controllers[EInput.emailOrPhone]?.text ?? '',
             password: _controllers[EInput.password]?.text ?? '',
-            localization: S.of(context),
           ),
         );
   }
@@ -84,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: ScaffoldWithGradientWidget(
-        child: Stack(
+        body: Stack(
           children: [
             const ScreenBackgroundWidget(),
             Container(
@@ -104,13 +84,13 @@ class _LoginPageState extends State<LoginPage> {
                         placeholder: localization.emailPlaceholder,
                         selector: (state) => state.errors?[EBlocError.email],
                         controller: _controllers[EInput.emailOrPhone],
-                        onChanged: _emailOrPhoneValidate,
+                        onChanged: emailValidate,
                       ),
                       SelectorPasswordInputWidget(
                         placeholder: localization.passwordPlaceholder,
                         selector: (state) => state.errors?[EBlocError.password],
                         controller: _controllers[EInput.password],
-                        onChanged: _passwordValidate,
+                        onChanged: passwordValidate,
                         margin: EdgeInsets.only(bottom: 22.0),
                         helpWidget: LinkWidget(
                           text: localization.forgottenPassword,
@@ -162,39 +142,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
             LoadingWidget(),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ScaffoldWithGradientWidget extends StatelessWidget {
-  final Widget child;
-  const ScaffoldWithGradientWidget({
-    super.key,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        context.read<AuthBloc>().add(AuthRouteEvent());
-        return true;
-      },
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFFFFC60F),
-                Color(0xFFFF9F0A),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: child,
         ),
       ),
     );
