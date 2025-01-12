@@ -58,8 +58,8 @@ Future<void> main() async {
     GetIt.I.registerSingleton<IAuthorization>(authorization);
     GetIt.I.registerSingleton<IAuthEmailService>(authEmail);
     GetIt.I.registerSingleton<IAuthGoogleService>(authGoogle);
-    GetIt.I.registerSingleton(authBloc);
     GetIt.I.registerSingleton(routerGuard);
+    GetIt.I.registerSingleton(authBloc);
     GetIt.I.registerSingleton(profileBlock);
 
     runApp(const App());

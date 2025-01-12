@@ -24,7 +24,6 @@ class _AppState extends State<App> {
   @override
   void dispose() {
     _appRouter.dispose();
-    //GetIt.I<AuthBloc>()
     super.dispose();
   }
 

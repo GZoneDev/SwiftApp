@@ -21,7 +21,7 @@ class _RegisterPageState extends State<RegisterPage>
     with ValidateMixin, ShowTimerDialogueMixin {
   final Map<EInput, TextEditingController> _controllers = {
     EInput.username: TextEditingController(),
-    EInput.emailOrPhone: TextEditingController(),
+    EInput.email: TextEditingController(),
     EInput.password: TextEditingController(),
   };
 
@@ -36,13 +36,13 @@ class _RegisterPageState extends State<RegisterPage>
 
   void _submit() {
     usernameValidate(_controllers[EInput.username]?.text);
-    emailValidate(_controllers[EInput.emailOrPhone]?.text);
+    emailValidate(_controllers[EInput.email]?.text);
     passwordValidate(_controllers[EInput.password]?.text);
 
     context.read<AuthBloc>().add(
           AuthRegisterEvent(
             username: _controllers[EInput.username]?.text ?? '',
-            email: _controllers[EInput.emailOrPhone]?.text ?? '',
+            email: _controllers[EInput.email]?.text ?? '',
             password: _controllers[EInput.password]?.text ?? '',
           ),
         );
@@ -89,19 +89,22 @@ class _RegisterPageState extends State<RegisterPage>
                       SelectorTextInputWidget(
                         placeholder: localization.namePlaceholder,
                         controller: _controllers[EInput.username],
-                        selector: (state) => state.errors?[EBlocError.username],
+                        errorType: EBlocError.username,
+                        routerPageName: RegisterRoute.name,
                         onChanged: usernameValidate,
                       ),
                       SelectorTextInputWidget(
                         placeholder: localization.emailPlaceholder,
-                        controller: _controllers[EInput.emailOrPhone],
-                        selector: (state) => state.errors?[EBlocError.email],
+                        controller: _controllers[EInput.email],
+                        errorType: EBlocError.email,
+                        routerPageName: RegisterRoute.name,
                         onChanged: emailValidate,
                       ),
                       SelectorPasswordInputWidget(
                         placeholder: localization.passwordPlaceholder,
                         controller: _controllers[EInput.password],
-                        selector: (state) => state.errors?[EBlocError.password],
+                        errorType: EBlocError.password,
+                        routerPageName: RegisterRoute.name,
                         onChanged: passwordValidate,
                       ),
                       SizedBox(

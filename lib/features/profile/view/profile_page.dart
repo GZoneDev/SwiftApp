@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/features/profile/widget/promo_banner.dart';
 
 import '../bloc/profile_bloc.dart';
@@ -817,6 +819,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             onTap: () {
                               print("Система -> Вийти");
+                              GetIt.I<IAuthorization>().logOut();
+                              AutoRouter.of(context).navigateNamed('/');
                             },
                             //contentPadding: EdgeInsets.zero,
                             contentPadding: EdgeInsets.symmetric(

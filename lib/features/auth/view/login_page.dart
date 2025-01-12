@@ -22,7 +22,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> with ValidateMixin {
   final Map<EInput, TextEditingController> _controllers = {
-    EInput.emailOrPhone: TextEditingController(),
+    EInput.email: TextEditingController(),
     EInput.password: TextEditingController(),
   };
 
@@ -36,12 +36,12 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
       _controllers.forEach((key, controller) => controller.clear());
 
   void _submit() {
-    emailValidate(_controllers[EInput.emailOrPhone]?.text);
+    emailValidate(_controllers[EInput.email]?.text);
     passwordValidate(_controllers[EInput.password]?.text);
 
     context.read<AuthBloc>().add(
           AuthLoginEvent(
-            email: _controllers[EInput.emailOrPhone]?.text ?? '',
+            email: _controllers[EInput.email]?.text ?? '',
             password: _controllers[EInput.password]?.text ?? '',
           ),
         );
@@ -84,20 +84,15 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                       const SizedBox(height: 16),
                       SelectorTextInputWidget(
                         placeholder: localization.emailPlaceholder,
-                        selector: (state) => state.errors?[EBlocError.email],
-                        // selector: (state) {
-                        //   if (router.currentPath == RegisterRoute().routeName) {
-                        //     return state.errors?[EBlocError.email];
-                        //   } else {
-                        //     return null;
-                        //   }
-                        // },
-                        controller: _controllers[EInput.emailOrPhone],
+                        errorType: EBlocError.email,
+                        routerPageName: LoginRoute.name,
+                        controller: _controllers[EInput.email],
                         onChanged: emailValidate,
                       ),
                       SelectorPasswordInputWidget(
                         placeholder: localization.passwordPlaceholder,
-                        selector: (state) => state.errors?[EBlocError.password],
+                        errorType: EBlocError.password,
+                        routerPageName: LoginRoute.name,
                         controller: _controllers[EInput.password],
                         onChanged: passwordValidate,
                         margin: EdgeInsets.only(bottom: 22.0),
@@ -136,6 +131,7 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                             IconButtonWidget(
                               assetPath: context.assetPath.appleLogo,
                               onPressed: () {
+                                // TODO: need create apple sign in
                                 debugPrint('Not created!');
                               },
                             ),

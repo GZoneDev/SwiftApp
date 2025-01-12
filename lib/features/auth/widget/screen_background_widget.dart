@@ -23,17 +23,17 @@ class ScreenBackgroundWidget extends StatelessWidget {
           Positioned(
             top: -95,
             left: -73,
-            child: CircleWidget(color: borderColor, width: 254, height: 254),
+            child: CircleWidget(color: borderColor, radius: 254),
           ),
           Positioned(
             bottom: -34,
             left: -47,
-            child: CircleWidget(color: borderColor, width: 123, height: 123),
+            child: CircleWidget(color: borderColor, radius: 123),
           ),
           Positioned(
             bottom: -72,
             right: -41,
-            child: CircleWidget(color: borderColor, width: 196, height: 196),
+            child: CircleWidget(color: borderColor, radius: 196),
           ),
         ],
       ),

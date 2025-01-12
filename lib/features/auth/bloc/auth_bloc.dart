@@ -176,7 +176,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
   }
 
   Future<void> _startTimer(Emitter<AuthState> emit) async {
-    if (_countdownController?.isClosed == false) return;
+    if (isBlocked) return;
     _countdownController = StreamController<int>();
 
     int remainingSeconds = 60;

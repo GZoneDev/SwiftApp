@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:get_it/get_it.dart';
 import 'package:receptico/core/router/router.dart';
 
 final List<AutoRoute> authRouting = [

@@ -15,10 +15,34 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    final orientation = MediaQuery.of(context).orientation;
     final router = AutoRouter.of(context);
     final localization = S.of(context);
     final borderColor = context.color.border.main.safe;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    double size = 1.0, padding = 60.0;
+
+    if (screenWidth <= 490) {
+      size = 1.2;
+    }
+
+    if (screenWidth <= 490) {
+      size = 1.3;
+    }
+
+    if (screenHeight <= 600) {
+      padding = 0.0;
+    }
+
+    if (screenWidth <= 490 && screenHeight <= 530) {
+      size = 1.5;
+    }
+
+    if (screenWidth <= 490 && screenHeight <= 470) {
+      size = 2;
+    }
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -31,14 +55,14 @@ class StartPage extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             Positioned(
-              top: -91,
-              right: -94,
-              child: CircleWidget(color: borderColor, width: 238, height: 238),
+              top: -91 / size,
+              right: -94 / size,
+              child: CircleWidget(color: borderColor, radius: 238 / size),
             ),
             Positioned(
-              bottom: -58,
-              left: -71,
-              child: CircleWidget(color: borderColor, width: 170, height: 170),
+              bottom: -58 / size,
+              left: -71 / size,
+              child: CircleWidget(color: borderColor, radius: 170 / size),
             ),
             Container(
               alignment: Alignment.center,
@@ -49,25 +73,24 @@ class StartPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(
-                        bottom: orientation == Orientation.portrait ? 60.0 : 0,
+                        bottom: padding,
                       ),
                       child: SvgPicture.asset(
                         context.assetPath.logo,
-                        width: 282,
-                        height: 282,
+                        width: 282 / size,
+                        height: 282 / size,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 34.0),
-                      child: SizedBox(
-                        width: 235,
-                        child: Text(
-                          localization.wantToCookQuestion,
-                          textAlign: TextAlign.center,
-                          style: context.font.displayLarge,
-                        ),
+                    SizedBox(
+                      width: 235,
+                      child: Text(
+                        localization.wantToCookQuestion,
+                        textAlign: TextAlign.center,
+                        style: context.font.displayLarge,
                       ),
                     ),
+                    SizedBox(height: 34 / size),
+                    //SizedBox(height: 16),
                     SizedBox(
                       width: 278,
                       height: 50,

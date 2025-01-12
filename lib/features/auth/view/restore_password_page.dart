@@ -80,8 +80,8 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
                           children: [
                             SelectorTextInputWidget(
                               placeholder: localization.emailPlaceholder,
-                              selector: (state) =>
-                                  state.errors?[EBlocError.email],
+                              errorType: EBlocError.email,
+                              routerPageName: RestorePasswordRoute.name,
                               controller: _emailController,
                               onChanged: emailValidate,
                               margin: EdgeInsets.only(bottom: 22.0),
