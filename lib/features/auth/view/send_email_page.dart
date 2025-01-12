@@ -101,7 +101,7 @@ class _SendEmailPageState extends State<SendEmailPage> {
                           child: GoToLinkWidget(
                             text: localithation.returnToLoginLink,
                             onTap: () async {
-                              await GetIt.I<IAuthorization>().signOut();
+                              await GetIt.I<IAuthorization>().logOut();
                               router.popForced();
                               router.navigate(const LoginRoute());
                             },

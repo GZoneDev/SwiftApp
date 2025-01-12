@@ -4,7 +4,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 abstract interface class IAuthorization {
   get isAuthorization;
 
-  Future<void> signOut();
+  Future<void> logOut();
 }
 
 class Authorization implements IAuthorization {
@@ -17,7 +17,7 @@ class Authorization implements IAuthorization {
       FirebaseAuth.instance.currentUser?.emailVerified ?? false;
 
   @override
-  Future<void> signOut() async {
+  Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
     _loger.log('User signed out');
   }

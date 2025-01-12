@@ -55,7 +55,7 @@ class TempLogoutPage extends StatelessWidget {
                     height: 50,
                     child: TextButton(
                       onPressed: () async {
-                        await GetIt.I<IAuthorization>().signOut();
+                        await GetIt.I<IAuthorization>().logOut();
                         router.navigateNamed('/');
                       },
                       child: Text('Logout'),
