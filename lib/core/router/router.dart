@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:get_it/get_it.dart';
 import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/features/auth/auth.dart';
 import 'package:receptico/features/auth/router/auth_router.dart';
 import 'package:receptico/features/auth/view/temp_logout_page.dart';
+import 'package:receptico/features/profile/view/profile_page.dart';
 
 part 'router.gr.dart';
 
@@ -26,6 +28,11 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
         ...authRouting,
+        AutoRoute(
+          page: ProfileRoute.page,
+          path: '/',
+          guards: [GetIt.I<RouterGuard>()],
+        ),
       ];
 
   @override
