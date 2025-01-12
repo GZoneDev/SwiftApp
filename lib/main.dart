@@ -4,16 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:receptico/core/authorization/authorization.dart';
+import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/auth/service/auth_email_service.dart';
+import 'package:receptico/features/auth/service/auth_google_service.dart';
+import 'package:receptico/features/profile/bloc/profile_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 import 'package:receptico/app.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'features/auth/bloc/auth_bloc.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   final talker = TalkerFlutter.init();
+
   GetIt.I.registerSingleton(talker);
 
   final dio = Dio();
@@ -37,6 +44,24 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    final authorization = Authorization(talker);
+    final routerGuard = RouterGuard(authorization);
+    final authEmail = AuthEmailService();
+    final authGoogle = AuthGoogleService();
+    final authBloc = AuthBloc(
+      authEmailService: authEmail,
+      authGoogleService: authGoogle,
+    );
+    final profileBlock = ProfileBloc();
+
+    GetIt.I.registerSingleton<IAuthorization>(authorization);
+    GetIt.I.registerSingleton<IAuthEmailService>(authEmail);
+    GetIt.I.registerSingleton<IAuthGoogleService>(authGoogle);
+    GetIt.I.registerSingleton(authBloc);
+    GetIt.I.registerSingleton(routerGuard);
+    GetIt.I.registerSingleton(profileBlock);
+
     runApp(const App());
   }, (e, st) {
     GetIt.I<Talker>().handle(e, st);

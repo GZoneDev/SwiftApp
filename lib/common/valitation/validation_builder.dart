@@ -1,7 +1,7 @@
 class ValidationBuilder {
   static final RegExp _defaultEmailRegExp = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
-  static final RegExp _defaultPhoneRegExp = RegExp(r'^\d{7,15}$');
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$"); //^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$
+  static final RegExp _defaultPhoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
 
   final List<String? Function(String)> _validators = [];
 
@@ -28,6 +28,8 @@ class ValidationBuilder {
   ValidationBuilder phone(String message) =>
       add((value) => _defaultPhoneRegExp.hasMatch(value) ? null : message);
 
+  String? Function(String) build() => validate;
+
   String? validate(String value) {
     for (var validator in _validators) {
       var result = validator(value);
@@ -37,6 +39,4 @@ class ValidationBuilder {
     }
     return null;
   }
-
-  String? Function(String) build() => validate;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:receptico/core/UI/theme.dart';
 
 class TitleWidget extends StatelessWidget {
   final String title, subtitle;
@@ -10,25 +11,21 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const height = 8.0, fontSizeTitle = 28.0, fontSizeSubtitle = 17.0;
+    const spacing = 8.0;
+    final textStyleTitle = context.font.title1Bold,
+        textStyleSubtitle = context.font.body;
     return Column(
+      spacing: spacing,
       children: [
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: fontSizeTitle,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textStyleTitle,
         ),
-        const SizedBox(height: height),
         Text(
           subtitle,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: fontSizeSubtitle,
-            fontWeight: FontWeight.normal,
-          ),
+          style: textStyleSubtitle,
         ),
       ],
     );

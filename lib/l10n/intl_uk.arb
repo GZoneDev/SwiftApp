@@ -1,1 +1,123 @@
-{}
+{
+  "@@locale": "uk",
+  "loginTitle": "Вхід",
+  "@loginTitle": {},
+  "loginSubtitle": "Увійдіть до облікового запису",
+  "@loginSubtitle": {},
+  "passwordPlaceholder": "Пароль",
+  "@passwordPlaceholder": {},
+  "forgottenPassword": "Забули пароль?",
+  "@forgottenPassword": {},
+  "loginButton": "Увійти",
+  "@loginButton": {},
+  "noAccountQuestion": "Не маєте акаунту?",
+  "@noAccountQuestion": {},
+  "createAccount": "Створити зараз",
+  "@createAccount": {},
+  "wantToCookQuestion": "Хочеш Щось Приготувати?",
+  "@wantToCookQuestion": {},
+  "registerLink": "Зареєструватися",
+  "@registerLink": {},
+  "registerTitle": "Реєстрація",
+  "@registerTitle": {},
+  "registerSubtitle": "Створіть новий акаунт",
+  "@registerSubtitle": {},
+  "namePlaceholder": "Ім’я",
+  "@namePlaceholder": {},
+  "registerButton": "Створити",
+  "@registerButton": {},
+  "accountQuestion": "Вже маєте акаунт?",
+  "@accountQuestion": {},
+  "loginLink": "Увійти",
+  "@loginLink": {},
+  "emailPlaceholder": "Email",
+  "@emailPlaceholder": {},
+  "restorePasswordButton": "Відновлення паролю",
+  "@restorePasswordButton": {},
+  "returnToLoginLink": "Повернутися до входу",
+  "@returnToLoginLink": {},
+  "newPasswordPlaceholder": "Новий пароль",
+  "@newPasswordPlaceholder": {},
+  "smsCodePlaceholder": "Код підтвердження",
+  "@smsCodePlaceholder": {},
+  "confirmPasswordPlaceholder": "Підтвердження паролю",
+  "@confirmPasswordPlaceholder": {},
+  "confirmPasswordChangeButton": "Підвердити зміну пароля",
+  "@confirmPasswordChangeButton": {},
+  "restorePasswordTitle": "Відновлення паролю",
+  "@restorePasswordTitle": {},
+  "restorePasswordSubtitle": "Введіть Email або номер телефону, який Ви використовували для реєстрації, і ми надішлемо Вам інструкцію",
+  "@restorePasswordSubtitle": {},
+  "restoreEmailMessage": "Якщо обліковий запис “{email}” існує, на електронну пошту буде надіслано інструкцію з відновлення паролю.",
+  "@restoreEmailMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "requiredError": "Поле не має бути пустим",
+  "@requiredError": {},
+  "passwordsNoMatchError": "Паролі не співпадають",
+  "@passwordsNoMatchError": {},
+  "invalidEmailError": "Недійсна пошта",
+  "@invalidEmailError": {},
+  "minPasswordLengError": "Пароль має бути не менше {min} символів",
+  "@minPasswordLengError": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "passwordUppercaseError": "Пароль має містити принаймні одну велику літеру",
+  "@passwordUppercaseError": {},
+  "passwordLowercaseError": "Пароль має містити принаймні одну малу літеру",
+  "@passwordLowercaseError": {},
+  "passwordNumberError": "Пароль повинен містити хоча б одне число",
+  "@passwordNumberError": {},
+  "passwordSpecialCharacterError": "Пароль повинен містити хоча б один спеціальний символ (_-./\\)",
+  "@passwordSpecialCharacterError": {},
+  "minUsernameLengError": "Ім’я не може бути меньшим ніж {min} символів",
+  "@minUsernameLengError": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "oopsTitle": "Ой, щось пішло не так",
+  "@oopsTitle": {},
+  "tryAgainButton": "Спробувати знову",
+  "@tryAgainButton": {},
+  "confirmEmailMessage": "Якщо обліковий запис “{email}” існує, на електронну пошту буде надіслано інструкцію з підтвердження пошти.",
+  "@confirmEmailMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "userNoVerifiedError": "Користувача не підтверджено",
+  "@userNoVerifiedError": {},
+  "userDisabledError": "Користувач заблокований",
+  "@userDisabledError": {},
+  "userNotFoundError": "Користувача не знайдено",
+  "@userNotFoundError": {},
+  "wrongPasswordError": "Невірний пароль",
+  "@wrongPasswordError": {},
+  "emailExistError": "Цей електронний лист вже використовується",
+  "@emailExistError": {},
+  "invalidVerificationCodeError": "Невірний код підтвердження",
+  "@invalidVerificationCodeError": {},
+  "invalidCharacterEnteredError": "Введено недійсний символ",
+  "@invalidCharacterEnteredError": {},
+  "sendAgainButton": "Надіслати знову",
+  "@sendAgainButton": {},
+  "weakPasswordError": "Слабкий пароль",
+  "@weakPasswordError": {},
+  "credentialAlreadyInUse": "Аккаунт вже використовується",
+  "@credentialAlreadyInUse": {},
+  "tryAgainMessage": "Спробуйте знову через",
+  "@tryAgainMessage": {}
+}
