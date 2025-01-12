@@ -39,11 +39,4 @@ final List<AutoRoute> authRouting = [
     transitionsBuilder: TransitionsBuilders.slideRight,
     durationInMilliseconds: 500,
   ),
-  CustomRoute(
-    page: TempLogoutRoute.page,
-    path: '/',
-    guards: [GetIt.I<RouterGuard>()],
-    transitionsBuilder: TransitionsBuilders.slideBottom,
-    durationInMilliseconds: 500,
-  ),
 ];

@@ -1,6 +1,6 @@
 name: receptico
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -26,6 +26,7 @@ dependencies:
   firebase_core: ^3.10.0
   firebase_auth: ^5.3.4
   google_sign_in: ^6.2.2
+  font_awesome_flutter: ^10.8.0
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +43,23 @@ flutter:
     - asset/icon/static/google_logo.svg
     - asset/icon/static/logo.svg
     - asset/icon/static/apple_logo.svg
+    - asset/icon/subscribe_back.svg
+    - asset/icon/grape_promo.svg
+    - asset/icon/grape.svg
+    - asset/icon/arrow.svg
+    - asset/icon/bels.svg
+    - asset/icon/callback.svg
+    - asset/icon/error.svg
+    - asset/icon/FAQ.svg
+    - asset/icon/info.svg
+    - asset/icon/lang.svg
+    - asset/icon/logOut.svg
+    - asset/icon/qvestion.svg
+    - asset/icon/recomend.svg
+    - asset/icon/star.svg
+    - asset/icon/sun.svg
+    - asset/icon/arrow_left.svg
+    - asset/icon/arrow_right.svg
 
   uses-material-design: true
   fonts:

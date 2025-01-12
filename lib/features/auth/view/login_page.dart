@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
 
           case const (AuthLoginSuccessState):
             // TODO: Update routing to the profile page
-            router.navigateNamed('/temp');
+            router.navigateNamed('/');
             break;
         }
       },

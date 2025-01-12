@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme/theme_light.dart';
 import 'package:receptico/core/bloc/bloc_route_interface.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/profile/bloc/profile_bloc.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -31,10 +32,9 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) => GetIt.I<AuthBloc>(),
-          // Add BLoC .....
-        ),
+        BlocProvider<AuthBloc>(create: (_) => GetIt.I<AuthBloc>()),
+        BlocProvider<ProfileBloc>(create: (_) => GetIt.I<ProfileBloc>()),
+        // Add BLoC .....
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.config(
