@@ -1,60 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:receptico/core/UI/color/color_theme.dart';
+import 'package:receptico/core/UI/color/palette.dart';
+import 'theme_builder.dart';
 
-final lightTheme = ThemeData(
-  scaffoldBackgroundColor: const Color(0xFFFFC60F),
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF3C644)),
-  useMaterial3: true,
-  textTheme: const TextTheme(
-    bodyMedium: TextStyle(
-      fontFamily: 'SFProText',
-      fontSize: 15,
-      fontWeight: FontWeight.normal,
-      color: Colors.white,
+final lightTheme = ThemeBuilder(
+  assetThemeDirectory: 'light',
+  primaryColor: Colors.white,
+  fontFamily: 'SFProText',
+  colorTheme: ColorTheme(
+    font: Palette(
+      main: Colors.white,
+      textButton: Colors.white,
+      elevatedButton: Colors.white,
+      input: Colors.black,
+      error: Colors.red,
+      hint: const Color(0xFF8E8E93),
+      link: Colors.white,
+    ),
+    background: Palette(
+      scaffold: const Color(0xFFFFC60F),
+      textButton: const Color(0xFF32ADE6),
+      elevatedButton: Colors.white,
+      input: Colors.white,
+      dashboarPhone: const Color(0xFFF1E3B6),
+      dashboarEmail: const Color(0xFF5AC8FA),
+      hint: const Color(0xFFFFC60F),
+      themeGradientTop: Color(0xFFFFC60F),
+      themeGradientBottom: Color(0xFFFF9F0A),
+    ),
+    border: Palette(
+      main: Colors.white,
+      error: Colors.red,
+      input: Colors.white,
+      dashboarPhone: const Color(0xFF8E8E93),
+      dashboarEmail: const Color(0xFF007AFF),
+      hint: Colors.white,
     ),
   ),
-  inputDecorationTheme: const InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.white,
-        width: 8,
-      ),
-    ),
-  ),
-);
-
-// class Theme {
-//   final Color fontColor, backgroundColor;
-//   const Theme({
-//     this.fontColor = Colors.transparent,
-//     this.backgroundColor = Colors.transparent,
-//   });
-// }
-
-// const actionButtomTheme = Theme(
-//   fontColor: Colors.white,
-//   backgroundColor: Color(0xFF32ADE6),
-// );
-
-// const linkButtomTheme = Theme(backgroundColor: Colors.white);
-// const errorTheme = Theme(fontColor: Colors.red);
-// const warningTheme = Theme(fontColor: Colors.red);
-
-class Palette {
-  final Color error, warning, buttom, link, text, textbox, placeholder;
-
-  const Palette({
-    required this.error,
-    required this.warning,
-    required this.buttom,
-    required this.link,
-    required this.text,
-    required this.textbox,
-    required this.placeholder,
-  });
-}
-
-class Theme {
-  final Palette font, background;
-
-  Theme({required this.font, required this.background});
-}
+).build();

@@ -14,16 +14,18 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.16
   dio: ^5.7.0
-  get_it: ^8.0.2
+  get_it: ^8.0.3
   flutter_bloc: ^8.1.6
   equatable: ^2.0.7
   json_annotation: ^4.9.0
   hive_flutter: ^1.1.0
-  talker_flutter: ^4.5.2
-  talker_dio_logger: ^4.5.2
-  talker_bloc_logger: ^4.5.2
+  talker_flutter: ^4.6.0
+  talker_dio_logger: ^4.6.0
+  talker_bloc_logger: ^4.6.0
   auto_route: ^9.2.2
-  firebase_core: ^3.8.1
+  firebase_core: ^3.9.0
+  firebase_auth: ^5.3.4
+  google_sign_in: ^6.2.2
 
 dev_dependencies:
   flutter_test:
@@ -32,13 +34,15 @@ dev_dependencies:
   json_serializable: ^6.9.0
   hive_generator: ^2.0.1
   auto_route_generator: ^9.0.0
-  build_runner: ^2.4.13
+  build_runner: ^2.4.14
+  intl_utils: ^2.8.7
 
 flutter:
   assets:
-    - asset/icon/logo.svg
-    - asset/icon/google_logo.svg
-    - asset/icon/apple_logo.svg
+    - asset/icon/static/google_logo.svg
+    - asset/icon/static/logo.svg
+    - asset/icon/static/apple_logo.svg
+
   uses-material-design: true
   fonts:
     - family: SFProText
@@ -49,3 +53,5 @@ flutter:
           weight: 700
 flutter_intl:
   enabled: true
+  arb-dir: lib/l10n
+  output-dir: lib/generated

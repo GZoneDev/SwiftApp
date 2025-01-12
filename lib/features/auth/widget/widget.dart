@@ -1,9 +1,13 @@
 export 'circle_widget.dart';
-export 'link_button_widget.dart';
 export 'icon_button_widget.dart';
 export 'text_input_widget.dart';
 export 'password_input_widget.dart';
 export 'title_widget.dart';
 export 'footer_widget.dart';
-export 'error_message_widget.dart';
-export 'link_widget.dart';
+export 'screen_background_widget.dart';
+export 'go_to_link_widget.dart';
+export 'loading_widget.dart';
+export 'selector_password_input_widget.dart';
+export 'selector_text_input_widget.dart';
+export 'timer_button_widget.dart';
+export 'scaffold_with_gradient_widget.dart';

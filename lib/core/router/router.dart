@@ -1,31 +1,35 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/features/auth/auth.dart';
+import 'package:receptico/features/auth/router/auth_router.dart';
+import 'package:receptico/features/auth/view/temp_logout_page.dart';
 
 part 'router.gr.dart';
+
+class RouterGuard extends AutoRouteGuard {
+  final IAuthorization _auth;
+
+  RouterGuard(this._auth);
+
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) {
+    if (_auth.isAuthorization) {
+      resolver.next(true);
+    } else {
+      resolver.redirect(StartRoute());
+    }
+  }
+}
 
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: StartRoute.page, path: '/'),
-        AutoRoute(page: LoginRoute.page),
-        AutoRoute(page: RegisterRoute.page),
+        ...authRouting,
       ];
 
   @override
   List<AutoRouteGuard> get guards => [
         // optionally add root guards here
       ];
-}
-
-extension RoutePageExtensions on StackRouter {
-  void goTo(PageRouteInfo routeToPush) {
-    final int routeLength = stack.length;
-
-    if (routeLength > 1 &&
-        stack[routeLength - 2].name == routeToPush.routeName) {
-      back();
-    }
-    push(routeToPush);
-  }
 }

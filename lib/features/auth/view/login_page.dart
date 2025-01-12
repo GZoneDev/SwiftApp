@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receptico/core/asset/asset_path.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/generated/l10n.dart';
+import 'package:receptico/core/UI/theme.dart';
 
-import '../block/block.dart';
-import '../model/user.dart';
+import '../bloc/bloc.dart';
+import '../common/enum/enum_input.dart';
+import '../common/mixin.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -16,51 +20,54 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  late bool _isError;
-  AuthLoginFailure _authState = AuthLoginFailure();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+class _LoginPageState extends State<LoginPage> with ValidateMixin {
+  final Map<EInput, TextEditingController> _controllers = {
+    EInput.emailOrPhone: TextEditingController(),
+    EInput.password: TextEditingController(),
+  };
 
   @override
-  void initState() {
-    super.initState();
-    _isError = false;
+  void dispose() {
+    _controllers.forEach((key, controller) => controller.dispose());
+    super.dispose();
   }
 
-  void _clearFailMessage() {
-    if (_isError) {
-      _isError = false;
-      setState(() => _authState = AuthLoginFailure());
-    }
-  }
+  void _clearForm() =>
+      _controllers.forEach((key, controller) => controller.clear());
 
   void _submit() {
+    emailValidate(_controllers[EInput.emailOrPhone]?.text);
+    passwordValidate(_controllers[EInput.password]?.text);
+
     context.read<AuthBloc>().add(
-          AuthLogin(
-            user: LoginUser(
-              email: _emailController.text,
-              password: _passwordController.text,
-            ),
+          AuthLoginEvent(
+            email: _controllers[EInput.emailOrPhone]?.text ?? '',
+            password: _controllers[EInput.password]?.text ?? '',
           ),
         );
   }
 
   @override
   Widget build(BuildContext context) {
-    var router = AutoRouter.of(context);
-    return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthLoginFailure) {
-            _isError = true;
-            setState(() => _authState = state);
-            return;
-          }
-        },
-        child: Stack(
+    final router = AutoRouter.of(context);
+    final localization = S.of(context);
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        switch (state.runtimeType) {
+          case const (AuthClearFailState):
+            _clearForm();
+            break;
+
+          case const (AuthLoginSuccessState):
+            // TODO: Update routing to the profile page
+            router.navigateNamed('/temp');
+            break;
+        }
+      },
+      child: ScaffoldWithGradientWidget(
+        body: Stack(
           children: [
-            LoginScreenBackgroundWidget(),
+            const ScreenBackgroundWidget(),
             Container(
               alignment: Alignment.center,
               child: SizedBox(
@@ -68,57 +75,76 @@ class _LoginPageState extends State<LoginPage> {
                 height: 458,
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const TitleWidget(
-                        title: 'Вхід',
-                        subtitle: 'Увійдіть до облікового запису',
+                      TitleWidget(
+                        title: localization.loginTitle,
+                        subtitle: localization.loginSubtitle,
                       ),
                       const SizedBox(height: 16),
-                      TextInputWidget(
-                        controller: _emailController,
-                        placeholder: 'Email',
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.emailError,
-                        margin: EdgeInsets.only(bottom: 10.0),
-                        marginWithError: EdgeInsets.only(bottom: 7.0),
+                      SelectorTextInputWidget(
+                        placeholder: localization.emailPlaceholder,
+                        selector: (state) => state.errors?[EBlocError.email],
+                        // selector: (state) {
+                        //   if (router.currentPath == RegisterRoute().routeName) {
+                        //     return state.errors?[EBlocError.email];
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
+                        controller: _controllers[EInput.emailOrPhone],
+                        onChanged: emailValidate,
                       ),
-                      PasswordInputWidget(
-                        controller: _passwordController,
-                        placeholderText: 'Пароль',
-                        onTap: _clearFailMessage,
-                        errorMessage: _authState.passwordError,
-                        helpWidget: LinkWidget(text: 'Забули пароль?'),
-                        margin: EdgeInsets.only(bottom: 25.0),
-                        marginWithError: EdgeInsets.only(bottom: 22.0),
+                      SelectorPasswordInputWidget(
+                        placeholder: localization.passwordPlaceholder,
+                        selector: (state) => state.errors?[EBlocError.password],
+                        controller: _controllers[EInput.password],
+                        onChanged: passwordValidate,
+                        margin: EdgeInsets.only(bottom: 22.0),
+                        helpWidget: Container(
+                          margin: EdgeInsets.only(right: 8),
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                            onTap: () =>
+                                router.navigate(const RestorePasswordRoute()),
+                            child: Text(
+                              localization.forgottenPassword,
+                              style: context.font.caption1,
+                            ),
+                          ),
+                        ),
                       ),
-                      LinkButtonWidget(
-                        text: 'Увійти',
-                        onPressed: _submit,
+                      SizedBox(
+                        height: 50,
+                        child: TextButton(
+                          onPressed: _submit,
+                          child: Text(localization.loginButton),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       FooterWidget(
-                        text: 'Не маєте акаунту?',
-                        linkText: 'Створити зараз',
-                        onTab: () {
-                          router.goTo(RegisterRoute());
-                          _clearFailMessage();
-                        },
+                        text: localization.noAccountQuestion,
+                        linkText: localization.createAccount,
+                        onTab: () => router.navigate(const RegisterRoute()),
                       ),
                       const SizedBox(height: 40),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 8,
                         children: [
+                          if (Platform.isIOS)
+                            IconButtonWidget(
+                              assetPath: context.assetPath.appleLogo,
+                              onPressed: () {
+                                debugPrint('Not created!');
+                              },
+                            ),
                           IconButtonWidget(
-                            assetPath: AssetPath.appleLogoPath,
+                            assetPath: context.assetPath.googleLogo,
                             onPressed: () {
-                              debugPrint('Not created!');
-                            },
-                          ),
-                          const SizedBox(width: 8),
-                          IconButtonWidget(
-                            assetPath: AssetPath.googleLogoPath,
-                            onPressed: () {
-                              debugPrint('Not created!');
+                              context
+                                  .read<AuthBloc>()
+                                  .add(AuthGoogleSingInEvent());
                             },
                           ),
                         ],
@@ -128,39 +154,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+            LoadingWidget(),
           ],
         ),
       ),
-    );
-  }
-}
-
-class LoginScreenBackgroundWidget extends StatelessWidget {
-  const LoginScreenBackgroundWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        const Positioned(
-          top: -95,
-          left: -73,
-          child: CircleWidget(width: 254, height: 254),
-        ),
-        const Positioned(
-          bottom: -34,
-          left: -47,
-          child: CircleWidget(width: 123, height: 123),
-        ),
-        const Positioned(
-          bottom: -72,
-          right: -41,
-          child: CircleWidget(width: 196, height: 196),
-        ),
-      ],
     );
   }
 }

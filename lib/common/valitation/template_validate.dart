@@ -1,60 +1,48 @@
 import 'package:receptico/common/valitation/validation_builder.dart';
+import 'package:receptico/generated/l10n.dart';
 
 class TemplateValidate {
+  static const _defoult = '';
   static const int minPasswordLeng = 6;
 
-  static ValidationBuilder _email() {
+  static ValidationBuilder _email(S localization) {
     return ValidationBuilder()
-        .required('Введіть пошту')
-        .email('Недійсна пошта');
+        .required(localization.requiredError)
+        .email(localization.invalidEmailError);
   }
 
-  static ValidationBuilder _phone() {
+  static ValidationBuilder _password(S localization) {
     return ValidationBuilder()
-        .required('Введіть дійсний номер телефону')
-        .phone('Недійсний номер телефону');
+        .required(localization.requiredError)
+        .minLength(
+            minPasswordLeng, localization.minPasswordLengError(minPasswordLeng))
+        .regExp(RegExp(r'[A-Z]'), localization.passwordUppercaseError)
+        .regExp(RegExp(r'[a-z]'), localization.passwordLowercaseError)
+        .regExp(RegExp(r'[0-9]'), localization.passwordNumberError)
+        .regExp(RegExp(r'^[a-zA-Z0-9]*$'),
+            localization.invalidCharacterEnteredError);
   }
 
-  static ValidationBuilder _password() {
-    return ValidationBuilder()
-        .required('Введіть пароль')
-        .minLength(minPasswordLeng,
-            'Пароль має бути не менше $minPasswordLeng символів')
-        .regExp(
-            RegExp(r'[A-Z]'), 'Пароль має містити принаймні одну велику літеру')
-        .regExp(
-            RegExp(r'[a-z]'), 'Пароль має містити принаймні одну малу літеру')
-        .regExp(RegExp(r'[0-9]'), 'Пароль повинен містити хоча б одне число')
-        .regExp(RegExp(r'[\W_]'),
-            'Пароль повинен містити хоча б один спеціальний символ');
+  static ValidationBuilder _username(S localization) {
+    return ValidationBuilder().required(localization.requiredError).minLength(
+        minPasswordLeng, localization.minUsernameLengError(minPasswordLeng));
   }
 
-  static ValidationBuilder _username() {
-    return ValidationBuilder().required('Введіть Ваше ім’я').minLength(
-        minPasswordLeng, 'Пароль має бути не менше $minPasswordLeng символів');
-  }
-
-  static String? emailValidate(String value) {
-    final validateEmail = _email().build();
-    final result = validateEmail(value);
+  static String? emailValidate(String? value, S localization) {
+    final validateEmail = _email(localization).build();
+    final result = validateEmail(value ?? _defoult);
     return result;
   }
 
-  static String? phoneValidate(String value) {
-    final validatePhone = _phone().build();
-    final result = validatePhone(value);
+  static String? passwordValidate(String? value, S localization) {
+    final validatePassword = _password(localization).build();
+    final result = validatePassword(value ?? _defoult);
     return result;
   }
 
-  static String? passwordValidate(String value) {
-    final validatePassword = _password().build();
-    final result = validatePassword(value);
-    return result;
-  }
-
-  static String? usernameValidate(String value) {
-    final validateUsername = _username().build();
-    final result = validateUsername(value);
+  static String? usernameValidate(String? value, S localization) {
+    final validateUsername = _username(localization).build();
+    final result = validateUsername(value ?? _defoult);
     return result;
   }
 }
