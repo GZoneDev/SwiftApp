@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/features/auth/bloc/auth_bloc.dart';
-import 'package:receptico/features/auth/widget/text_button_widget.dart';
+import 'package:receptico/features/auth/common/function/function_second_to_minute.dart';
 
 class TimerButtonWidget extends StatefulWidget {
   final String text;
@@ -27,41 +27,36 @@ class _TimerButtonWidgetState extends State<TimerButtonWidget> {
         String time = '';
 
         if (state is AuthCountdownUpdatedState) {
-          time = _formatTime(state.remainingSeconds);
+          time = secondToMinute(state.remainingSeconds);
         } else if (state is AuthCountdownCompleteState) {
           time = '';
           isVisibleButton = true;
         }
 
+        final font = context.font.title1;
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isVisibleButton)
-              TextButtonWidget(
+              SizedBox(
                 width: 278,
                 height: 50,
-                text: widget.text,
-                onPressed: () {
-                  setState(() {
-                    isVisibleButton = false;
-                  });
-                  widget.onPressed();
-                },
+                child: TextButton(
+                  onPressed: () {
+                    setState(() => isVisibleButton = false);
+                    widget.onPressed();
+                  },
+                  child: Text(widget.text),
+                ),
               ),
             if (!isVisibleButton)
               Text(
                 time,
-                style: context.font.title1,
+                style: font,
               ),
           ],
         );
       },
     );
-  }
-
-  String _formatTime(int totalSeconds) {
-    final minutes = totalSeconds ~/ 60;
-    final seconds = totalSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 }

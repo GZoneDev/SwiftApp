@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme/theme_light.dart';
-import 'package:receptico/core/authorization/authorization.dart';
+import 'package:receptico/core/bloc/bloc_route_interface.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,11 +18,12 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final _appRouter = AppRouter(GetIt.I<IAuthorization>());
+  final _appRouter = AppRouter();
 
   @override
   void dispose() {
     _appRouter.dispose();
+    //GetIt.I<AuthBloc>()
     super.dispose();
   }
 
@@ -37,7 +38,10 @@ class _AppState extends State<App> {
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.config(
-          navigatorObservers: () => [TalkerRouteObserver(GetIt.I<Talker>())],
+          navigatorObservers: () => [
+            TalkerRouteObserver(GetIt.I<Talker>()),
+            BlocRouteObserver(GetIt.I<AuthBloc>()),
+          ],
         ),
         localizationsDelegates: const [
           S.delegate,

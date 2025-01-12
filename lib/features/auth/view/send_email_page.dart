@@ -98,7 +98,7 @@ class _SendEmailPageState extends State<SendEmailPage> {
                         Container(
                           width: 278,
                           alignment: Alignment.center,
-                          child: BackLinkWidget(
+                          child: GoToLinkWidget(
                             text: localithation.returnToLoginLink,
                             onTap: () async {
                               await GetIt.I<IAuthorization>().signOut();

@@ -87,18 +87,18 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
                               margin: EdgeInsets.only(bottom: 22.0),
                               marginWithError: EdgeInsets.only(bottom: 16.0),
                             ),
-                            TextButtonWidget(
+                            SizedBox(
                               height: 50,
-                              text: localization.restorePasswordButton,
-                              onPressed: _submit,
+                              width: 278,
+                              child: TextButton(
+                                onPressed: _submit,
+                                child: Text(localization.restorePasswordButton),
+                              ),
                             ),
                             const SizedBox(height: 22),
-                            BackLinkWidget(
+                            GoToLinkWidget(
                               text: localization.returnToLoginLink,
-                              onTap: () {
-                                router.navigate(const LoginRoute());
-                                context.read<AuthBloc>().add(AuthRouteEvent());
-                              },
+                              onTap: () => router.navigate(const LoginRoute()),
                             ),
                           ],
                         ),

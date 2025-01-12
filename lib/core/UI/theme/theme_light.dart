@@ -29,6 +29,7 @@ final lightTheme = ThemeBuilder(
       themeGradientBottom: Color(0xFFFF9F0A),
     ),
     border: Palette(
+      main: Colors.white,
       error: Colors.red,
       input: Colors.white,
       dashboarPhone: const Color(0xFF8E8E93),

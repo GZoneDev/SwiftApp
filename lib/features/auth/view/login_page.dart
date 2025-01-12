@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +59,6 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
             break;
 
           case const (AuthLoginSuccessState):
-            _clearForm();
             // TODO: Update routing to the profile page
             router.navigateNamed('/temp');
             break;
@@ -74,6 +75,7 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                 height: 458,
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       TitleWidget(
                         title: localization.loginTitle,
@@ -83,6 +85,13 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                       SelectorTextInputWidget(
                         placeholder: localization.emailPlaceholder,
                         selector: (state) => state.errors?[EBlocError.email],
+                        // selector: (state) {
+                        //   if (router.currentPath == RegisterRoute().routeName) {
+                        //     return state.errors?[EBlocError.email];
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         controller: _controllers[EInput.emailOrPhone],
                         onChanged: emailValidate,
                       ),
@@ -92,39 +101,44 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                         controller: _controllers[EInput.password],
                         onChanged: passwordValidate,
                         margin: EdgeInsets.only(bottom: 22.0),
-                        helpWidget: LinkWidget(
-                          text: localization.forgottenPassword,
-                          onTap: () {
-                            router.navigate(const RestorePasswordRoute());
-                            context.read<AuthBloc>().add(AuthRouteEvent());
-                          },
+                        helpWidget: Container(
+                          margin: EdgeInsets.only(right: 8),
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                            onTap: () =>
+                                router.navigate(const RestorePasswordRoute()),
+                            child: Text(
+                              localization.forgottenPassword,
+                              style: context.font.caption1,
+                            ),
+                          ),
                         ),
                       ),
-                      TextButtonWidget(
+                      SizedBox(
                         height: 50,
-                        text: localization.loginButton,
-                        onPressed: _submit,
+                        child: TextButton(
+                          onPressed: _submit,
+                          child: Text(localization.loginButton),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       FooterWidget(
                         text: localization.noAccountQuestion,
                         linkText: localization.createAccount,
-                        onTab: () {
-                          router.navigate(const RegisterRoute());
-                          context.read<AuthBloc>().add(AuthRouteEvent());
-                        },
+                        onTab: () => router.navigate(const RegisterRoute()),
                       ),
                       const SizedBox(height: 40),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 8,
                         children: [
-                          IconButtonWidget(
-                            assetPath: context.assetPath.appleLogo,
-                            onPressed: () {
-                              debugPrint('Not created!');
-                            },
-                          ),
+                          if (Platform.isIOS)
+                            IconButtonWidget(
+                              assetPath: context.assetPath.appleLogo,
+                              onPressed: () {
+                                debugPrint('Not created!');
+                              },
+                            ),
                           IconButtonWidget(
                             assetPath: context.assetPath.googleLogo,
                             onPressed: () {

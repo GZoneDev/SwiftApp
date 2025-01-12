@@ -13,6 +13,9 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
+        final colorBackground =
+            context.color.background.hint.safe.withOpacity(0.3);
+        final colorCircular = context.color.border.hint.safe;
         return state is AuthLoadingState
             ? AbsorbPointer(
                 absorbing: true,
@@ -21,13 +24,12 @@ class LoadingWidget extends StatelessWidget {
                     BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: Container(
-                        color:
-                            context.color.background.hint.safe.withOpacity(0.3),
+                        color: colorBackground,
                       ),
                     ),
                     Center(
                       child: CircularProgressIndicator(
-                        color: context.color.border.hint.safe,
+                        color: colorCircular,
                         strokeWidth: 5,
                         strokeAlign: 5,
                       ),

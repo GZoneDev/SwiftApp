@@ -1,10 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:receptico/core/UI/theme.dart';
 
-import '../bloc/bloc.dart';
 import '../widget/widget.dart';
 
 @RoutePage()
@@ -37,14 +35,11 @@ class FailPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 SizedBox(
-                  width: 278,
                   height: 50,
-                  child: TextButtonWidget(
-                    text: localithation.tryAgainButton,
-                    onPressed: () {
-                      context.read<AuthBloc>().add(AuthRouteEvent());
-                      router.back();
-                    },
+                  width: 278,
+                  child: TextButton(
+                    onPressed: () => router.back(),
+                    child: Text(localithation.tryAgainButton),
                   ),
                 ),
               ],

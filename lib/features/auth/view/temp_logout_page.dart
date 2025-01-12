@@ -20,22 +20,13 @@ class TempLogoutPage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const Positioned(
-            top: -91,
-            right: -94,
-            child: CircleWidget(width: 238, height: 238),
-          ),
-          const Positioned(
-            bottom: -58,
-            left: -71,
-            child: CircleWidget(width: 170, height: 170),
-          ),
           Container(
             alignment: Alignment.center,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  PasswordInputWidget(),
                   Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(
@@ -59,20 +50,21 @@ class TempLogoutPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  TextButtonWidget(
+                  SizedBox(
                     width: 278,
                     height: 50,
-                    text: 'Logout',
-                    onPressed: () async {
-                      await GetIt.I<IAuthorization>().signOut();
-                      router.back();
-                    },
+                    child: TextButton(
+                      onPressed: () async {
+                        await GetIt.I<IAuthorization>().signOut();
+                        router.navigateNamed('/');
+                      },
+                      child: Text('Logout'),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          FailCatchWidget(),
         ],
       ),
     );

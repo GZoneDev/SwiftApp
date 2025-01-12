@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/features/auth/bloc/auth_bloc.dart';
 import 'package:receptico/features/auth/widget/widget.dart';
 
@@ -29,12 +30,13 @@ class SelectorPasswordInputWidget extends StatelessWidget {
       builder: (context, error) {
         return PasswordInputWidget(
           controller: controller,
-          placeholderText: placeholder,
+          placeholder: placeholder,
           onChanged: onChanged,
           margin: margin,
           marginWithError: marginWithError,
           helpWidget: helpWidget,
           error: error,
+          iconColor: context.color.font.input,
         );
       },
     );

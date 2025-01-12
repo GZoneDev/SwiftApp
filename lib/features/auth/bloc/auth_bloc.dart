@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:receptico/common/valitation/template_validate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receptico/core/bloc/bloc_route_interface.dart';
 import 'package:receptico/generated/l10n.dart';
 
 import '../service/service.dart';
@@ -16,7 +17,7 @@ enum EBlocError {
   confirmPassword,
 }
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
   late S _localization;
   final IAuthEmailService authEmailService;
   final IAuthGoogleService authGoogleService;
@@ -200,6 +201,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void updateLocalization(S localization) {
     _localization = localization;
   }
+
+  @override
+  void routeEvent() => add(AuthRouteEvent());
 
   void _emitFail(
       final EBlocError type, final String? message, Emitter<AuthState> emit) {

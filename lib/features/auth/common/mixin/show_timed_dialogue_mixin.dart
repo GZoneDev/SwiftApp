@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/features/auth/bloc/bloc.dart';
+import 'package:receptico/features/auth/common/function/function_second_to_minute.dart';
 import 'package:receptico/generated/l10n.dart';
 
 mixin ShowTimerDialogueMixin<T extends StatefulWidget> on State<T> {
-  String _formatTime(int totalSeconds) {
-    final minutes = totalSeconds ~/ 60;
-    final seconds = totalSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-  }
-
   void showTimedDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -21,7 +16,7 @@ mixin ShowTimerDialogueMixin<T extends StatefulWidget> on State<T> {
             String time = '';
 
             if (state is AuthCountdownUpdatedState) {
-              time = _formatTime(state.remainingSeconds);
+              time = secondToMinute(state.remainingSeconds);
             } else if (state is AuthCountdownCompleteState) {
               time = '';
               Navigator.of(context).pop();

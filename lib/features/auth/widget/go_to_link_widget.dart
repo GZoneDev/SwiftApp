@@ -2,23 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:receptico/core/UI/theme.dart';
 
-class BackLinkWidget extends StatelessWidget {
+class GoToLinkWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final String text;
-  final double fontSize;
+  final double iconSize;
 
-  const BackLinkWidget({
+  const GoToLinkWidget({
     super.key,
     required this.onTap,
     required this.text,
-    this.fontSize = 15,
+    this.iconSize = 15,
   });
 
   @override
   Widget build(BuildContext context) {
     const offset = Offset(-22, 4);
     final textStyle = context.font.subheadBold;
-    context.font.body;
+    final color = context.color.font.link.safe;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -29,8 +29,8 @@ class BackLinkWidget extends StatelessWidget {
               offset: offset,
               child: Icon(
                 CupertinoIcons.chevron_back,
-                size: fontSize,
-                color: context.color.font.link.safe,
+                size: iconSize,
+                color: color,
               ),
             ),
             Text(text, style: textStyle),

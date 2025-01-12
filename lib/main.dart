@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:receptico/core/authorization/authorization.dart';
+import 'package:receptico/core/router/router.dart';
 import 'package:receptico/features/auth/service/auth_email_service.dart';
 import 'package:receptico/features/auth/service/auth_google_service.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -44,6 +45,7 @@ Future<void> main() async {
     );
 
     final authorization = Authorization(talker);
+    final routerGuard = RouterGuard(authorization);
     final authEmail = AuthEmailService();
     final authGoogle = AuthGoogleService();
     final authBloc = AuthBloc(
@@ -54,7 +56,8 @@ Future<void> main() async {
     GetIt.I.registerSingleton<IAuthorization>(authorization);
     GetIt.I.registerSingleton<IAuthEmailService>(authEmail);
     GetIt.I.registerSingleton<IAuthGoogleService>(authGoogle);
-    GetIt.I.registerSingleton<AuthBloc>(authBloc);
+    GetIt.I.registerSingleton(authBloc);
+    GetIt.I.registerSingleton(routerGuard);
 
     runApp(const App());
   }, (e, st) {

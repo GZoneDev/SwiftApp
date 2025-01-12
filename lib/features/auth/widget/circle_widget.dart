@@ -8,7 +8,7 @@ class CircleWidget extends StatelessWidget {
     super.key,
     this.width = 100,
     this.height = 100,
-    this.color = Colors.white,
+    required this.color,
     this.borderWidth = 8,
   });
 

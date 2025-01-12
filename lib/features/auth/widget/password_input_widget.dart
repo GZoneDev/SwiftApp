@@ -1,26 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:receptico/core/UI/color/color.dart';
 
 import 'text_input_widget.dart';
 
 class PasswordInputWidget extends StatefulWidget {
-  final double width, height, borderRadius, fontSize;
+  final double width, height, borderRadius, iconSize;
   final EdgeInsets margin, marginWithError;
-  final String placeholderText;
+  final String? placeholder;
   final String? Function(String?)? onChanged;
   final VoidCallback? onTap;
   final TextEditingController? controller;
   final Widget? helpWidget;
   final String? error;
+  final Color? iconColor;
 
   const PasswordInputWidget({
     super.key,
-    required this.placeholderText,
+    this.placeholder,
     this.width = 278,
     this.height = 42,
     this.borderRadius = 8,
-    this.fontSize = 17,
+    this.iconSize = 17,
     this.marginWithError = const EdgeInsets.all(0),
     this.margin = const EdgeInsets.all(0),
     this.onTap,
@@ -28,6 +28,7 @@ class PasswordInputWidget extends StatefulWidget {
     this.helpWidget,
     this.onChanged,
     this.error,
+    this.iconColor,
   });
 
   @override
@@ -45,7 +46,7 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
         TextInputWidget(
           onChanged: widget.onChanged,
           controller: widget.controller,
-          placeholder: widget.placeholderText,
+          placeholder: widget.placeholder,
           obscureText: _isObscured,
           padding: padding,
           onTap: widget.onTap,
@@ -61,8 +62,8 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
             onPressed: () => setState(() => _isObscured = !_isObscured),
             icon: Icon(
               _isObscured ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-              size: widget.fontSize,
-              color: context.color.font.input,
+              size: widget.iconSize,
+              color: widget.iconColor,
             ),
           ),
         ),

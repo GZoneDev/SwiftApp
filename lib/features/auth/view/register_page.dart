@@ -61,7 +61,6 @@ class _RegisterPageState extends State<RegisterPage>
 
           case const (AuthRegisterSuccessState):
             router.navigate(const SendEmailRoute());
-            _clearForm();
             break;
 
           case const (AuthShowWaitMessageState):
@@ -80,6 +79,7 @@ class _RegisterPageState extends State<RegisterPage>
                 height: 430,
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       TitleWidget(
                         title: localization.registerTitle,
@@ -104,20 +104,18 @@ class _RegisterPageState extends State<RegisterPage>
                         selector: (state) => state.errors?[EBlocError.password],
                         onChanged: passwordValidate,
                       ),
-                      TextButtonWidget(
+                      SizedBox(
                         height: 50,
-                        text: localization.registerButton,
-                        onPressed: _submit,
+                        child: TextButton(
+                          onPressed: _submit,
+                          child: Text(localization.registerButton),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       FooterWidget(
                         text: localization.accountQuestion,
                         linkText: localization.loginLink,
-                        onTab: () {
-                          context.read<AuthBloc>().add(AuthRouteEvent());
-                          router.navigate(const LoginRoute());
-                          _clearForm();
-                        },
+                        onTab: () => router.navigate(const LoginRoute()),
                       ),
                     ],
                   ),
