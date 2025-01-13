@@ -25,6 +25,8 @@ class _RegisterPageState extends State<RegisterPage>
     EInput.password: TextEditingController(),
   };
 
+  bool _isUserOnCurrentPage = false;
+
   void _clearForm() =>
       _controllers.forEach((key, controller) => controller.clear());
 
@@ -54,6 +56,10 @@ class _RegisterPageState extends State<RegisterPage>
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        _isUserOnCurrentPage = router.current.name == RegisterRoute.name;
+
+        if (!_isUserOnCurrentPage) return;
+
         switch (state.runtimeType) {
           case const (AuthClearFailState):
             _clearForm();
@@ -89,23 +95,29 @@ class _RegisterPageState extends State<RegisterPage>
                       SelectorTextInputWidget(
                         placeholder: localization.namePlaceholder,
                         controller: _controllers[EInput.username],
-                        errorType: EBlocError.username,
-                        routerPageName: RegisterRoute.name,
                         onChanged: usernameValidate,
+                        selector: (state) =>
+                            _isUserOnCurrentPage && state is AuthFailState
+                                ? state.errors[EBlocError.password]
+                                : null,
                       ),
                       SelectorTextInputWidget(
                         placeholder: localization.emailPlaceholder,
                         controller: _controllers[EInput.email],
-                        errorType: EBlocError.email,
-                        routerPageName: RegisterRoute.name,
                         onChanged: emailValidate,
+                        selector: (state) =>
+                            _isUserOnCurrentPage && state is AuthFailState
+                                ? state.errors[EBlocError.email]
+                                : null,
                       ),
                       SelectorPasswordInputWidget(
                         placeholder: localization.passwordPlaceholder,
                         controller: _controllers[EInput.password],
-                        errorType: EBlocError.password,
-                        routerPageName: RegisterRoute.name,
                         onChanged: passwordValidate,
+                        selector: (state) =>
+                            _isUserOnCurrentPage && state is AuthFailState
+                                ? state.errors[EBlocError.password]
+                                : null,
                       ),
                       SizedBox(
                         height: 50,

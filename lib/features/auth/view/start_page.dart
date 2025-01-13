@@ -15,7 +15,6 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
     final router = AutoRouter.of(context);
     final localization = S.of(context);
     final borderColor = context.color.border.main.safe;
@@ -24,25 +23,21 @@ class StartPage extends StatelessWidget {
 
     double size = 1.0, padding = 60.0;
 
-    if (screenWidth <= 490) {
-      size = 1.2;
-    }
+    // if (screenWidth <= 490) {
+    //   size = 1.2;
+    // }
 
-    if (screenWidth <= 490) {
-      size = 1.3;
-    }
+    // if (screenHeight <= 600) {
+    //   padding = 0.0;
+    // }
 
-    if (screenHeight <= 600) {
-      padding = 0.0;
-    }
+    // if (screenHeight <= 530) {
+    //   size = 1.5;
+    // }
 
-    if (screenWidth <= 490 && screenHeight <= 530) {
-      size = 1.5;
-    }
-
-    if (screenWidth <= 490 && screenHeight <= 470) {
-      size = 2;
-    }
+    // if (screenHeight <= 470) {
+    //   size = 2;
+    // }
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {

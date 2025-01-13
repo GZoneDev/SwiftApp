@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +23,8 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
     EInput.email: TextEditingController(),
     EInput.password: TextEditingController(),
   };
+
+  bool _isUserOnCurrentPage = false;
 
   @override
   void dispose() {
@@ -53,6 +53,10 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        _isUserOnCurrentPage = router.current.name == LoginRoute.name;
+
+        if (!_isUserOnCurrentPage) return;
+
         switch (state.runtimeType) {
           case const (AuthClearFailState):
             _clearForm();
@@ -84,18 +88,22 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                       const SizedBox(height: 16),
                       SelectorTextInputWidget(
                         placeholder: localization.emailPlaceholder,
-                        errorType: EBlocError.email,
-                        routerPageName: LoginRoute.name,
                         controller: _controllers[EInput.email],
                         onChanged: emailValidate,
+                        selector: (state) =>
+                            _isUserOnCurrentPage && state is AuthFailState
+                                ? state.errors[EBlocError.email]
+                                : null,
                       ),
                       SelectorPasswordInputWidget(
                         placeholder: localization.passwordPlaceholder,
-                        errorType: EBlocError.password,
-                        routerPageName: LoginRoute.name,
                         controller: _controllers[EInput.password],
                         onChanged: passwordValidate,
                         margin: EdgeInsets.only(bottom: 22.0),
+                        selector: (state) =>
+                            _isUserOnCurrentPage && state is AuthFailState
+                                ? state.errors[EBlocError.password]
+                                : null,
                         helpWidget: Container(
                           margin: EdgeInsets.only(right: 8),
                           alignment: Alignment.topRight,
@@ -127,14 +135,14 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 8,
                         children: [
-                          if (Platform.isIOS)
-                            IconButtonWidget(
-                              assetPath: context.assetPath.appleLogo,
-                              onPressed: () {
-                                // TODO: need create apple sign in
-                                debugPrint('Not created!');
-                              },
-                            ),
+                          //if (Platform.isIOS)
+                          IconButtonWidget(
+                            assetPath: context.assetPath.appleLogo,
+                            onPressed: () {
+                              // TODO: need create apple sign in
+                              debugPrint('Not created!');
+                            },
+                          ),
                           IconButtonWidget(
                             assetPath: context.assetPath.googleLogo,
                             onPressed: () {

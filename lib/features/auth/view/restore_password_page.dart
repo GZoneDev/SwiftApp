@@ -20,6 +20,8 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
     with ShowTimerDialogueMixin, ValidateMixin {
   final _emailController = TextEditingController();
 
+  bool _isUserOnCurrentPage = false;
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -42,6 +44,10 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
     final localization = S.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        _isUserOnCurrentPage = router.current.name == RestorePasswordRoute.name;
+
+        if (!_isUserOnCurrentPage) return;
+
         switch (state.runtimeType) {
           case const (AuthClearFailState):
             _clearForm();
@@ -80,12 +86,14 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
                           children: [
                             SelectorTextInputWidget(
                               placeholder: localization.emailPlaceholder,
-                              errorType: EBlocError.email,
-                              routerPageName: RestorePasswordRoute.name,
                               controller: _emailController,
                               onChanged: emailValidate,
                               margin: EdgeInsets.only(bottom: 22.0),
                               marginWithError: EdgeInsets.only(bottom: 16.0),
+                              selector: (state) =>
+                                  _isUserOnCurrentPage && state is AuthFailState
+                                      ? state.errors[EBlocError.email]
+                                      : null,
                             ),
                             SizedBox(
                               height: 50,

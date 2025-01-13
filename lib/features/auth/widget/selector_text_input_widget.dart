@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/features/auth/bloc/auth_bloc.dart';
@@ -6,8 +5,7 @@ import 'package:receptico/features/auth/widget/widget.dart';
 
 class SelectorTextInputWidget extends StatelessWidget {
   final String placeholder;
-  final EBlocError errorType;
-  final String routerPageName;
+  final String? Function(AuthState) selector;
   final TextEditingController? controller;
   final String? Function(String?) onChanged;
   final EdgeInsets margin, marginWithError;
@@ -17,20 +15,15 @@ class SelectorTextInputWidget extends StatelessWidget {
     required this.placeholder,
     required this.controller,
     required this.onChanged,
-    required this.errorType,
-    required this.routerPageName,
     this.margin = const EdgeInsets.only(bottom: 16.0),
     this.marginWithError = const EdgeInsets.only(bottom: 10.0),
+    required this.selector,
   });
 
   @override
   Widget build(BuildContext context) {
-    final router = AutoRouter.of(context);
     return BlocSelector<AuthBloc, AuthState, String?>(
-      selector: (state) =>
-          router.current.name == routerPageName && state is AuthFailState
-              ? state.errors[errorType]
-              : null,
+      selector: selector,
       builder: (context, error) {
         return TextInputWidget(
           controller: controller,

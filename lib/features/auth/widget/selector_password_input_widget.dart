@@ -7,9 +7,8 @@ import 'package:receptico/features/auth/widget/widget.dart';
 
 class SelectorPasswordInputWidget extends StatelessWidget {
   final String placeholder;
-  final EBlocError errorType;
-  final String routerPageName;
   final TextEditingController? controller;
+  final String? Function(AuthState) selector;
   final String? Function(String?) onChanged;
   final EdgeInsets margin, marginWithError;
   final Widget? helpWidget;
@@ -17,23 +16,19 @@ class SelectorPasswordInputWidget extends StatelessWidget {
   const SelectorPasswordInputWidget({
     super.key,
     required this.placeholder,
-    required this.errorType,
-    required this.routerPageName,
     required this.controller,
     required this.onChanged,
     this.margin = const EdgeInsets.only(bottom: 25.0),
     this.marginWithError = const EdgeInsets.only(bottom: 22.0),
     this.helpWidget,
+    required this.selector,
   });
 
   @override
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     return BlocSelector<AuthBloc, AuthState, String?>(
-      selector: (state) =>
-          router.current.name == routerPageName && state is AuthFailState
-              ? state.errors[errorType]
-              : null,
+      selector: selector,
       builder: (context, error) {
         return PasswordInputWidget(
           controller: controller,
