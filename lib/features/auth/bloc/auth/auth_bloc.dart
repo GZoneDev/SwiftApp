@@ -29,10 +29,10 @@ EventTransformer<E> throttle<E>(Duration duration) {
 class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
   late S _localization;
   final Talker loger;
-  final IAuthEmail authEmailService;
-  final IAuthGoogle authGoogleService;
-  final ITimer restoreTimer;
-  final ITimer registerTimer;
+  final AuthEmailService authEmailService;
+  final AuthGoogleService authGoogleService;
+  final TimerService restoreTimer;
+  final TimerService registerTimer;
 
   final Map<EBlocError, String?> _errors = <EBlocError, String?>{};
 

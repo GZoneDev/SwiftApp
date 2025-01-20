@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/core/router/router.dart';
-import 'package:receptico/features/auth/common/function/function_second_to_minute.dart';
+import 'package:receptico/features/auth/common/function/second_to_minute.dart';
 import 'package:receptico/generated/l10n.dart';
 
 import '../bloc/bloc.dart';
@@ -54,9 +54,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
             break;
 
           case const (AuthSendRestorePasswordEmail):
-            //TODO: need localization fix
-            showTimedDialog(context,
-                'Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.');
+            showTimedDialog(context, localization.sendEmailMessage);
             context.read<TimerBloc>().add(RestoreTimerStart());
             break;
         }

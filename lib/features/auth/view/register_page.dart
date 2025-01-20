@@ -7,7 +7,7 @@ import 'package:receptico/generated/l10n.dart';
 
 import '../bloc/bloc.dart';
 import '../common/enum.dart';
-import '../common/function/function_second_to_minute.dart';
+import '../common/function/second_to_minute.dart';
 import '../common/mixin.dart';
 import '../widget/widget.dart';
 
@@ -90,16 +90,12 @@ class _RegisterPageState extends State<RegisterPage>
 
           case const (AuthSendRegisterPasswordEmail):
             context.read<TimerBloc>().add(RegisterTimerStart());
-            //TODO: need localization fix
-            showTimedDialog(context,
-                'Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.');
+            showTimedDialog(context, localization.sendEmailMessage);
             break;
 
           case const (AuthRegisterSuccessState):
             context.read<TimerBloc>().add(RegisterTimerStart());
-            //TODO: need localization fix
-            showTimedDialog(context,
-                'Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.');
+            showTimedDialog(context, localization.sendEmailMessage);
             setState(() => _isLockInput = true);
             break;
 
@@ -157,8 +153,9 @@ class _RegisterPageState extends State<RegisterPage>
                                     height: 40,
                                     child: TextButton(
                                       onPressed: _sendEmail,
-                                      //TODO: need localization fix
-                                      child: Text('Надіслати знову'),
+                                      child: Text(
+                                        localization.sendAgainButton,
+                                      ),
                                     ),
                                   );
                                 }

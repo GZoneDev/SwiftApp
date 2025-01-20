@@ -18,8 +18,6 @@ class StartPage extends StatelessWidget {
     final router = AutoRouter.of(context);
     final localization = S.of(context);
     final borderColor = context.color.border.main.safe;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     bool isVisibleCircle = true;
     double size = 1.0, padding = 60.0;

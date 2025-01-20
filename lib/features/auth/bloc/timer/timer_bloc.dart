@@ -7,8 +7,8 @@ part 'timer_state.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Talker loger;
-  final ITimer restoreTimer;
-  final ITimer registerTimer;
+  final TimerService restoreTimer;
+  final TimerService registerTimer;
 
   TimerBloc({
     required this.restoreTimer,
