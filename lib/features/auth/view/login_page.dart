@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with ValidateMixin {
+class _LoginPageState extends State<LoginPage>
+    with ValidateMixin, ShowTimerDialogueMixin {
   final Map<EInput, TextEditingController> _controllers = {
     EInput.email: TextEditingController(),
     EInput.password: TextEditingController(),
@@ -36,9 +39,6 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
       _controllers.forEach((key, controller) => controller.clear());
 
   void _submit() {
-    emailValidate(_controllers[EInput.email]?.text);
-    passwordValidate(_controllers[EInput.password]?.text);
-
     context.read<AuthBloc>().add(
           AuthLoginEvent(
             email: _controllers[EInput.email]?.text ?? '',
@@ -66,6 +66,11 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
             // TODO: Update routing to the profile page
             router.navigateNamed('/');
             break;
+
+          case const (AuthEmailVerifiedSuccess):
+            showTimedDialog(context,
+                'Пошту успішно підтверджено, спробуйте авторизуватися');
+            break;
         }
       },
       child: ScaffoldWithGradientWidget(
@@ -74,10 +79,10 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
             const ScreenBackgroundWidget(),
             Container(
               alignment: Alignment.center,
-              child: SizedBox(
-                width: 278,
-                height: 458,
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  width: 278,
+                  height: 458,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -118,7 +123,7 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                         ),
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 40,
                         child: TextButton(
                           onPressed: _submit,
                           child: Text(localization.loginButton),
@@ -135,14 +140,14 @@ class _LoginPageState extends State<LoginPage> with ValidateMixin {
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 8,
                         children: [
-                          //if (Platform.isIOS)
-                          IconButtonWidget(
-                            assetPath: context.assetPath.appleLogo,
-                            onPressed: () {
-                              // TODO: need create apple sign in
-                              debugPrint('Not created!');
-                            },
-                          ),
+                          if (Platform.isIOS)
+                            IconButtonWidget(
+                              assetPath: context.assetPath.appleLogo,
+                              onPressed: () {
+                                // TODO: need create apple sign in
+                                debugPrint('Not created!');
+                              },
+                            ),
                           IconButtonWidget(
                             assetPath: context.assetPath.googleLogo,
                             onPressed: () {

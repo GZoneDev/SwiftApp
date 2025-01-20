@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/auth/bloc/bloc.dart';
 import 'package:receptico/features/auth/service/auth_email_service.dart';
 import 'package:receptico/features/auth/service/auth_google_service.dart';
+import 'package:receptico/features/auth/service/timer_service.dart';
 import 'package:receptico/features/profile/bloc/profile_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
@@ -15,7 +17,6 @@ import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 import 'package:receptico/app.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'features/auth/bloc/auth_bloc.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -45,6 +46,8 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
+    final passwordRestoreTimerService = TimerService();
+    final registerTimerService = TimerService();
     final authorization = Authorization(talker);
     final routerGuard = RouterGuard(authorization);
     final authEmail = AuthEmailService();
@@ -52,14 +55,23 @@ Future<void> main() async {
     final authBloc = AuthBloc(
       authEmailService: authEmail,
       authGoogleService: authGoogle,
+      restoreTimer: passwordRestoreTimerService,
+      registerTimer: registerTimerService,
+      loger: talker,
+    );
+    final timerBloc = TimerBloc(
+      restoreTimer: passwordRestoreTimerService,
+      registerTimer: registerTimerService,
+      loger: talker,
     );
     final profileBlock = ProfileBloc();
 
     GetIt.I.registerSingleton<IAuthorization>(authorization);
-    GetIt.I.registerSingleton<IAuthEmailService>(authEmail);
-    GetIt.I.registerSingleton<IAuthGoogleService>(authGoogle);
+    GetIt.I.registerSingleton<IAuthEmail>(authEmail);
+    GetIt.I.registerSingleton<IAuthGoogle>(authGoogle);
     GetIt.I.registerSingleton(routerGuard);
     GetIt.I.registerSingleton(authBloc);
+    GetIt.I.registerSingleton(timerBloc);
     GetIt.I.registerSingleton(profileBlock);
 
     runApp(const App());

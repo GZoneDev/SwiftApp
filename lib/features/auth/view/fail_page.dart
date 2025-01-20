@@ -35,7 +35,7 @@ class FailPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 SizedBox(
-                  height: 50,
+                  height: 40,
                   width: 278,
                   child: TextButton(
                     onPressed: () => router.back(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receptico/features/auth/bloc/auth_bloc.dart';
+import 'package:receptico/features/auth/bloc/auth/auth_bloc.dart';
 import 'package:receptico/features/auth/widget/widget.dart';
 
 class SelectorTextInputWidget extends StatelessWidget {

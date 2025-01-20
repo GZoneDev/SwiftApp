@@ -3,11 +3,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-abstract interface class IAuthGoogleService {
+abstract interface class IAuthGoogle {
   Future<bool> signInWithGoogle();
 }
 
-class AuthGoogleService implements IAuthGoogleService {
+class AuthGoogleService implements IAuthGoogle {
   final _auth = FirebaseAuth.instance;
   final _googleSignIn = GoogleSignIn();
   final _loger = GetIt.I<Talker>();

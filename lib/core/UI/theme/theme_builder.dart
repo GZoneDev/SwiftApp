@@ -26,7 +26,7 @@ class ThemeBuilder {
     );
     const inputTextPadding = EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         elevatedButtonPadding = EdgeInsets.all(14),
-        textButtonPadding = EdgeInsets.all(14);
+        textButtonPadding = EdgeInsets.all(10);
     final borderRadiusElevatedButton = BorderRadius.circular(12),
         borderRadiusTextButton = BorderRadius.circular(12);
     return ThemeData(
@@ -63,7 +63,7 @@ class ThemeBuilder {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          textStyle: WidgetStateProperty.all(EFont.headline.textStyle()),
+          textStyle: WidgetStateProperty.all(EFont.subhead.textStyle()),
           foregroundColor: WidgetStateProperty.all(colorTheme.font.textButton),
           backgroundColor:
               WidgetStateProperty.all(colorTheme.background.textButton),

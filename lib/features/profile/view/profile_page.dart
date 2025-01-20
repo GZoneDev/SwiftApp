@@ -817,9 +817,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontSize: 17, // Размер шрифта
                               ),
                             ),
-                            onTap: () {
+                            onTap: () async {
                               print("Система -> Вийти");
-                              GetIt.I<IAuthorization>().logOut();
+                              await GetIt.I<IAuthorization>().logOut();
                               AutoRouter.of(context).navigateNamed('/');
                             },
                             //contentPadding: EdgeInsets.zero,

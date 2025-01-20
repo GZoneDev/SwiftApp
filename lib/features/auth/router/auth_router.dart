@@ -32,10 +32,4 @@ final List<AutoRoute> authRouting = [
     transitionsBuilder: TransitionsBuilders.slideLeft,
     durationInMilliseconds: 500,
   ),
-  CustomRoute(
-    page: SendEmailRoute.page,
-    path: '/sendEmail',
-    transitionsBuilder: TransitionsBuilders.slideRight,
-    durationInMilliseconds: 500,
-  ),
 ];
