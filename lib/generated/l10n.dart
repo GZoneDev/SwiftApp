@@ -529,6 +529,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.`
+  String get sendEmailMessage {
+    return Intl.message(
+      'Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.',
+      name: 'sendEmailMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
