@@ -27,6 +27,7 @@ EventTransformer<E> throttle<E>(Duration duration) {
 }
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
+  static const waitTime = 60;
   late S _localization;
   final Talker loger;
   final AuthEmailService authEmailService;
@@ -153,7 +154,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
 
       if (result.isSuccess) {
         emit(AuthRegisterSuccessState());
-        await registerTimer.wait(60);
+        await registerTimer.wait(waitTime);
         final isVerify = await _waitEmailVerification();
         if (isVerify) emit(AuthEmailVerifiedSuccess());
       } else {
@@ -195,7 +196,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
 
       if (result.isSuccess) {
         emit(AuthSendRestorePasswordEmail());
-        restoreTimer.wait(60);
+        restoreTimer.wait(waitTime);
       } else {
         _throwFail(result, _localization, emit);
       }
@@ -223,7 +224,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
       final result = await authEmailService.resendVerificationEmail();
       if (result.isSuccess) {
         emit(AuthSendRegisterPasswordEmail());
-        await registerTimer.wait(60);
+        await registerTimer.wait(waitTime);
         final isVerify = await _waitEmailVerification();
         if (isVerify) emit(AuthEmailVerifiedSuccess());
       } else {
@@ -249,7 +250,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
   }
 
   @override
-  void routeEvent() => add(AuthRouteEvent());
+  //void routeEvent() => add(AuthRouteEvent());
+
+  void routeEvent() => emit(AuthLoginSuccessState());
 
   void _emitFail(
       final EBlocError type, final String? message, Emitter<AuthState> emit) {

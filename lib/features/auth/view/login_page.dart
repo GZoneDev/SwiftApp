@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage>
             break;
 
           case const (AuthEmailVerifiedSuccess):
-            showTimedDialog(context,
+            popUpDialogWidget(context,
                 'Пошту успішно підтверджено, спробуйте авторизуватися');
             break;
         }

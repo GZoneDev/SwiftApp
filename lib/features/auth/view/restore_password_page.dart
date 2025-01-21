@@ -54,7 +54,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
             break;
 
           case const (AuthSendRestorePasswordEmail):
-            showTimedDialog(context, localization.sendEmailMessage);
+            popUpDialogWidget(context, localization.sendEmailMessage);
             context.read<TimerBloc>().add(RestoreTimerStart());
             break;
         }

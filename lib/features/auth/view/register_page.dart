@@ -90,12 +90,12 @@ class _RegisterPageState extends State<RegisterPage>
 
           case const (AuthSendRegisterPasswordEmail):
             context.read<TimerBloc>().add(RegisterTimerStart());
-            showTimedDialog(context, localization.sendEmailMessage);
+            popUpDialogWidget(context, localization.sendEmailMessage);
             break;
 
           case const (AuthRegisterSuccessState):
             context.read<TimerBloc>().add(RegisterTimerStart());
-            showTimedDialog(context, localization.sendEmailMessage);
+            popUpDialogWidget(context, localization.sendEmailMessage);
             setState(() => _isLockInput = true);
             break;
 
