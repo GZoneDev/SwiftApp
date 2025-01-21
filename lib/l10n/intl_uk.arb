@@ -119,5 +119,6 @@
   "credentialAlreadyInUse": "Аккаунт вже використовується",
   "@credentialAlreadyInUse": {},
   "tryAgainMessage": "Спробуйте знову через",
-  "@tryAgainMessage": {}
+  "@tryAgainMessage": {},
+  "sendEmailMessage": "Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку."
 }

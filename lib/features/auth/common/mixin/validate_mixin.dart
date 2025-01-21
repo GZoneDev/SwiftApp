@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth/auth_bloc.dart';
 
 mixin ValidateMixin<T extends StatefulWidget> on State<T> {
   String? usernameValidate(String? value) {

@@ -6,6 +6,7 @@ class Palette {
   final Color? warning;
   final Color? hint;
   final Color? input;
+  final Color? inputReadonly;
   final Color? link;
   final Color? textButton;
   final Color? elevatedButton;
@@ -13,7 +14,7 @@ class Palette {
   final Color? scaffold;
   final Color? themeGradientTop;
   final Color? themeGradientBottom;
-  final Color? dashboarEmail;
+  final Color? timer;
   final Color? dashboarPhone;
 
   const Palette({
@@ -22,6 +23,7 @@ class Palette {
     this.warning,
     this.hint,
     this.input,
+    this.inputReadonly,
     this.link,
     this.textButton,
     this.elevatedButton,
@@ -29,7 +31,7 @@ class Palette {
     this.scaffold,
     this.themeGradientTop,
     this.themeGradientBottom,
-    this.dashboarEmail,
+    this.timer,
     this.dashboarPhone,
   });
 
@@ -39,6 +41,7 @@ class Palette {
     Color? warning,
     Color? hint,
     Color? input,
+    Color? inputReadonly,
     Color? link,
     Color? textButton,
     Color? elevatedButton,
@@ -46,7 +49,7 @@ class Palette {
     Color? scaffold,
     Color? themeGradientTop,
     Color? themeGradientBottom,
-    Color? dashboarEmail,
+    Color? timer,
     Color? dashboarPhone,
   }) {
     return Palette(
@@ -55,6 +58,7 @@ class Palette {
       warning: warning ?? this.warning,
       hint: hint ?? this.hint,
       input: input ?? this.input,
+      inputReadonly: inputReadonly ?? this.inputReadonly,
       link: link ?? this.link,
       textButton: textButton ?? this.textButton,
       elevatedButton: elevatedButton ?? this.elevatedButton,
@@ -62,7 +66,7 @@ class Palette {
       scaffold: scaffold ?? this.scaffold,
       themeGradientTop: themeGradientTop ?? this.themeGradientTop,
       themeGradientBottom: themeGradientBottom ?? this.themeGradientBottom,
-      dashboarEmail: dashboarEmail ?? this.dashboarEmail,
+      timer: timer ?? this.timer,
       dashboarPhone: dashboarPhone ?? this.dashboarPhone,
     );
   }
@@ -74,6 +78,7 @@ class Palette {
       warning: Color.lerp(x?.warning, y?.warning, t),
       hint: Color.lerp(x?.hint, y?.hint, t),
       input: Color.lerp(x?.input, y?.input, t),
+      inputReadonly: Color.lerp(x?.input, y?.input, t),
       link: Color.lerp(x?.link, y?.link, t),
       textButton: Color.lerp(x?.textButton, y?.textButton, t),
       elevatedButton: Color.lerp(x?.elevatedButton, y?.elevatedButton, t),
@@ -83,7 +88,7 @@ class Palette {
       themeGradientTop: Color.lerp(x?.themeGradientTop, y?.themeGradientTop, t),
       themeGradientBottom:
           Color.lerp(x?.themeGradientBottom, y?.themeGradientBottom, t),
-      dashboarEmail: Color.lerp(x?.dashboarEmail, y?.dashboarEmail, t),
+      timer: Color.lerp(x?.timer, y?.timer, t),
       dashboarPhone: Color.lerp(x?.dashboarPhone, y?.dashboarPhone, t),
     );
   }

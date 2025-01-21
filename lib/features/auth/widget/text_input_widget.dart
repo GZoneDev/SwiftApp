@@ -8,6 +8,7 @@ class TextInputWidget extends StatefulWidget {
   final EdgeInsets margin, marginWithError;
   final EdgeInsets? padding;
   final VoidCallback? onTap;
+  final InputDecoration? decoration;
   final String? Function(String?)? onChanged;
   final TextEditingController? controller;
   final String? error, placeholder;
@@ -23,6 +24,7 @@ class TextInputWidget extends StatefulWidget {
     this.margin = const EdgeInsets.all(0),
     this.padding,
     this.onTap,
+    this.decoration,
     this.controller,
     this.error,
     this.obscureText = false,
@@ -76,13 +78,15 @@ class _TextInputWidgetState extends State<TextInputWidget> {
               controller: widget.controller,
               obscureText: widget.obscureText,
               onChanged: _onTextChanged,
-              decoration: InputDecoration(
-                contentPadding: padding ?? EdgeInsets.symmetric(horizontal: 16),
-                hintText: widget.placeholder,
-                border: effectiveBorder,
-                enabledBorder: effectiveBorder,
-                focusedBorder: effectiveBorder,
-              ),
+              decoration: widget.decoration ??
+                  InputDecoration(
+                    contentPadding:
+                        padding ?? EdgeInsets.symmetric(horizontal: 16),
+                    hintText: widget.placeholder,
+                    border: effectiveBorder,
+                    enabledBorder: effectiveBorder,
+                    focusedBorder: effectiveBorder,
+                  ),
             ),
           ),
           Row(
