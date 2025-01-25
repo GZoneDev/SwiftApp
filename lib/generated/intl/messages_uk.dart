@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Пароль має містити принаймні одну велику літеру"),
         "passwordsNoMatchError":
             MessageLookupByLibrary.simpleMessage("Паролі не співпадають"),
+        "profilePageTitle": MessageLookupByLibrary.simpleMessage("Профіль"),
         "registerButton": MessageLookupByLibrary.simpleMessage("Створити"),
         "registerLink": MessageLookupByLibrary.simpleMessage("Зареєструватися"),
         "registerSubtitle":

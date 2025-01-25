@@ -2,11 +2,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'package:receptico/core/FirebaseAuthService/FirebaseAuthManager.dart';
+import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/profile/widget/%D1%81ustomProfileAppBar.dart';
+import 'package:receptico/features/profile/widget/customListTile.dart';
 import 'package:receptico/features/profile/widget/promo_banner.dart';
+import 'package:receptico/generated/l10n.dart';
+import 'package:receptico/providers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
-import '../bloc/profile_bloc.dart';
+import '../bloc/profile/profile_bloc.dart';
 
 @RoutePage()
 class ProfilePage extends StatefulWidget {
@@ -26,6 +32,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final router = AutoRouter.of(context);
+    final localithation = S.of(context);
+    final provider = Provider.of<LocaleProvider>(context);
+    final locale = provider.locale;
     return Scaffold(
       backgroundColor: Color(0xFFF6F6F6),
       body: BlocBuilder<ProfileBloc, ProfileState>(
@@ -39,126 +49,17 @@ class _ProfilePageState extends State<ProfilePage> {
             return CustomScrollView(
               slivers: [
                 // Используем SliverAppBar для фиксации верхнего градиента
-                SliverAppBar(
-                  expandedHeight: MediaQuery.of(context).size.width *
-                      0.558, //218, // Высота градиента
-                  pinned: true, // Этот параметр делает AppBar фиксированным
-                  automaticallyImplyLeading: false, // Убираем стрелку назад
-                  backgroundColor: Color(0xFFFFA11E), //FFD60A 0xFFFFA11E
-                  elevation: 0, // Убираем тень
-                  shadowColor: Colors.transparent, // Убираем тень
-                  title: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(left: 0, top: 0), // Отступы
-                      child: Text(
-                        'Профіль', // Заголовок "Профіль"
-                        style: TextStyle(
-                          color: Color(0xFFF6F6F6), // Цвет текста на AppBar
-                          fontFamily: 'SFProText-Bold.ttf', // Указываем шрифт
-                          fontWeight: FontWeight.bold, // Толщина шрифта
-                          fontSize: 28, // Размер шрифта
-                        ),
-                      ),
-                    ),
-                  ),
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xFFFFC60F), // Цвет 29% (желтый)
-                              Color(0xFFFF9F0A), // Цвет 82% (оранжевый)
-                            ],
-                            stops: [
-                              0.29,
-                              1.0
-                            ], // Указываем проценты: 29% для жёлтого, 82% для оранжевого
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20, top: 18),
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundImage:
-                                    NetworkImage(state.user.profilePictureUrl),
-                              ),
-                            ),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.04),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 18),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                //НУЖНО ПОСТАВИТЬ ОТСТУП 4 МЕЖДУ ИМИНЕМ И ПОЧТОЙ И ПОМЕНЯТЬ ШРИФТ
-                                children: [
-                                  Text(
-                                    state.user.name,
-                                    style: TextStyle(
-                                      color: Color(
-                                          0xFFFFFFFF), // Цвет текста на AppBar
-                                      fontFamily:
-                                          'SFProText-Bold.ttf', // Указываем шрифт
-                                      fontWeight:
-                                          FontWeight.bold, // Толщина шрифта
-                                      fontSize: 22, // Размер шрифта
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    state.user.email,
-                                    style: TextStyle(
-                                      color: Color(
-                                          0xFFFFFFFF), // Цвет текста на AppBar
-                                      fontFamily:
-                                          'SFProText-Regular.ttf', // Указываем шрифт
-                                      //fontWeight:
-                                      //FontWeight., // Толщина шрифта
-                                      fontSize: 15, // Размер шрифта
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.10),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 18),
-                              child: Container(
-                                width: 32,
-                                height: 32,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFFFFFFF), // Цвет круга
-                                  shape: BoxShape.circle, // Форма круга
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    print('Редагувати нажата');
-                                  },
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.pencil, // Иконка карандаша
-                                    color: Color(0xFFFF9500), // Цвет иконки
-                                    size: 13, // Размер иконки
-                                  ),
-                                  padding: EdgeInsets
-                                      .zero, // Убираем отступы внутри кнопки
-                                  constraints:
-                                      BoxConstraints(), // Убираем дополнительные ограничения
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-                  ),
+                CustomProfileAppBar(
+                  title:
+                      localithation.profilePageTitle, //'Профіль', // Заголовок
+                  userName: state.user.name, // Имя пользователя
+                  userEmail: state.user.email, // Почта пользователя
+                  userImageUrl: state.user.profilePictureUrl, // URL изображения
+                  onEditPressed: () {
+                    print('Редагувати нажата'); // Действие при нажатии
+                  },
                 ),
+
                 SliverList(
                   delegate: SliverChildListDelegate([
                     Padding(
@@ -171,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Поточний план',
+                                  'Поточний план', //localithation.currentPlan
                                   style: TextStyle(
                                     color: Color(0xFF000000),
                                     fontFamily:
@@ -184,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Text(
                                   state.user.plan,
                                   style: TextStyle(
-                                    color: Color(0xFF000000),
+                                    color: Color(0xFF9601CC),
                                     fontFamily:
                                         'SFProText-Regular.ttf', // Указываем шрифт
                                     fontWeight:
@@ -202,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 24),
                           Text(
-                            'Система',
+                            'Система', //localithation.systemTitleList
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -212,187 +113,54 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           SizedBox(height: 18),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/lang.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Мови',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title: 'Мови', //localithation.langLableCustomList
+                            iconPath: 'asset/icon/light_theme/lang.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
+                              final provider = Provider.of<LocaleProvider>(
+                                  context,
+                                  listen: false);
+                              final newLocale = locale.languageCode == 'en'
+                                  ? Locale('uk')
+                                  : Locale('en');
+                              provider.setLocale(newLocale);
                               print('Система -> Мови');
                             },
-                            //contentPadding: EdgeInsets.zero,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 16),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/bels.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Повідомлення',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Повідомлення', //localithation.notificationLableCustomList
+                            iconPath: 'asset/icon/light_theme/bels.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
                               print('Система -> Повідомлення');
                             },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 16),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/sun.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Дисплей',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Дисплей', //localithation.displayLableCustomList
+                            iconPath: 'asset/icon/light_theme/sun.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
                               print('Система -> Дисплей');
                             },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 16),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: FaIcon(
-                                  FontAwesomeIcons.icons,
-                                  size: 18, // Размер иконки
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Іконки додатку',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Іконки додатку', //localithation.iconsLableCustomList
+                            iconPath: 'asset/icon/light_theme/icons-solid.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
                               print('Система -> Іконки додатку');
                             },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 24),
                           Divider(
@@ -403,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 24,
                           ),
                           Text(
-                            'Підтримка',
+                            'Підтримка', //localithation.helpTitleList
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -413,143 +181,37 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           SizedBox(height: 18),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/callback.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              "Зворотній зв'язок",
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                "Зворотній зв'язок", //localithation.callbackLableCustomList
+                            iconPath: 'asset/icon/light_theme/callback.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
-                              print("Система -> Зворотній зв'язок");
+                              print("Підтримка -> Зворотній зв'язок");
                             },
-                            //contentPadding: EdgeInsets.zero,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 16),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/error.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Повідомити про помилку',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Повідомити про помилку', //localithation.helpLableCustomList
+                            iconPath: 'asset/icon/light_theme/error.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
-                              print('Система -> Повідомити про помилку');
+                              print('Підтримка -> Повідомити про помилку');
                             },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 16),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/qvestion.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Поширені запитання',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Поширені запитання', //localithation.questionLableCustomList
+                            iconPath: 'asset/icon/light_theme/question.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
-                              print('Система -> Поширені запитання');
+                              print('Підтримка -> Поширені запитання');
                             },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 24),
                           Divider(
@@ -560,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 24,
                           ),
                           Text(
-                            'Рекомендація',
+                            'Рекомендація', //localithation.recomendTitleList
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -570,97 +232,26 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           SizedBox(height: 18),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/recomend.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              "Розповісти другу!",
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Розповісти другу!', //localithation.recomendLableCustomList
+                            iconPath: 'asset/icon/light_theme/recomend.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
-                              print("Система -> Розповісти другу!");
+                              print('Рекомендація -> Розповісти другу!');
                             },
-                            //contentPadding: EdgeInsets.zero,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 16),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/star.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Оцінити додаток',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Оцінити додаток', //localithation.starLableCustomList
+                            iconPath: 'asset/icon/light_theme/star.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
-                              print('Система -> Оцінити додаток');
+                              print('Рекомендація -> Оцінити додаток');
                             },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 24),
                           Divider(
@@ -669,7 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 24),
                           Text(
-                            'Інформація',
+                            'Інформація', //localithation.infoTitleList
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -679,97 +270,25 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           SizedBox(height: 18),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/FAQ.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              "Про нас",
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title: 'Про нас', //localithation.faqLableCustomList
+                            iconPath: 'asset/icon/light_theme/FAQ.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
-                              print("Система -> Про нас");
+                              print('Інформація -> Про нас');
                             },
-                            //contentPadding: EdgeInsets.zero,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 16),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/info.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Правова інформація',
-                              style: TextStyle(
-                                color: Color(0xFF000000),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
+                          CustomListTile(
+                            title:
+                                'Правова інформація', //localithation.infoLableCustomList
+                            iconPath: 'asset/icon/light_theme/info.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
                             onTap: () {
-                              print('Система -> Правова інформація');
+                              print('Інформація -> Правова інформація');
                             },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 24),
                           Divider(
@@ -777,53 +296,22 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Color(0xFFDEDEDE), // Цвет линии DEDEDE
                           ),
                           SizedBox(height: 24),
-                          ListTile(
-                            leading: SizedBox(
-                              width: 18, // Ширина области для иконки
-                              height: 18, // Высота области для иконки
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/logOut.svg',
-                                  width: 18,
-                                  height: 18,
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            trailing: //Icon(FontAwesomeIcons.greaterThan),
-                                SizedBox(
-                              width: 12, // Ширина области для знака "больше"
-                              height: 6, // Высота области для знака "больше"
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'asset/icon/arrow_right.svg',
-                                  width: 6,
-                                  height: 12,
-                                  color: Color(
-                                      0xFFFF3B30), // Устанавливаем цвет иконки
-                                  //fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              "Вийти",
-                              style: TextStyle(
-                                color: Color(0xFFFF3B30),
-                                fontFamily:
-                                    'SFProText-Bold.ttf', // Указываем шрифт
-                                fontWeight: FontWeight.w500, // Толщина шрифта
-                                fontSize: 17, // Размер шрифта
-                              ),
-                            ),
-                            onTap: () {
-                              print("Система -> Вийти");
+                          CustomListTile(
+                            title:
+                                'Вийти', //localithation.logOutLableCustomList
+                            iconPath: 'asset/icon/light_theme/logOut.svg',
+                            trailingIconPath:
+                                'asset/icon/light_theme/arrow.svg',
+                            titleColor: Color(0xFFFF271B), // Цвет текста
+                            iconColor: Color(0xFFFF271B), // Цвет иконки слева
+                            trailingIconColor:
+                                Color(0xFFFF271B), // Цвет иконки справа
+                            onTap: () async {
+                              await GetIt.I<FirebaseAuthManager>().logOut();
+                              router.popForced();
+                              router.navigate(const LoginRoute());
+                              print('Вийти');
                             },
-                            //contentPadding: EdgeInsets.zero,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            minVerticalPadding: 0,
-                            minTileHeight: 0,
-                            dense: true,
                           ),
                           SizedBox(height: 24),
                         ],

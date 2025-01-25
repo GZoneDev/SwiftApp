@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme.dart';
-import 'package:receptico/core/authorization/authorization.dart';
+import 'package:receptico/core/FirebaseAuthService/FirebaseAuthManager.dart';
 
 import '../widget/widget.dart';
 
@@ -55,7 +55,7 @@ class TempLogoutPage extends StatelessWidget {
                     height: 50,
                     child: TextButton(
                       onPressed: () async {
-                        await GetIt.I<IAuthorization>().logOut();
+                        await GetIt.I<FirebaseAuthManager>().logOut();
                         router.navigateNamed('/');
                       },
                       child: Text('Logout'),

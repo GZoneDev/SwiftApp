@@ -119,5 +119,8 @@
   "credentialAlreadyInUse": "Account already in use",
   "@credentialAlreadyInUse": {},
   "tryAgainMessage": "Try again through",
-  "@tryAgainMessage": {}
+  "@tryAgainMessage": {},
+
+  "profilePageTitle": "Profile",
+  "@profilePageTitle": {} 
 }

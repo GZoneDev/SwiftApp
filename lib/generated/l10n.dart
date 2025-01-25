@@ -529,6 +529,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Profile`
+  String get profilePageTitle {
+    return Intl.message(
+      'Profile',
+      name: 'profilePageTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

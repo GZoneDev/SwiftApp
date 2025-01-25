@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Password must contain at least one uppercase letter"),
         "passwordsNoMatchError":
             MessageLookupByLibrary.simpleMessage("Passwords do not match"),
+        "profilePageTitle": MessageLookupByLibrary.simpleMessage("Profile"),
         "registerButton": MessageLookupByLibrary.simpleMessage("Sign up"),
         "registerLink": MessageLookupByLibrary.simpleMessage("Sign up"),
         "registerSubtitle":

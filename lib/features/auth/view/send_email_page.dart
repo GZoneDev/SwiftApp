@@ -3,7 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme.dart';
-import 'package:receptico/core/authorization/authorization.dart';
+import 'package:receptico/core/FirebaseAuthService/FirebaseAuthManager.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 
@@ -101,7 +101,7 @@ class _SendEmailPageState extends State<SendEmailPage> {
                           child: GoToLinkWidget(
                             text: localithation.returnToLoginLink,
                             onTap: () async {
-                              await GetIt.I<IAuthorization>().logOut();
+                              await GetIt.I<FirebaseAuthManager>().logOut();
                               router.popForced();
                               router.navigate(const LoginRoute());
                             },

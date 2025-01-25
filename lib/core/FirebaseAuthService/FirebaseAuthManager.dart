@@ -1,16 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-abstract interface class IAuthorization {
+abstract interface class FirebaseAuthManager {
+  //Базовый интерфейс
   get isAuthorization;
-
   Future<void> logOut();
 }
 
-class Authorization implements IAuthorization {
+class FirebaseAuthService implements FirebaseAuthManager {
   final Talker _loger;
 
-  Authorization(this._loger);
+  FirebaseAuthService(this._loger);
 
   @override
   get isAuthorization =>
