@@ -9,10 +9,12 @@ class PasswordInputWidget extends StatefulWidget {
   final String? placeholder;
   final String? Function(String?)? onChanged;
   final VoidCallback? onTap;
+  final InputDecoration? decoration;
   final TextEditingController? controller;
   final Widget? helpWidget;
   final String? error;
   final Color? iconColor;
+  final bool readOnly;
 
   const PasswordInputWidget({
     super.key,
@@ -24,11 +26,13 @@ class PasswordInputWidget extends StatefulWidget {
     this.marginWithError = const EdgeInsets.all(0),
     this.margin = const EdgeInsets.all(0),
     this.onTap,
+    this.decoration,
     this.controller,
     this.helpWidget,
     this.onChanged,
     this.error,
     this.iconColor,
+    this.readOnly = false,
   });
 
   @override
@@ -54,6 +58,8 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
           error: widget.error,
           margin: widget.margin,
           marginWithError: widget.marginWithError,
+          decoration: widget.decoration,
+          readOnly: widget.readOnly,
         ),
         Container(
           height: widget.height,

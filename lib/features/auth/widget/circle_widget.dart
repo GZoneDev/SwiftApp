@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CircleWidget extends StatelessWidget {
-  final double width, height, borderWidth;
+  final double radius, borderWidth;
+
   final Color color;
 
   const CircleWidget({
     super.key,
-    this.width = 100,
-    this.height = 100,
+    this.radius = 100,
     required this.color,
     this.borderWidth = 8,
   });
@@ -15,8 +15,8 @@ class CircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
+      width: radius,
+      height: radius,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(

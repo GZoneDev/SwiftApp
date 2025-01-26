@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:get_it/get_it.dart';
 import 'package:receptico/core/router/router.dart';
 
 final List<AutoRoute> authRouting = [
@@ -31,12 +30,6 @@ final List<AutoRoute> authRouting = [
     page: RestorePasswordRoute.page,
     path: '/restorePasword',
     transitionsBuilder: TransitionsBuilders.slideLeft,
-    durationInMilliseconds: 500,
-  ),
-  CustomRoute(
-    page: SendEmailRoute.page,
-    path: '/sendEmail',
-    transitionsBuilder: TransitionsBuilders.slideRight,
     durationInMilliseconds: 500,
   ),
 ];

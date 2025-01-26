@@ -1,6 +1,6 @@
 enum EInput {
   username,
-  emailOrPhone,
+  email,
   password,
   confirmPassword,
   smsCode,
