@@ -13,11 +13,17 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
   });
 
   @override
-  Future<AuthError> resendVerificationEmail() async {
+  Future<AuthError> sendVerificationEmail(String email, String password) async {
     try {
-      final user = auth.currentUser;
+      final credential = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final user = credential.user;
       if (user != null && !user.emailVerified) {
         await user.sendEmailVerification();
+        auth.signOut();
 
         loger.log('Verification email resent to: ${user.email}');
         return AuthError.success;
@@ -38,7 +44,7 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
   }
 
   @override
-  Future<AuthError> registerWithEmail(
+  Future<AuthError> registerEmail(
     String username,
     String email,
     String password,
@@ -49,7 +55,7 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
         password: password,
       );
 
-      await credential.user?.sendEmailVerification();
+      auth.signOut();
 
       loger.log('User registered: ${credential.user?.email}');
       loger.log('Verification email sent to: ${credential.user?.email}');
@@ -65,7 +71,7 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
   }
 
   @override
-  Future<AuthError> loginWithEmail(
+  Future<AuthError> loginEmail(
       final String email, final String password) async {
     try {
       final credential = await auth.signInWithEmailAndPassword(
@@ -103,17 +109,5 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
       loger.error('Error sent password reset email: $e');
       return AuthError.unknown;
     }
-  }
-
-  @override
-  Future<bool> isEmailVerified() async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      await user.reload();
-      return FirebaseAuth.instance.currentUser?.emailVerified ?? false;
-    }
-
-    return false;
   }
 }

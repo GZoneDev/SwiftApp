@@ -76,7 +76,7 @@ void main() {
           when(mockAuthValidationService.emailValidate(any)).thenReturn(null);
           when(mockAuthValidationService.passwordValidate(any))
               .thenReturn(null);
-          when(mockAuthEmailService.loginWithEmail(any, any))
+          when(mockAuthEmailService.loginEmail(any, any))
               .thenAnswer((_) async => AuthError.userNoVerified);
           return authBloc;
         },
@@ -86,7 +86,7 @@ void main() {
           AuthFail(email: AuthError.userNoVerified.name),
         ],
         verify: (_) {
-          verify(mockAuthEmailService.loginWithEmail('', '')).called(1);
+          verify(mockAuthEmailService.loginEmail('', '')).called(1);
         },
       );
 
@@ -96,7 +96,7 @@ void main() {
           when(mockAuthValidationService.emailValidate(any)).thenReturn(null);
           when(mockAuthValidationService.passwordValidate(any))
               .thenReturn(null);
-          when(mockAuthEmailService.loginWithEmail(any, any))
+          when(mockAuthEmailService.loginEmail(any, any))
               .thenAnswer((_) async => AuthError.success);
           return authBloc;
         },
@@ -106,7 +106,7 @@ void main() {
           AuthLoginSuccess(),
         ],
         verify: (_) {
-          verify(mockAuthEmailService.loginWithEmail('', '')).called(1);
+          verify(mockAuthEmailService.loginEmail('', '')).called(1);
         },
       );
     });
@@ -149,7 +149,7 @@ void main() {
           when(mockAuthValidationService.emailValidate(any)).thenReturn(null);
           when(mockAuthValidationService.passwordValidate(any))
               .thenReturn(null);
-          when(mockAuthEmailService.registerWithEmail(any, any, any))
+          when(mockAuthEmailService.registerEmail(any, any, any))
               .thenAnswer((_) async => AuthError.emailAlreadyInUse);
           return authBloc;
         },
@@ -160,27 +160,39 @@ void main() {
           AuthFail(email: AuthError.emailAlreadyInUse.name),
         ],
         verify: (_) {
-          verify(mockAuthEmailService.registerWithEmail('', '', '')).called(1);
+          verify(mockAuthEmailService.registerEmail('', '', '')).called(1);
         },
       );
 
-      //TODO: fix mock stream
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthRegister] when AuthRegister is added with locked',
+        build: () {
+          when(mockTimer.isRunning).thenReturn(true);
+          return authBloc;
+        },
+        act: (bloc) =>
+            bloc.add(AuthRegister(username: '', email: '', password: '')),
+        expect: () => [],
+        verify: (_) {
+          verify(mockTimer.isRunning).called(1);
+        },
+      );
+
       blocTest<AuthBloc, AuthState>(
         'emits [AuthRegister, AuthRegisterSuccess] when AuthRegister is added',
         build: () {
-          when(mockTimer.stream).thenAnswer((_) => Stream.periodic(
-                Duration(seconds: 1),
-                (count) => count,
-              ).take(5));
           when(mockTimer.isRunning).thenReturn(false);
-          when(mockTimer.stream).thenReturn(Stream.empty());
           when(mockAuthValidationService.usernameValidate(any))
               .thenReturn(null);
           when(mockAuthValidationService.emailValidate(any)).thenReturn(null);
           when(mockAuthValidationService.passwordValidate(any))
               .thenReturn(null);
-          when(mockAuthEmailService.registerWithEmail(any, any, any))
+          when(mockAuthEmailService.registerEmail(any, any, any))
               .thenAnswer((_) async => AuthError.success);
+          when(mockAuthEmailService.sendVerificationEmail(any, any))
+              .thenAnswer((_) async => AuthError.success);
+          when(mockTimer.wait(any)).thenAnswer((_) async {});
+
           return authBloc;
         },
         act: (bloc) =>
@@ -188,9 +200,155 @@ void main() {
         expect: () => [
           AuthLoading(),
           AuthRegisterSuccess(),
+          AuthLoading(),
+          AuthSendRegisterPasswordEmail(),
         ],
         verify: (_) {
-          verify(mockAuthEmailService.registerWithEmail('', '', '')).called(1);
+          verify(mockAuthEmailService.registerEmail('', '', '')).called(1);
+          verify(mockAuthEmailService.sendVerificationEmail('', '')).called(1);
+        },
+      );
+
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthSendRegisterEmail] when AuthSendRegisterEmail is added with locked',
+        build: () {
+          when(mockTimer.isRunning).thenReturn(true);
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthSendRegisterEmail(email: '', password: '')),
+        expect: () => [],
+        verify: (_) {
+          verify(mockTimer.isRunning).called(1);
+        },
+      );
+
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthSendRegisterEmail, AuthSendRegisterPasswordEmail] when AuthSendRegisterEmail is added',
+        build: () {
+          when(mockTimer.isRunning).thenReturn(false);
+          when(mockAuthEmailService.sendVerificationEmail(any, any))
+              .thenAnswer((_) async => AuthError.success);
+          when(mockTimer.wait(any));
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthSendRegisterEmail(email: '', password: '')),
+        expect: () => [
+          AuthLoading(),
+          AuthSendRegisterPasswordEmail(),
+        ],
+        verify: (_) {
+          verify(mockAuthEmailService.sendVerificationEmail('', '')).called(1);
+          verify(mockTimer.wait(any)).called(1);
+        },
+      );
+
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthSendRegisterEmail AuthEmailVerifiedSuccess] when AuthSendRegisterEmail is added',
+        build: () {
+          when(mockTimer.isRunning).thenReturn(false);
+          when(mockAuthEmailService.sendVerificationEmail(any, any))
+              .thenAnswer((_) async => AuthError.emailAlreadyInUse);
+          when(mockTimer.wait(any));
+
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthSendRegisterEmail(email: '', password: '')),
+        expect: () => [
+          AuthLoading(),
+          AuthEmailVerifiedSuccess(),
+        ],
+        verify: (_) {
+          verify(mockAuthEmailService.sendVerificationEmail('', '')).called(1);
+        },
+      );
+    });
+
+    group('Restore Test', () {
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthRestore AuthFail] when AuthRegister is added',
+        build: () {
+          when(mockTimer.isRunning).thenReturn(false);
+          when(mockAuthValidationService.emailValidate(any)).thenReturn(null);
+          when(mockAuthEmailService.sendResetPasswordEmail(any))
+              .thenAnswer((_) async => AuthError.userNotFound);
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthRestore(email: '')),
+        expect: () => [
+          AuthLoading(),
+          AuthFail(email: AuthError.userNotFound.name),
+        ],
+        verify: (_) {
+          verify(mockAuthEmailService.sendResetPasswordEmail('')).called(1);
+        },
+      );
+
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthRestore] when AuthRestore is added with locked',
+        build: () {
+          when(mockTimer.isRunning).thenReturn(true);
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthRestore(email: '')),
+        expect: () => [],
+        verify: (_) {
+          verify(mockTimer.isRunning).called(1);
+        },
+      );
+
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthRestore AuthSendRestorePasswordEmail] when AuthRegister is added with success',
+        build: () {
+          when(mockAuthValidationService.emailValidate(any)).thenReturn(null);
+          when(mockTimer.isRunning).thenReturn(false);
+          when(mockTimer.wait(any)).thenAnswer((_) async => true);
+          when(mockAuthEmailService.sendResetPasswordEmail(any))
+              .thenAnswer((_) async => AuthError.success);
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthRestore(email: '')),
+        expect: () => [
+          AuthLoading(),
+          AuthSendRestorePasswordEmail(),
+        ],
+        verify: (_) {
+          verify(mockTimer.isRunning).called(1);
+        },
+      );
+    });
+
+    group('Auth GoogleSignIn Test', () {
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthGoogleSingIn AuthLoaded] when AuthGoogleSingIn is added server error',
+        build: () {
+          when(mockAuthGoogleService.signInWithGoogle())
+              .thenAnswer((_) async => false);
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthGoogleSingIn()),
+        expect: () => [
+          AuthLoading(),
+          AuthLoaded(),
+        ],
+        verify: (_) {
+          verify(mockAuthGoogleService.signInWithGoogle()).called(1);
+        },
+      );
+
+      blocTest<AuthBloc, AuthState>(
+        'emits [AuthGoogleSingIn AuthLoginSuccess] when AuthGoogleSingIn is added',
+        build: () {
+          when(mockAuthGoogleService.signInWithGoogle())
+              .thenAnswer((_) async => true);
+          return authBloc;
+        },
+        act: (bloc) => bloc.add(AuthGoogleSingIn()),
+        expect: () => [
+          AuthLoading(),
+          AuthLoginSuccess(),
+        ],
+        verify: (_) {
+          verify(mockAuthGoogleService.signInWithGoogle()).called(1);
         },
       );
     });

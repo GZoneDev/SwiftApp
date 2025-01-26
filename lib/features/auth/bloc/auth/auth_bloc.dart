@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:get_it/get_it.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receptico/core/authorization/authorization.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
@@ -51,7 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     on<AuthRegister>(
       _register,
-      transformer: throttle(const Duration(milliseconds: 500)),
+      transformer: throttle(const Duration(seconds: 2)),
     );
     on<AuthRestore>(
       _sendRestorePasswordEmail,
@@ -110,7 +108,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
 
     final result =
-        await authEmailService.loginWithEmail(event.email, event.password);
+        await authEmailService.loginEmail(event.email, event.password);
 
     result.isSuccess ? emit(AuthLoginSuccess()) : _throwFail(result, emit);
   }
@@ -133,7 +131,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     emit(AuthLoading());
 
-    final result = await authEmailService.registerWithEmail(
+    final result = await authEmailService.registerEmail(
       event.username,
       event.email,
       event.password,
@@ -145,46 +143,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     emit(AuthRegisterSuccess());
-
-    try {
-      await registerTimer.wait(waitTime);
-      final isVerify = await _waitEmailVerification();
-      if (isVerify) emit(AuthEmailVerifiedSuccess());
-    } catch (e) {
-      loger.error(e);
-    }
-  }
-
-  Future<bool> _waitEmailVerification() async {
-    await for (var _ in registerTimer.stream) {
-      final isVerificated = await authEmailService.isEmailVerified();
-      if (isVerificated) {
-        registerTimer.stop();
-        return true;
-      }
-    }
-
-    return false;
+    add(AuthSendRegisterEmail(email: event.email, password: event.password));
   }
 
   FutureOr<void> _sendRestorePasswordEmail(
       AuthRestore event, Emitter<AuthState> emit) async {
     if (restoreTimer.isRunning) return;
 
+    final errorEmail = validationService.emailValidate(event.email);
+
+    _setError(_EBlocError.email, errorEmail?.name);
+
+    if (_errors.isNotEmpty) {
+      _emitFail(emit);
+      return;
+    }
+
+    emit(AuthLoading());
+
+    final result = await authEmailService.sendResetPasswordEmail(event.email);
+
     try {
-      final errorEmail = validationService.emailValidate(event.email);
-
-      _setError(_EBlocError.email, errorEmail?.name);
-
-      if (_errors.isNotEmpty) {
-        _emitFail(emit);
-        return;
-      }
-
-      emit(AuthLoading());
-
-      final result = await authEmailService.sendResetPasswordEmail(event.email);
-
       if (result.isSuccess) {
         emit(AuthSendRestorePasswordEmail());
         restoreTimer.wait(waitTime);
@@ -203,21 +182,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     emit(AuthLoading());
     try {
-      final isVerified = await authEmailService.isEmailVerified();
+      final result = await authEmailService.sendVerificationEmail(
+          event.email, event.password);
 
-      //TODO: need refactor
-      if (isVerified) {
-        await GetIt.I<IAuthorization>().logOut();
+      if (result == AuthError.emailAlreadyInUse) {
         emit(AuthEmailVerifiedSuccess());
         return;
       }
 
-      final result = await authEmailService.resendVerificationEmail();
       if (result.isSuccess) {
         emit(AuthSendRegisterPasswordEmail());
         await registerTimer.wait(waitTime);
-        final isVerify = await _waitEmailVerification();
-        if (isVerify) emit(AuthEmailVerifiedSuccess());
       } else {
         _throwFail(result, emit);
       }

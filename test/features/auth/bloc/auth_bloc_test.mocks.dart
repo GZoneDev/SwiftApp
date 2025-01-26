@@ -77,14 +77,14 @@ class MockAuthEmailService extends _i1.Mock implements _i4.AuthEmailService {
   }
 
   @override
-  _i3.Future<_i4.AuthError> registerWithEmail(
+  _i3.Future<_i4.AuthError> registerEmail(
     String? username,
     String? email,
     String? password,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #registerWithEmail,
+          #registerEmail,
           [
             username,
             email,
@@ -95,13 +95,13 @@ class MockAuthEmailService extends _i1.Mock implements _i4.AuthEmailService {
       ) as _i3.Future<_i4.AuthError>);
 
   @override
-  _i3.Future<_i4.AuthError> loginWithEmail(
+  _i3.Future<_i4.AuthError> loginEmail(
     String? email,
     String? password,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #loginWithEmail,
+          #loginEmail,
           [
             email,
             password,
@@ -121,22 +121,20 @@ class MockAuthEmailService extends _i1.Mock implements _i4.AuthEmailService {
       ) as _i3.Future<_i4.AuthError>);
 
   @override
-  _i3.Future<_i4.AuthError> resendVerificationEmail() => (super.noSuchMethod(
+  _i3.Future<_i4.AuthError> sendVerificationEmail(
+    String? email,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #resendVerificationEmail,
-          [],
+          #sendVerificationEmail,
+          [
+            email,
+            password,
+          ],
         ),
         returnValue: _i3.Future<_i4.AuthError>.value(_i4.AuthError.success),
       ) as _i3.Future<_i4.AuthError>);
-
-  @override
-  _i3.Future<bool> isEmailVerified() => (super.noSuchMethod(
-        Invocation.method(
-          #isEmailVerified,
-          [],
-        ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
 }
 
 /// A class which mocks [AuthGoogleService].

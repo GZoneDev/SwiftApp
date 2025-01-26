@@ -53,4 +53,11 @@ class AuthUsernameValidate extends AuthValidate {
 
 class AuthGoogleSingIn extends AuthEvent {}
 
-class AuthSendRegisterEmail extends AuthEvent {}
+class AuthSendRegisterEmail extends AuthEvent {
+  final String email, password;
+
+  AuthSendRegisterEmail({
+    required this.email,
+    required this.password,
+  });
+}

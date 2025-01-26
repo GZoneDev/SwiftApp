@@ -61,7 +61,12 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   void _sendEmail() {
-    context.read<AuthBloc>().add(AuthSendRegisterEmail());
+    context.read<AuthBloc>().add(
+          AuthSendRegisterEmail(
+            email: _controllers[EInput.email]?.text ?? '',
+            password: _controllers[EInput.password]?.text ?? '',
+          ),
+        );
   }
 
   void _submit() {
@@ -110,8 +115,6 @@ class _RegisterPageState extends State<RegisterPage>
             break;
 
           case const (AuthRegisterSuccess):
-            context.read<TimerBloc>().add(RegisterTimerStart());
-            popUpDialogWidget(context, localization.sendEmailMessage);
             setState(() => _isLockInput = true);
             break;
 

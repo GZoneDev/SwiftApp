@@ -51,13 +51,12 @@ enum AuthError {
 }
 
 abstract interface class AuthEmailService {
-  Future<AuthError> registerWithEmail(
+  Future<AuthError> registerEmail(
     String username,
     String email,
     String password,
   );
-  Future<AuthError> loginWithEmail(String email, String password);
+  Future<AuthError> loginEmail(String email, String password);
   Future<AuthError> sendResetPasswordEmail(String email);
-  Future<AuthError> resendVerificationEmail();
-  Future<bool> isEmailVerified();
+  Future<AuthError> sendVerificationEmail(String email, String password);
 }
