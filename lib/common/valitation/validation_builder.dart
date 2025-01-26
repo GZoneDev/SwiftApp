@@ -1,6 +1,6 @@
+import 'package:email_validator/email_validator.dart';
+
 class ValidationBuilder<T> {
-  static final RegExp _defaultEmailRegExp = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$"); //^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$
   static final RegExp _defaultPhoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
 
   final List<T? Function(String)> _validators = [];
@@ -23,7 +23,7 @@ class ValidationBuilder<T> {
       add((value) => regex.hasMatch(value) ? null : message);
 
   ValidationBuilder email(T message) =>
-      add((value) => _defaultEmailRegExp.hasMatch(value) ? null : message);
+      add((value) => EmailValidator.validate(value) ? null : message);
 
   ValidationBuilder phone(T message) =>
       add((value) => _defaultPhoneRegExp.hasMatch(value) ? null : message);

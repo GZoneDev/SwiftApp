@@ -3,6 +3,7 @@ import 'package:receptico/features/auth/service/auth_validation_service.dart';
 
 class AuthValidationServiceImpl implements AuthValidationService {
   static const minPasswordLength = 6;
+  static const maxPasswordLength = 50;
 
   late final EFormatError? Function(String) _passwordValidator;
   late final EFormatError? Function(String) _emailValidator;
@@ -33,7 +34,9 @@ class AuthValidationServiceImpl implements AuthValidationService {
   ValidationBuilder _username() {
     return ValidationBuilder<EFormatError>()
         .required(EFormatError.requiredField)
-        .minLength(minPasswordLength, EFormatError.tooShort);
+        .minLength(minPasswordLength, EFormatError.tooShort)
+        .maxLength(maxPasswordLength, EFormatError.tooLong)
+        .regExp(RegExp(r'^[a-zA-Z0-9]*$'), EFormatError.invalidCharacter);
   }
 
   @override

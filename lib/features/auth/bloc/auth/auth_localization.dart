@@ -23,6 +23,7 @@ class AuthLocalizationHelper {
     EFormatError.missingUppercase.name: (local) => local.passwordUppercaseError,
     EFormatError.missingNumber.name: (local) => local.passwordNumberError,
     EFormatError.requiredField.name: (local) => local.requiredError,
+    //TODO: fix magic value
     EFormatError.tooShort.name: (local) => local.minPasswordLengError(6),
   };
 

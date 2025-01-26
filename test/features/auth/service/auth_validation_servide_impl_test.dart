@@ -113,7 +113,7 @@ void main() {
 
       test('Email contains with incorrect domain 2', () {
         // Arrange
-        const email = 'email@ffd.dfd';
+        const email = 'email@ffd.dfd.';
 
         // Act
         final result = authValidation.emailValidate(email);
@@ -124,7 +124,7 @@ void main() {
 
       test('Email contains with incorrect domain 3', () {
         // Arrange
-        const email = 'email@ffd.dfd.fdg';
+        const email = 'email@ffd.dfd.fdg.';
 
         // Act
         final result = authValidation.emailValidate(email);
@@ -143,84 +143,84 @@ void main() {
         // Assert
         expect(null, result);
       });
+    });
 
-      group('Password validation Test', () {
-        test('Password is empty', () {
-          // Arrange
-          const emptyPassword = '';
+    group('Password validation Test', () {
+      test('Password is empty', () {
+        // Arrange
+        const emptyPassword = '';
 
-          // Act
-          final result = authValidation.passwordValidate(emptyPassword);
+        // Act
+        final result = authValidation.passwordValidate(emptyPassword);
 
-          // Assert
-          expect(EFormatError.requiredField, result);
-        });
+        // Assert
+        expect(EFormatError.requiredField, result);
+      });
 
-        test('Password is too short', () {
-          // Arrange
-          const password = 'Ed12';
+      test('Password is too short', () {
+        // Arrange
+        const password = 'Ed12';
 
-          // Act
-          final result = authValidation.passwordValidate(password);
+        // Act
+        final result = authValidation.passwordValidate(password);
 
-          // Assert
-          expect(EFormatError.tooShort, result);
-        });
+        // Assert
+        expect(EFormatError.tooShort, result);
+      });
 
-        test('Password missing uppercase', () {
-          // Arrange
-          const password = 'qwe124q';
+      test('Password missing uppercase', () {
+        // Arrange
+        const password = 'qwe124q';
 
-          // Act
-          final result = authValidation.passwordValidate(password);
+        // Act
+        final result = authValidation.passwordValidate(password);
 
-          // Assert
-          expect(EFormatError.missingUppercase, result);
-        });
+        // Assert
+        expect(EFormatError.missingUppercase, result);
+      });
 
-        test('Password missing lowercase', () {
-          // Arrange
-          const password = 'QWS123SE';
+      test('Password missing lowercase', () {
+        // Arrange
+        const password = 'QWS123SE';
 
-          // Act
-          final result = authValidation.passwordValidate(password);
+        // Act
+        final result = authValidation.passwordValidate(password);
 
-          // Assert
-          expect(EFormatError.missingLowercase, result);
-        });
+        // Assert
+        expect(EFormatError.missingLowercase, result);
+      });
 
-        test('Password missing number', () {
-          // Arrange
-          const password = 'Qwertyq';
+      test('Password missing number', () {
+        // Arrange
+        const password = 'Qwertyq';
 
-          // Act
-          final result = authValidation.passwordValidate(password);
+        // Act
+        final result = authValidation.passwordValidate(password);
 
-          // Assert
-          expect(EFormatError.missingNumber, result);
-        });
+        // Assert
+        expect(EFormatError.missingNumber, result);
+      });
 
-        test('Password contains invalide character', () {
-          // Arrange
-          const password = 'Qwert1yq@#';
+      test('Password contains invalide character', () {
+        // Arrange
+        const password = 'Qwert1yq@#';
 
-          // Act
-          final result = authValidation.passwordValidate(password);
+        // Act
+        final result = authValidation.passwordValidate(password);
 
-          // Assert
-          expect(EFormatError.invalidCharacter, result);
-        });
+        // Assert
+        expect(EFormatError.invalidCharacter, result);
+      });
 
-        test('Password is correct', () {
-          // Arrange
-          const password = 'Qasf12rEf3';
+      test('Password is correct', () {
+        // Arrange
+        const password = 'Qasf12rEf3';
 
-          // Act
-          final result = authValidation.passwordValidate(password);
+        // Act
+        final result = authValidation.passwordValidate(password);
 
-          // Assert
-          expect(null, result);
-        });
+        // Assert
+        expect(null, result);
       });
     });
   });
