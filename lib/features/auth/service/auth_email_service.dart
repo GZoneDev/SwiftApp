@@ -6,6 +6,7 @@ enum AuthError {
   // Login
   userDisabled('user-disabled'),
   userNotFound('user-not-found'),
+  userNoVerified('user-no-verified'),
   wrongPassword('wrong-password'),
 
   // Register
@@ -50,7 +51,11 @@ enum AuthError {
 }
 
 abstract interface class AuthEmailService {
-  Future<AuthError> registerWithEmail(String email, String password);
+  Future<AuthError> registerWithEmail(
+    String username,
+    String email,
+    String password,
+  );
   Future<AuthError> loginWithEmail(String email, String password);
   Future<AuthError> sendResetPasswordEmail(String email);
   Future<AuthError> resendVerificationEmail();

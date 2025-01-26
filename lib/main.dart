@@ -15,8 +15,6 @@ import 'package:receptico/app.dart';
 import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/features/auth/bloc/bloc.dart';
-import 'package:receptico/features/auth/service/auth_email_service.dart';
-import 'package:receptico/features/auth/service/auth_google_service.dart';
 import 'package:receptico/features/profile/bloc/profile_bloc.dart';
 
 import 'features/auth/service/implement/implement.dart';
@@ -43,47 +41,51 @@ Future<void> main() async {
   FlutterError.onError =
       (details) => GetIt.I<Talker>().handle(details.exception, details.stack);
 
-  runZonedGuarded(() async {
+  await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-
+    final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
     final googleSingIn = GoogleSignIn();
-    final passwordRestoreTimerService = TimerServiceImpl();
-    final registerTimerService = TimerServiceImpl();
     final authorization = Authorization(talker);
     final routerGuard = RouterGuard(authorization);
     final authEmail = AuthEmailServiceFirebaseImpl(
       auth: FirebaseAuth.instance,
       loger: talker,
     );
+    final authValidationService = AuthValidationServiceImpl();
     final authGoogle = AuthGoogleServiceFirebaseImpl(
       auth: FirebaseAuth.instance,
       googleSignIn: googleSingIn,
       loger: talker,
     );
+    final passwordRestoreTimerService = TimerServiceImpl();
+    final registerTimerService = TimerServiceImpl();
+
     final authBloc = AuthBloc(
+      validationService: authValidationService,
       authEmailService: authEmail,
       authGoogleService: authGoogle,
       restoreTimer: passwordRestoreTimerService,
       registerTimer: registerTimerService,
-      loger: talker,
+      loger: GetIt.I<Talker>(),
     );
+
     final timerBloc = TimerBloc(
       restoreTimer: passwordRestoreTimerService,
       registerTimer: registerTimerService,
-      loger: talker,
+      loger: GetIt.I<Talker>(),
     );
-    final profileBlock = ProfileBloc();
 
+    final profileBloc = ProfileBloc();
+
+    GetIt.I.registerSingleton(routeObserver);
     GetIt.I.registerSingleton<IAuthorization>(authorization);
-    GetIt.I.registerSingleton<AuthEmailService>(authEmail);
-    GetIt.I.registerSingleton<AuthGoogleService>(authGoogle);
     GetIt.I.registerSingleton(routerGuard);
     GetIt.I.registerSingleton(authBloc);
     GetIt.I.registerSingleton(timerBloc);
-    GetIt.I.registerSingleton(profileBlock);
+    GetIt.I.registerSingleton(profileBloc);
 
     runApp(const App());
   }, (e, st) {

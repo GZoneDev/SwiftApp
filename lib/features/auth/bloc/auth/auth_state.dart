@@ -1,31 +1,69 @@
 part of 'auth_bloc.dart';
 
-abstract class AuthState {}
+abstract class AuthState extends Equatable {}
 
-class AuthInitialState extends AuthState {}
-
-class AuthLoadingState extends AuthState {}
-
-class AuthLoadedState extends AuthState {}
-
-class AuthLoginSuccessState extends AuthState {}
-
-class AuthRegisterSuccessState extends AuthState {}
-
-class AuthRestoreSuccessState extends AuthState {}
-
-class AuthNetworkFailState extends AuthState {}
-
-class AuthClearFailState extends AuthState {}
-
-class AuthFailState extends AuthState {
-  final Map<EBlocError, String?> errors;
-
-  AuthFailState({required this.errors});
+class AuthInitial extends AuthState {
+  @override
+  List<Object?> get props => [];
 }
 
-class AuthSendRestorePasswordEmail extends AuthState {}
+class AuthLoading extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
 
-class AuthSendRegisterPasswordEmail extends AuthState {}
+class AuthLoaded extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
 
-class AuthEmailVerifiedSuccess extends AuthState {}
+class AuthLoginSuccess extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthRegisterSuccess extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthRestoreSuccess extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthUnknownFail extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthClearFail extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthFail extends AuthState {
+  final String? email;
+  final String? password;
+  final String? username;
+
+  AuthFail({this.email, this.password, this.username});
+
+  @override
+  List<Object?> get props => [email, password, username];
+}
+
+class AuthSendRestorePasswordEmail extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthSendRegisterPasswordEmail extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthEmailVerifiedSuccess extends AuthState {
+  @override
+  List<Object?> get props => [];
+}

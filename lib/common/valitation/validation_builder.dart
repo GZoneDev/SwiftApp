@@ -1,36 +1,36 @@
-class ValidationBuilder {
+class ValidationBuilder<T> {
   static final RegExp _defaultEmailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$"); //^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$
   static final RegExp _defaultPhoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
 
-  final List<String? Function(String)> _validators = [];
+  final List<T? Function(String)> _validators = [];
 
-  ValidationBuilder add(String? Function(String) validator) {
+  ValidationBuilder add(T? Function(String) validator) {
     _validators.add(validator);
     return this;
   }
 
-  ValidationBuilder required(String message) =>
+  ValidationBuilder required(T message) =>
       add((value) => value.isEmpty ? message : null);
 
-  ValidationBuilder minLength(int minLengh, String message) =>
+  ValidationBuilder minLength(int minLengh, T message) =>
       add((value) => value.length < minLengh ? message : null);
 
-  ValidationBuilder maxLength(int maxLengh, String message) =>
+  ValidationBuilder maxLength(int maxLengh, T message) =>
       add((value) => value.length > maxLengh ? message : null);
 
-  ValidationBuilder regExp(RegExp regex, String message) =>
+  ValidationBuilder regExp(RegExp regex, T message) =>
       add((value) => regex.hasMatch(value) ? null : message);
 
-  ValidationBuilder email(String message) =>
+  ValidationBuilder email(T message) =>
       add((value) => _defaultEmailRegExp.hasMatch(value) ? null : message);
 
-  ValidationBuilder phone(String message) =>
+  ValidationBuilder phone(T message) =>
       add((value) => _defaultPhoneRegExp.hasMatch(value) ? null : message);
 
-  String? Function(String) build() => validate;
+  T? Function(String) build() => validate;
 
-  String? validate(String value) {
+  T? validate(String value) {
     for (var validator in _validators) {
       var result = validator(value);
       if (result != null) {

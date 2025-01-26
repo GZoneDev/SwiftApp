@@ -120,5 +120,6 @@
   "@credentialAlreadyInUse": {},
   "tryAgainMessage": "Спробуйте знову через",
   "@tryAgainMessage": {},
-  "sendEmailMessage": "Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку."
+  "sendEmailMessage": "Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.",
+  "@sendEmailMessage": {}
 }

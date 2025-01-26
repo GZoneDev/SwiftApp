@@ -39,7 +39,10 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
 
   @override
   Future<AuthError> registerWithEmail(
-      final String email, final String password) async {
+    String username,
+    String email,
+    String password,
+  ) async {
     try {
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
@@ -69,6 +72,13 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
         email: email,
         password: password,
       );
+      final isVerified = credential.user?.emailVerified ?? false;
+
+      if (!isVerified) {
+        auth.signOut();
+        return AuthError.userNoVerified;
+      }
+
       loger.log('User signed in: ${credential.user?.email}');
       return AuthError.success;
     } on FirebaseAuthException catch (e) {

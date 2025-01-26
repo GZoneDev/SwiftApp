@@ -120,5 +120,6 @@
   "@credentialAlreadyInUse": {},
   "tryAgainMessage": "Try again through",
   "@tryAgainMessage": {},
-  "sendEmailMessage": "We have sent you an email. Please check your email."
+  "sendEmailMessage": "We have sent you an email. Please check your email.",
+  "@sendEmailMessage": {}
 }

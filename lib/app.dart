@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme/theme_light.dart';
-import 'package:receptico/core/bloc/bloc_route_interface.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/features/profile/bloc/profile_bloc.dart';
 import 'package:receptico/generated/l10n.dart';
@@ -31,16 +30,25 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(create: (_) => GetIt.I<AuthBloc>()),
-        BlocProvider<TimerBloc>(create: (_) => GetIt.I<TimerBloc>()),
-        BlocProvider<ProfileBloc>(create: (_) => GetIt.I<ProfileBloc>()),
+        BlocProvider<AuthBloc>(
+          lazy: true,
+          create: (_) => GetIt.I<AuthBloc>(),
+        ),
+        BlocProvider<TimerBloc>(
+          lazy: true,
+          create: (_) => GetIt.I<TimerBloc>(),
+        ),
+        BlocProvider<ProfileBloc>(
+          lazy: true,
+          create: (_) => GetIt.I<ProfileBloc>(),
+        ),
         // Add BLoC .....
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.config(
           navigatorObservers: () => [
             TalkerRouteObserver(GetIt.I<Talker>()),
-            BlocRouteObserver(GetIt.I<AuthBloc>()),
+            GetIt.I<RouteObserver<PageRoute>>(),
           ],
         ),
         localizationsDelegates: const [
@@ -49,14 +57,10 @@ class _AppState extends State<App> {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        locale: Locale('uk'),
+        locale: Locale('en'),
         supportedLocales: S.delegate.supportedLocales,
         title: 'Flutter Demo',
         theme: lightTheme,
-        builder: (context, child) {
-          context.read<AuthBloc>().updateLocalization(S.of(context));
-          return child!;
-        },
       ),
     );
   }

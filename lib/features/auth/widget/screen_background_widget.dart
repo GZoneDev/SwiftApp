@@ -14,27 +14,10 @@ class ScreenBackgroundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final matrix4 = Matrix4.diagonal3Values(IsMirrored ? -1 : 1, 1, 1);
     final borderColor = context.color.border.main.safe;
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     double size = 1.0;
     bool isVisible = screenHeight > 540;
-
-    // if (screenWidth <= 530) {
-    //   size = 1.2;
-    // }
-
-    // if (screenWidth <= 430) {
-    //   size = 1.5;
-    // }
-
-    // if (screenHeight <= 580) {
-    //   size = 1.8;
-    // }
-
-    // if (screenHeight <= 540) {
-    //   size = 2;
-    // }
 
     return !isVisible
         ? SizedBox.shrink()

@@ -16,7 +16,7 @@ class LoadingWidget extends StatelessWidget {
         final colorBackground =
             context.color.background.hint.safe.withOpacity(0.3);
         final colorCircular = context.color.border.hint.safe;
-        return state is AuthLoadingState
+        return state is AuthLoading
             ? AbsorbPointer(
                 absorbing: true,
                 child: Stack(
