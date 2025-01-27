@@ -30,9 +30,8 @@ class UserData {
       gender: map['gender'] ?? '',
       website: map['website'] ?? '',
       email: map['email'] ?? 'examplemail12345@gmail.com',
-      profilePictureUrl: map['profilePictureUrl'] ??
-          'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
-      plan: map['plan'] ?? 'Безкоштовно',
+      profilePictureUrl: map['profilePictureUrl'] ?? '',
+      plan: map['plan'] ?? 'free',
     );
   }
 

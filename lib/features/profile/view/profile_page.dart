@@ -1,13 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:receptico/core/FirebaseAuthService/FirebaseAuthManager.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/profile/service/PlanTranslator.dart';
 import 'package:receptico/features/profile/widget/%D1%81ustomProfileAppBar.dart';
 import 'package:receptico/features/profile/widget/customListTile.dart';
-import 'package:receptico/features/profile/widget/promo_banner.dart';
+import 'package:receptico/features/profile/widget/freePlanbanner.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:receptico/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
@@ -36,12 +37,18 @@ class _ProfilePageState extends State<ProfilePage> {
     final localithation = S.of(context);
     final provider = Provider.of<LocaleProvider>(context);
     final locale = provider.locale;
+    final planTranslator = PlanTranslator(context);
     return Scaffold(
       backgroundColor: Color(0xFFF6F6F6),
       body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
           if (state is ProfileLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: LoadingAnimationWidget.fourRotatingDots(
+                size: 40,
+                color: Color(0xFF9601CC),
+              ),
+            );
           }
 
           if (state is ProfileLoaded) {
@@ -59,7 +66,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     print('Редагувати нажата'); // Действие при нажатии
                   },
                 ),
-
                 SliverList(
                   delegate: SliverChildListDelegate([
                     Padding(
@@ -72,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Поточний план', //localithation.currentPlan
+                                  localithation.currentPlanLable,
                                   style: TextStyle(
                                     color: Color(0xFF000000),
                                     fontFamily:
@@ -83,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 Text(
-                                  state.user.plan,
+                                  planTranslator.translate(state.user.plan),
                                   style: TextStyle(
                                     color: Color(0xFF9601CC),
                                     fontFamily:
@@ -95,15 +101,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ]),
                           SizedBox(height: 16),
-                          PromoBanner(),
+                          if (state.user.plan.toLowerCase() == "free") ...[
+                            FreePlanBanner(), // Виджет для бесплатного плана
+                          ] else ...[
+                            FreePlanBanner(), // Виджет для платного плана
+                          ],
                           SizedBox(height: 24),
                           Divider(
                             height: 1, // Высота линии
-                            color: Color(0xFFDEDEDE), // Цвет линии DEDEDE
+                            color: Color(0xFFDEDEDE),
                           ),
                           SizedBox(height: 24),
                           Text(
-                            'Система', //localithation.systemTitleList
+                            localithation.systemTitleList,
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -114,10 +124,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 18),
                           CustomListTile(
-                            title: 'Мови', //localithation.langLableCustomList
+                            title: localithation.langLableCustomList,
                             iconPath: 'asset/icon/light_theme/lang.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               final provider = Provider.of<LocaleProvider>(
                                   context,
@@ -131,33 +141,30 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 16),
                           CustomListTile(
-                            title:
-                                'Повідомлення', //localithation.notificationLableCustomList
+                            title: localithation.notificationLableCustomList,
                             iconPath: 'asset/icon/light_theme/bels.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Система -> Повідомлення');
                             },
                           ),
                           SizedBox(height: 16),
                           CustomListTile(
-                            title:
-                                'Дисплей', //localithation.displayLableCustomList
+                            title: localithation.displayLableCustomList,
                             iconPath: 'asset/icon/light_theme/sun.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Система -> Дисплей');
                             },
                           ),
                           SizedBox(height: 16),
                           CustomListTile(
-                            title:
-                                'Іконки додатку', //localithation.iconsLableCustomList
-                            iconPath: 'asset/icon/light_theme/icons-solid.svg',
+                            title: localithation.iconsLableCustomList,
+                            iconPath: 'asset/icon/light_theme/icons_thin.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Система -> Іконки додатку');
                             },
@@ -165,13 +172,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: 24),
                           Divider(
                             height: 1, // Высота линии
-                            color: Color(0xFFDEDEDE), // Цвет линии DEDEDE
+                            color: Color(0xFFDEDEDE),
                           ),
                           SizedBox(
                             height: 24,
                           ),
                           Text(
-                            'Підтримка', //localithation.helpTitleList
+                            localithation.helpTitleList,
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -182,33 +189,30 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 18),
                           CustomListTile(
-                            title:
-                                "Зворотній зв'язок", //localithation.callbackLableCustomList
+                            title: localithation.callbackLableCustomList,
                             iconPath: 'asset/icon/light_theme/callback.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print("Підтримка -> Зворотній зв'язок");
                             },
                           ),
                           SizedBox(height: 16),
                           CustomListTile(
-                            title:
-                                'Повідомити про помилку', //localithation.helpLableCustomList
+                            title: localithation.helpLableCustomList,
                             iconPath: 'asset/icon/light_theme/error.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Підтримка -> Повідомити про помилку');
                             },
                           ),
                           SizedBox(height: 16),
                           CustomListTile(
-                            title:
-                                'Поширені запитання', //localithation.questionLableCustomList
+                            title: localithation.questionLableCustomList,
                             iconPath: 'asset/icon/light_theme/question.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Підтримка -> Поширені запитання');
                             },
@@ -216,13 +220,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: 24),
                           Divider(
                             height: 1, // Высота линии
-                            color: Color(0xFFDEDEDE), // Цвет линии DEDEDE
+                            color: Color(0xFFDEDEDE),
                           ),
                           SizedBox(
                             height: 24,
                           ),
                           Text(
-                            'Рекомендація', //localithation.recomendTitleList
+                            localithation.recomendTitleList,
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -233,22 +237,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 18),
                           CustomListTile(
-                            title:
-                                'Розповісти другу!', //localithation.recomendLableCustomList
+                            title: localithation.recomendLableCustomList,
                             iconPath: 'asset/icon/light_theme/recomend.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Рекомендація -> Розповісти другу!');
                             },
                           ),
                           SizedBox(height: 16),
                           CustomListTile(
-                            title:
-                                'Оцінити додаток', //localithation.starLableCustomList
+                            title: localithation.starLableCustomList,
                             iconPath: 'asset/icon/light_theme/star.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Рекомендація -> Оцінити додаток');
                             },
@@ -256,11 +258,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: 24),
                           Divider(
                             height: 1, // Высота линии
-                            color: Color(0xFFDEDEDE), // Цвет линии DEDEDE
+                            color: Color(0xFFDEDEDE),
                           ),
                           SizedBox(height: 24),
                           Text(
-                            'Інформація', //localithation.infoTitleList
+                            localithation.infoTitleList,
                             style: TextStyle(
                               color: Color(0xFF000000),
                               fontFamily:
@@ -271,21 +273,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 18),
                           CustomListTile(
-                            title: 'Про нас', //localithation.faqLableCustomList
+                            title: localithation.aboutUsLableCustomList,
                             iconPath: 'asset/icon/light_theme/FAQ.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Інформація -> Про нас');
                             },
                           ),
                           SizedBox(height: 16),
                           CustomListTile(
-                            title:
-                                'Правова інформація', //localithation.infoLableCustomList
+                            title: localithation.infoLableCustomList,
                             iconPath: 'asset/icon/light_theme/info.svg',
                             trailingIconPath:
-                                'asset/icon/light_theme/arrow.svg', // если нужно отображать иконку в правой части
+                                'asset/icon/light_theme/arrow.svg',
                             onTap: () {
                               print('Інформація -> Правова інформація');
                             },
@@ -293,12 +294,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: 24),
                           Divider(
                             height: 1, // Высота линии
-                            color: Color(0xFFDEDEDE), // Цвет линии DEDEDE
+                            color: Color(0xFFDEDEDE),
                           ),
                           SizedBox(height: 24),
                           CustomListTile(
-                            title:
-                                'Вийти', //localithation.logOutLableCustomList
+                            title: localithation.logOutLableCustomList,
                             iconPath: 'asset/icon/light_theme/logOut.svg',
                             trailingIconPath:
                                 'asset/icon/light_theme/arrow.svg',

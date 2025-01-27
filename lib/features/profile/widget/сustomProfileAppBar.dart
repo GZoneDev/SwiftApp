@@ -139,6 +139,8 @@ class CustomProfileAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String firstLetter =
+        userName.isNotEmpty ? userName[0].toUpperCase() : '?';
     return SliverAppBar(
       expandedHeight: 200, // Высота градиента
       pinned: true, // Делает AppBar фиксированным
@@ -176,11 +178,32 @@ class CustomProfileAppBar extends StatelessWidget {
           ),
           child: Row(
             children: [
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 20, top: 76),
+              //   child: CircleAvatar(
+              //     radius: 40,
+              //     backgroundImage: NetworkImage(userImageUrl),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 76),
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage(userImageUrl),
+                  backgroundColor:
+                      userImageUrl.isNotEmpty ? null : Color(0xFF9601CC),
+                  backgroundImage: userImageUrl.isNotEmpty
+                      ? NetworkImage(userImageUrl)
+                      : null,
+                  child: userImageUrl.isEmpty
+                      ? Text(
+                          firstLetter.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 40, // Размер текста
+                            color: Colors.white, // Цвет текста
+                            fontWeight: FontWeight.bold, // Жирный шрифт
+                          ),
+                        )
+                      : null,
                 ),
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.04),

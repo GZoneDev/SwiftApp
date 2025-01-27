@@ -54,7 +54,6 @@ Future<void> main() async {
       authEmailService: authEmail,
       authGoogleService: authGoogle,
     );
-    //final profileBlock = ProfileBloc();
     final profileBloc = ProfileBloc(FirebaseUserService());
 
     GetIt.I.registerSingleton<FirebaseAuthManager>(authorization);

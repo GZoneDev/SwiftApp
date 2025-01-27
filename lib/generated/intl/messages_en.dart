@@ -32,8 +32,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "aboutUsLableCustomList":
+            MessageLookupByLibrary.simpleMessage("About us"),
         "accountQuestion":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
+        "callbackLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Feedback"),
         "confirmEmailMessage": m0,
         "confirmPasswordChangeButton":
             MessageLookupByLibrary.simpleMessage("Change password "),
@@ -42,17 +46,36 @@ class MessageLookup extends MessageLookupByLibrary {
         "createAccount": MessageLookupByLibrary.simpleMessage("Create now"),
         "credentialAlreadyInUse":
             MessageLookupByLibrary.simpleMessage("Account already in use"),
+        "currentPlanLable":
+            MessageLookupByLibrary.simpleMessage("Current plan"),
+        "displayLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Display"),
+        "duringFourteenDayTrialLable": MessageLookupByLibrary.simpleMessage(
+            "\nsubscriptions for free during\n14-day trial period!"),
         "emailExistError":
             MessageLookupByLibrary.simpleMessage("Email already in use"),
         "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
         "forgottenPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
+        "freePlan": MessageLookupByLibrary.simpleMessage("Free"),
+        "helpLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Report an error"),
+        "helpTitleList": MessageLookupByLibrary.simpleMessage("Support"),
+        "iconsLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Application icons"),
+        "infoLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Legal information"),
+        "infoTitleList": MessageLookupByLibrary.simpleMessage("Information"),
         "invalidCharacterEnteredError":
             MessageLookupByLibrary.simpleMessage("Invalid character entered"),
         "invalidEmailError":
             MessageLookupByLibrary.simpleMessage("Invalid email"),
         "invalidVerificationCodeError":
             MessageLookupByLibrary.simpleMessage("Invalid verification code"),
+        "langLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Languages"),
+        "logOutLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Log out"),
         "loginButton": MessageLookupByLibrary.simpleMessage("Sign in"),
         "loginLink": MessageLookupByLibrary.simpleMessage("Sign in"),
         "loginSubtitle":
@@ -65,6 +88,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("New password"),
         "noAccountQuestion":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
+        "notificationLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Notification"),
         "oopsTitle":
             MessageLookupByLibrary.simpleMessage("Oops, something went wrong"),
         "passwordLowercaseError": MessageLookupByLibrary.simpleMessage(
@@ -78,7 +103,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Password must contain at least one uppercase letter"),
         "passwordsNoMatchError":
             MessageLookupByLibrary.simpleMessage("Passwords do not match"),
+        "proPlan": MessageLookupByLibrary.simpleMessage("PRO"),
         "profilePageTitle": MessageLookupByLibrary.simpleMessage("Profile"),
+        "questionLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Frequently asked questions"),
+        "recomendLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Tell a friend!"),
+        "recomendTitleList":
+            MessageLookupByLibrary.simpleMessage("Recommendation"),
         "registerButton": MessageLookupByLibrary.simpleMessage("Sign up"),
         "registerLink": MessageLookupByLibrary.simpleMessage("Sign up"),
         "registerSubtitle":
@@ -98,9 +130,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "sendAgainButton": MessageLookupByLibrary.simpleMessage("Send again"),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Confirmation code"),
+        "starLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Rate the app"),
+        "systemTitleList": MessageLookupByLibrary.simpleMessage("System"),
+        "testAllFunctionLable":
+            MessageLookupByLibrary.simpleMessage("Try all the features"),
         "tryAgainButton": MessageLookupByLibrary.simpleMessage("Try again"),
         "tryAgainMessage":
             MessageLookupByLibrary.simpleMessage("Try again through"),
+        "trySubscribeButtonLable":
+            MessageLookupByLibrary.simpleMessage("Try it"),
+        "unknownPlan": MessageLookupByLibrary.simpleMessage("Unknown"),
         "userDisabledError":
             MessageLookupByLibrary.simpleMessage("User disabled"),
         "userNoVerifiedError":

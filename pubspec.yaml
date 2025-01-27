@@ -28,6 +28,7 @@ dependencies:
   google_sign_in: ^6.2.2
   font_awesome_flutter: ^10.8.0
   cloud_firestore: ^5.6.1
+  loading_animation_widget:
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,7 @@ flutter:
     - asset/icon/light_theme/sun.svg
     - asset/icon/light_theme/edit.svg
     - asset/icon/light_theme/icons-solid.svg
+    - asset/icon/light_theme/icons_thin.svg
 
   uses-material-design: true
   fonts:

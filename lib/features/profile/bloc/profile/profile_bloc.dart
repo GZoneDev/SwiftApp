@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:bloc/bloc.dart';
 import 'package:receptico/core/FirebaseUserService/FirebaseUserManager.dart';
 import 'package:receptico/features/profile/model/user.dart';
-//import 'package:equatable/equatable.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -25,7 +22,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
         // Загружаем данные пользователя из Firebase
         final userData = await userManager.fetchUserData(currentUser.uid);
-
+        //await Future.delayed(const Duration(seconds: 2));
         // Эмитим состояние с загруженными данными
         emit(ProfileLoaded(userData));
       } catch (e) {
