@@ -530,10 +530,10 @@ class S {
     );
   }
 
-  /// `Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.`
+  /// `We have sent you an email. Please check your email.`
   String get sendEmailMessage {
     return Intl.message(
-      'Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.',
+      'We have sent you an email. Please check your email.',
       name: 'sendEmailMessage',
       desc: '',
       args: [],

@@ -96,7 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Return to login"),
         "sendAgainButton": MessageLookupByLibrary.simpleMessage("Send again"),
         "sendEmailMessage": MessageLookupByLibrary.simpleMessage(
-            "Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку."),
+            "We have sent you an email. Please check your email."),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Confirmation code"),
         "tryAgainButton": MessageLookupByLibrary.simpleMessage("Try again"),

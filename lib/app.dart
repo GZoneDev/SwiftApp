@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:receptico/core/UI/theme/theme_light.dart';
+import 'package:receptico/core/UI/theme/themes/theme_light.dart';
+import 'package:receptico/core/UI/theme/theme_provider.dart';
 import 'package:receptico/core/bloc/bloc_route_interface.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/features/profile/bloc/profile_bloc.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'features/auth/bloc/bloc.dart';
 
@@ -28,36 +30,45 @@ class _AppState extends State<App> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthBloc>(create: (_) => GetIt.I<AuthBloc>()),
-        BlocProvider<TimerBloc>(create: (_) => GetIt.I<TimerBloc>()),
-        BlocProvider<ProfileBloc>(create: (_) => GetIt.I<ProfileBloc>()),
-        // Add BLoC .....
-      ],
-      child: MaterialApp.router(
-        routerConfig: _appRouter.config(
-          navigatorObservers: () => [
-            TalkerRouteObserver(GetIt.I<Talker>()),
-            BlocRouteObserver(GetIt.I<AuthBloc>()),
-          ],
-        ),
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+  Widget build(BuildContext context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (context) => GetIt.I<ThemeProvider>(),
+          ),
         ],
-        locale: Locale('uk'),
-        supportedLocales: S.delegate.supportedLocales,
-        title: 'Flutter Demo',
-        theme: lightTheme,
         builder: (context, child) {
-          context.read<AuthBloc>().updateLocalization(S.of(context));
-          return child!;
+          final themeProvider = Provider.of<ThemeProvider>(context);
+
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthBloc>(create: (_) => GetIt.I<AuthBloc>()),
+              BlocProvider<TimerBloc>(create: (_) => GetIt.I<TimerBloc>()),
+              BlocProvider<ProfileBloc>(create: (_) => GetIt.I<ProfileBloc>()),
+              // Add BLoC .....
+            ],
+            child: MaterialApp.router(
+              routerConfig: _appRouter.config(
+                navigatorObservers: () => [
+                  TalkerRouteObserver(GetIt.I<Talker>()),
+                  BlocRouteObserver(GetIt.I<AuthBloc>()),
+                ],
+              ),
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              locale: Locale('uk'),
+              supportedLocales: S.delegate.supportedLocales,
+              title: 'Flutter Demo',
+              theme: themeProvider.currentTheme,
+              builder: (context, child) {
+                context.read<AuthBloc>().updateLocalization(S.of(context));
+                return child!;
+              },
+            ),
+          );
         },
-      ),
-    );
-  }
+      );
 }
