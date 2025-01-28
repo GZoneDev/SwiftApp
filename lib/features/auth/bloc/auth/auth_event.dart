@@ -51,7 +51,9 @@ class AuthUsernameValidate extends AuthValidate {
   AuthUsernameValidate({required super.value});
 }
 
-class AuthGoogleSingIn extends AuthEvent {}
+class AuthGoogleLogin extends AuthEvent {}
+
+class AuthAppleLogin extends AuthEvent {}
 
 class AuthSendRegisterEmail extends AuthEvent {
   final String email, password;

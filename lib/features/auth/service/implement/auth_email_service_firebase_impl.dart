@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:receptico/features/auth/service/auth_email_service.dart';
+import 'package:receptico/features/auth/service/auth_user_service.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class AuthEmailServiceFirebaseImpl implements AuthEmailService {
+  final AuthUserService userService;
   final FirebaseAuth auth;
   final Talker loger;
 
   AuthEmailServiceFirebaseImpl({
+    required this.userService,
     required this.auth,
     required this.loger,
   });
@@ -55,10 +58,15 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
         password: password,
       );
 
+      if (credential.user != null) {
+        userService.create(credential.user!.uid, username, email);
+        loger.log('User not found after register: ${credential.user?.email}');
+        //TODO: need return fail
+      }
+
       auth.signOut();
 
       loger.log('User registered: ${credential.user?.email}');
-      loger.log('Verification email sent to: ${credential.user?.email}');
 
       return AuthError.success;
     } on FirebaseAuthException catch (e) {

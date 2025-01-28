@@ -61,8 +61,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     on<AuthRoute>(_routing);
-    on<AuthGoogleSingIn>(
+    on<AuthGoogleLogin>(
       _googleLogin,
+      transformer: throttle(const Duration(milliseconds: 500)),
+    );
+
+    on<AuthAppleLogin>(
+      _appleLogin,
       transformer: throttle(const Duration(milliseconds: 500)),
     );
   }
@@ -203,7 +208,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _googleLogin(
-      AuthGoogleSingIn event, Emitter<AuthState> emit) async {
+      AuthGoogleLogin event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
     final result = await authGoogleService.signInWithGoogle();
@@ -222,6 +227,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       password: _errors[_EBlocError.password],
       username: _errors[_EBlocError.username],
     ));
+  }
+
+  FutureOr<void> _appleLogin(
+      AuthAppleLogin event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    //TODO: add apple login
+    final result = false;
+
+    result ? emit(AuthLoginSuccess()) : emit(AuthLoaded());
   }
 
   void _throwFail(AuthError error, Emitter<AuthState> emit) {

@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:receptico/features/auth/service/auth_user_service.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
@@ -47,15 +49,19 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+    final userService = AuthUserServiceFirebaseFirestoreImpl(
+        firestore: FirebaseFirestore.instance, loger: talker);
     final googleSingIn = GoogleSignIn();
     final authorization = Authorization(talker);
     final routerGuard = RouterGuard(authorization);
     final authEmail = AuthEmailServiceFirebaseImpl(
+      userService: userService,
       auth: FirebaseAuth.instance,
       loger: talker,
     );
     final authValidationService = AuthValidationServiceImpl();
     final authGoogle = AuthGoogleServiceFirebaseImpl(
+      userService: userService,
       auth: FirebaseAuth.instance,
       googleSignIn: googleSingIn,
       loger: talker,

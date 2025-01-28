@@ -34,20 +34,20 @@ class _LoginPageState extends State<LoginPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<AuthBloc>().add(AuthRoute());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
     GetIt.I<RouteObserver<PageRoute>>()
         .subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPopNext() {
-    context.read<AuthBloc>().add(AuthRoute());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
     _clearForm();
   }
 
   @override
   void initState() {
-    context.read<AuthBloc>().add(AuthRoute());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
     super.initState();
   }
 
@@ -60,16 +60,16 @@ class _LoginPageState extends State<LoginPage>
 
   void _clearForm() {
     _controllers.forEach((key, controller) => controller.clear());
-    context.read<AuthBloc>().add(AuthRoute());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
   }
 
   void _submit() {
-    context.read<AuthBloc>().add(
-          AuthLogin(
-            email: _controllers[EInput.email]?.text ?? '',
-            password: _controllers[EInput.password]?.text ?? '',
-          ),
-        );
+    BlocProvider.of<AuthBloc>(context).add(
+      AuthLogin(
+        email: _controllers[EInput.email]?.text ?? '',
+        password: _controllers[EInput.password]?.text ?? '',
+      ),
+    );
   }
 
   @override
@@ -167,14 +167,15 @@ class _LoginPageState extends State<LoginPage>
                             IconButtonWidget(
                               assetPath: context.assetPath.appleLogo,
                               onPressed: () {
-                                // TODO: need create apple sign in
-                                debugPrint('Not created!');
+                                BlocProvider.of<AuthBloc>(context)
+                                    .add(AuthAppleLogin());
                               },
                             ),
                           IconButtonWidget(
                             assetPath: context.assetPath.googleLogo,
                             onPressed: () {
-                              context.read<AuthBloc>().add(AuthGoogleSingIn());
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(AuthGoogleLogin());
                             },
                           ),
                         ],

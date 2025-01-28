@@ -35,20 +35,20 @@ class _RegisterPageState extends State<RegisterPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<AuthBloc>().add(AuthRoute());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
     GetIt.I<RouteObserver<PageRoute>>()
         .subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPopNext() {
-    context.read<AuthBloc>().add(AuthRoute());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
     _clearForm();
   }
 
   void _clearForm() {
     if (_isLockInput) {
-      context.read<TimerBloc>().add(RegisterTimerStop());
+      BlocProvider.of<TimerBloc>(context).add(RegisterTimerStop());
       setState(() => _isLockInput = false);
     }
     _controllers.forEach((key, controller) => controller.clear());
@@ -61,22 +61,22 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   void _sendEmail() {
-    context.read<AuthBloc>().add(
-          AuthSendRegisterEmail(
-            email: _controllers[EInput.email]?.text ?? '',
-            password: _controllers[EInput.password]?.text ?? '',
-          ),
-        );
+    BlocProvider.of<AuthBloc>(context).add(
+      AuthSendRegisterEmail(
+        email: _controllers[EInput.email]?.text ?? '',
+        password: _controllers[EInput.password]?.text ?? '',
+      ),
+    );
   }
 
   void _submit() {
-    context.read<AuthBloc>().add(
-          AuthRegister(
-            username: _controllers[EInput.username]?.text ?? '',
-            email: _controllers[EInput.email]?.text ?? '',
-            password: _controllers[EInput.password]?.text ?? '',
-          ),
-        );
+    BlocProvider.of<AuthBloc>(context).add(
+      AuthRegister(
+        username: _controllers[EInput.username]?.text ?? '',
+        email: _controllers[EInput.email]?.text ?? '',
+        password: _controllers[EInput.password]?.text ?? '',
+      ),
+    );
   }
 
   @override
@@ -110,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage>
             break;
 
           case const (AuthSendRegisterPasswordEmail):
-            context.read<TimerBloc>().add(RegisterTimerStart());
+            BlocProvider.of<TimerBloc>(context).add(RegisterTimerStart());
             popUpDialogWidget(context, localization.sendEmailMessage);
             break;
 
@@ -204,7 +204,6 @@ class _RegisterPageState extends State<RegisterPage>
                               selector: (state) =>
                                   _isUserOnCurrentPage && state is AuthFail
                                       ? AuthLocalizationHelper.localizate(
-                                          //state.errors[EBlocError.username],
                                           state.username,
                                           localization,
                                         )
@@ -217,7 +216,6 @@ class _RegisterPageState extends State<RegisterPage>
                               selector: (state) =>
                                   _isUserOnCurrentPage && state is AuthFail
                                       ? AuthLocalizationHelper.localizate(
-                                          //state.errors[EBlocError.email],
                                           state.email,
                                           localization,
                                         )
@@ -230,7 +228,6 @@ class _RegisterPageState extends State<RegisterPage>
                               selector: (state) =>
                                   _isUserOnCurrentPage && state is AuthFail
                                       ? AuthLocalizationHelper.localizate(
-                                          //state.errors[EBlocError.password],
                                           state.password,
                                           localization,
                                         )

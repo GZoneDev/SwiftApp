@@ -11,6 +11,7 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: fix multy showing widget
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         final colorBackground =

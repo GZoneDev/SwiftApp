@@ -317,15 +317,15 @@ void main() {
       );
     });
 
-    group('Auth GoogleSignIn Test', () {
+    group('Auth GoogleLogin Test', () {
       blocTest<AuthBloc, AuthState>(
-        'emits [AuthGoogleSingIn AuthLoaded] when AuthGoogleSingIn is added server error',
+        'emits [AuthGoogleLogin AuthLoaded] when AuthGoogleLogin is added server error',
         build: () {
           when(mockAuthGoogleService.signInWithGoogle())
               .thenAnswer((_) async => false);
           return authBloc;
         },
-        act: (bloc) => bloc.add(AuthGoogleSingIn()),
+        act: (bloc) => bloc.add(AuthGoogleLogin()),
         expect: () => [
           AuthLoading(),
           AuthLoaded(),
@@ -336,13 +336,13 @@ void main() {
       );
 
       blocTest<AuthBloc, AuthState>(
-        'emits [AuthGoogleSingIn AuthLoginSuccess] when AuthGoogleSingIn is added',
+        'emits [AuthGoogleLogin AuthLoginSuccess] when AuthGoogleLogin is added',
         build: () {
           when(mockAuthGoogleService.signInWithGoogle())
               .thenAnswer((_) async => true);
           return authBloc;
         },
-        act: (bloc) => bloc.add(AuthGoogleSingIn()),
+        act: (bloc) => bloc.add(AuthGoogleLogin()),
         expect: () => [
           AuthLoading(),
           AuthLoginSuccess(),

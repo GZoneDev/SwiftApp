@@ -27,7 +27,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
 
   @override
   void initState() {
-    context.read<AuthBloc>().add(AuthRoute());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
     super.initState();
   }
 
@@ -40,7 +40,8 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
   void _clearForm() => _emailController.clear();
 
   void _submit() {
-    context.read<AuthBloc>().add(AuthRestore(email: _emailController.text));
+    BlocProvider.of<AuthBloc>(context)
+        .add(AuthRestore(email: _emailController.text));
   }
 
   @override
@@ -60,7 +61,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
 
           case const (AuthSendRestorePasswordEmail):
             popUpDialogWidget(context, localization.sendEmailMessage);
-            context.read<TimerBloc>().add(RestoreTimerStart());
+            BlocProvider.of<TimerBloc>(context).add(RestoreTimerStart());
             break;
         }
       },
@@ -94,7 +95,6 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
                               selector: (state) =>
                                   _isUserOnCurrentPage && state is AuthFail
                                       ? AuthLocalizationHelper.localizate(
-                                          //state.errors[EBlocError.email],
                                           state.email,
                                           localization,
                                         )

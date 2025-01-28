@@ -17,10 +17,10 @@ void main() {
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
     loger = Talker();
-    authEmail = AuthEmailServiceFirebaseImpl(
-      auth: mockFirebaseAuth,
-      loger: loger,
-    );
+    // authEmail = AuthEmailServiceFirebaseImpl(
+    //   auth: mockFirebaseAuth,
+    //   loger: loger,
+    // );
   });
 
   group('AuthEmailServiceFirebaseImpl Test', () {

@@ -23,8 +23,10 @@ class AuthLocalizationHelper {
     EFormatError.missingUppercase.name: (local) => local.passwordUppercaseError,
     EFormatError.missingNumber.name: (local) => local.passwordNumberError,
     EFormatError.requiredField.name: (local) => local.requiredError,
-    //TODO: fix magic value
+    //TODO: fix magic value and add universal message
     EFormatError.tooShort.name: (local) => local.minPasswordLengError(6),
+    //TOFO: add localization message
+    EFormatError.tooLong.name: (local) => 'tooLong',
   };
 
   static String? localizate(String? key, S local) {
