@@ -231,11 +231,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _appleLogin(
       AuthAppleLogin event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    //emit(AuthLoading());
     //TODO: add apple login
-    final result = false;
+    //final result = false;
 
-    result ? emit(AuthLoginSuccess()) : emit(AuthLoaded());
+    //result ? emit(AuthLoginSuccess()) : emit(AuthLoaded());
   }
 
   void _throwFail(AuthError error, Emitter<AuthState> emit) {

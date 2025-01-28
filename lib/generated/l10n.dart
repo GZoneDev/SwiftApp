@@ -540,6 +540,246 @@ class S {
     );
   }
 
+  /// `Profile`
+  String get profilePageTitle {
+    return Intl.message(
+      'Profile',
+      name: 'profilePageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current plan`
+  String get currentPlanLable {
+    return Intl.message(
+      'Current plan',
+      name: 'currentPlanLable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free`
+  String get freePlan {
+    return Intl.message(
+      'Free',
+      name: 'freePlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PRO`
+  String get proPlan {
+    return Intl.message(
+      'PRO',
+      name: 'proPlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown`
+  String get unknownPlan {
+    return Intl.message(
+      'Unknown',
+      name: 'unknownPlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try all the features`
+  String get testAllFunctionLable {
+    return Intl.message(
+      'Try all the features',
+      name: 'testAllFunctionLable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `\nsubscriptions for free during\n14-day trial period!`
+  String get duringFourteenDayTrialLable {
+    return Intl.message(
+      '\nsubscriptions for free during\n14-day trial period!',
+      name: 'duringFourteenDayTrialLable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try it`
+  String get trySubscribeButtonLable {
+    return Intl.message(
+      'Try it',
+      name: 'trySubscribeButtonLable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System`
+  String get systemTitleList {
+    return Intl.message(
+      'System',
+      name: 'systemTitleList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Languages`
+  String get langLableCustomList {
+    return Intl.message(
+      'Languages',
+      name: 'langLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notification`
+  String get notificationLableCustomList {
+    return Intl.message(
+      'Notification',
+      name: 'notificationLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Display`
+  String get displayLableCustomList {
+    return Intl.message(
+      'Display',
+      name: 'displayLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Application icons`
+  String get iconsLableCustomList {
+    return Intl.message(
+      'Application icons',
+      name: 'iconsLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support`
+  String get helpTitleList {
+    return Intl.message(
+      'Support',
+      name: 'helpTitleList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Feedback`
+  String get callbackLableCustomList {
+    return Intl.message(
+      'Feedback',
+      name: 'callbackLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report an error`
+  String get helpLableCustomList {
+    return Intl.message(
+      'Report an error',
+      name: 'helpLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Frequently asked questions`
+  String get questionLableCustomList {
+    return Intl.message(
+      'Frequently asked questions',
+      name: 'questionLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommendation`
+  String get recomendTitleList {
+    return Intl.message(
+      'Recommendation',
+      name: 'recomendTitleList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tell a friend!`
+  String get recomendLableCustomList {
+    return Intl.message(
+      'Tell a friend!',
+      name: 'recomendLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rate the app`
+  String get starLableCustomList {
+    return Intl.message(
+      'Rate the app',
+      name: 'starLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Information`
+  String get infoTitleList {
+    return Intl.message(
+      'Information',
+      name: 'infoTitleList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About us`
+  String get aboutUsLableCustomList {
+    return Intl.message(
+      'About us',
+      name: 'aboutUsLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Legal information`
+  String get infoLableCustomList {
+    return Intl.message(
+      'Legal information',
+      name: 'infoLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log out`
+  String get logOutLableCustomList {
+    return Intl.message(
+      'Log out',
+      name: 'logOutLableCustomList',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `We have sent you an email. Please check your email.`
   String get sendEmailMessage {
     return Intl.message(

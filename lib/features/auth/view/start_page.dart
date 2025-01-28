@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:receptico/core/UI/theme.dart';
+import 'package:receptico/core/UI/theme/theme_provider.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/features/auth/bloc/auth/auth_bloc.dart';
 import 'package:receptico/generated/l10n.dart';
+
+import 'package:provider/provider.dart';
 
 import '../widget/widget.dart';
 
@@ -21,6 +24,11 @@ class StartPage extends StatelessWidget {
 
     bool isVisibleCircle = true;
     double size = 1.0, padding = 60.0;
+
+    //TODO: must be deleted after viewing
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    ETheme _selectedTheme = ETheme.light;
+    //TODO end
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -85,6 +93,24 @@ class StartPage extends StatelessWidget {
                         style: context.font.headline,
                       ),
                     ),
+                    //TODO: must be deleted after viewing
+                    DropdownButton<ETheme>(
+                      value: _selectedTheme,
+                      items: ETheme.values.map((theme) {
+                        return DropdownMenuItem<ETheme>(
+                          value: theme,
+                          child: Text(theme.name),
+                        );
+                      }).toList(),
+                      onChanged: (ETheme? newTheme) {
+                        if (newTheme != null) {
+                          //This need use statefull widget for update DropdownMenu
+                          themeProvider.theme = newTheme;
+                          _selectedTheme = newTheme;
+                        }
+                      },
+                    ),
+                    //TODO: end
                   ],
                 ),
               ),
