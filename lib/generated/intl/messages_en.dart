@@ -23,11 +23,14 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(email) =>
       "If the account “${email}” exists, instructions for verifying the email will be sent to your email.";
 
-  static String m1(min) => "Password must be at least ${min} characters long";
+  static String m1(max) =>
+      "The string length must be no more than ${max} characters.";
 
-  static String m2(min) => "Username must be at least ${min} characters long";
+  static String m2(min) => "The string must be at least ${min} characters long";
 
-  static String m3(email) =>
+  static String m3(min) => "Username must be at least ${min} characters long";
+
+  static String m4(email) =>
       "If the account ${email} exists, password recovery instructions will be sent to your email.";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -58,8 +61,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginSubtitle":
             MessageLookupByLibrary.simpleMessage("Log in to your account"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Sign in"),
-        "minPasswordLengError": m1,
-        "minUsernameLengError": m2,
+        "maxLineLengError": m1,
+        "minLineLengError": m2,
+        "minUsernameLengError": m3,
         "namePlaceholder": MessageLookupByLibrary.simpleMessage("Name"),
         "newPasswordPlaceholder":
             MessageLookupByLibrary.simpleMessage("New password"),
@@ -85,7 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "registerTitle": MessageLookupByLibrary.simpleMessage("Sign up"),
         "requiredError": MessageLookupByLibrary.simpleMessage(
             "The field must not be empty."),
-        "restoreEmailMessage": m3,
+        "restoreEmailMessage": m4,
         "restorePasswordButton":
             MessageLookupByLibrary.simpleMessage("Restore password"),
         "restorePasswordSubtitle": MessageLookupByLibrary.simpleMessage(

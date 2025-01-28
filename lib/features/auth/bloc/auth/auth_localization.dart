@@ -24,9 +24,9 @@ class AuthLocalizationHelper {
     EFormatError.missingNumber.name: (local) => local.passwordNumberError,
     EFormatError.requiredField.name: (local) => local.requiredError,
     //TODO: fix magic value and add universal message
-    EFormatError.tooShort.name: (local) => local.minPasswordLengError(6),
-    //TOFO: add localization message
-    EFormatError.tooLong.name: (local) => 'tooLong',
+    EFormatError.tooShort.name: (local) => local.minLineLengError(6),
+    //TODO: fix magic value and add universal message
+    EFormatError.tooLong.name: (local) => local.maxLineLengError(50),
   };
 
   static String? localizate(String? key, S local) {

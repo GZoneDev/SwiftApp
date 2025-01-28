@@ -62,10 +62,18 @@
   "@passwordsNoMatchError": {},
   "invalidEmailError": "Invalid email",
   "@invalidEmailError": {},
-  "minPasswordLengError": "Password must be at least {min} characters long",
-  "@minPasswordLengError": {
+  "minLineLengError": "The string must be at least {min} characters long",
+  "@minLineLengError": {
     "placeholders": {
       "min": {
+        "type": "int"
+      }
+    }
+  },
+  "maxLineLengError": "The string length must be no more than {max} characters.",
+  "@maxLineLengError": {
+    "placeholders": {
+      "max": {
         "type": "int"
       }
     }
