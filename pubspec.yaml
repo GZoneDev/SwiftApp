@@ -28,8 +28,8 @@ dependencies:
   google_sign_in: ^6.2.2
   font_awesome_flutter: ^10.8.0
   cloud_firestore: ^5.6.1
+  loading_animation_widget:
   rxdart: ^0.28.0
-
 
 dev_dependencies:
   flutter_test:
@@ -48,23 +48,23 @@ flutter:
     - asset/icon/static/google_logo.svg
     - asset/icon/static/logo.svg
     - asset/icon/static/apple_logo.svg
-    - asset/icon/subscribe_back.svg
-    - asset/icon/grape_promo.svg
-    - asset/icon/grape.svg
-    - asset/icon/arrow.svg
-    - asset/icon/bels.svg
-    - asset/icon/callback.svg
-    - asset/icon/error.svg
-    - asset/icon/FAQ.svg
-    - asset/icon/info.svg
-    - asset/icon/lang.svg
-    - asset/icon/logOut.svg
-    - asset/icon/qvestion.svg
-    - asset/icon/recomend.svg
-    - asset/icon/star.svg
-    - asset/icon/sun.svg
-    - asset/icon/arrow_left.svg
-    - asset/icon/arrow_right.svg
+    - asset/icon/light_theme/subscribe_back.svg
+    - asset/icon/light_theme/grape.svg
+    - asset/icon/light_theme/arrow.svg
+    - asset/icon/light_theme/bels.svg
+    - asset/icon/light_theme/callback.svg
+    - asset/icon/light_theme/error.svg
+    - asset/icon/light_theme/FAQ.svg
+    - asset/icon/light_theme/info.svg
+    - asset/icon/light_theme/lang.svg
+    - asset/icon/light_theme/logOut.svg
+    - asset/icon/light_theme/question.svg
+    - asset/icon/light_theme/recomend.svg
+    - asset/icon/light_theme/star.svg
+    - asset/icon/light_theme/sun.svg
+    - asset/icon/light_theme/edit.svg
+    - asset/icon/light_theme/icons-solid.svg
+    - asset/icon/light_theme/icons_thin.svg
 
   uses-material-design: true
   fonts:

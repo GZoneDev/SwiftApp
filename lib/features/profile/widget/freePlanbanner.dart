@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:receptico/generated/l10n.dart';
 
-class PromoBanner extends StatelessWidget {
+class FreePlanBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final localithation = S.of(context);
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width, // Ширина блока
@@ -28,7 +30,7 @@ class PromoBanner extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12), // Скругляем углы
               child: SvgPicture.asset(
-                'asset/icon/subscribe_back.svg',
+                'asset/icon/light_theme/subscribe_back.svg',
                 fit: BoxFit.cover,
                 height: MediaQuery.of(context).size.height,
                 //allowDrawingOutsideViewBox: true,
@@ -47,7 +49,8 @@ class PromoBanner extends StatelessWidget {
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: 'Спробуйте всі функції',
+                          text: localithation
+                              .testAllFunctionLable, //'Спробуйте всі функції',
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w400,
@@ -55,8 +58,8 @@ class PromoBanner extends StatelessWidget {
                             color: Color(0xFF000000),
                             height: 1.3,
                           ),
-                          children: const <TextSpan>[
-                            TextSpan(
+                          children: <TextSpan>[
+                            const TextSpan(
                               text: '  PRO',
                               style: TextStyle(
                                 fontSize: 22,
@@ -67,7 +70,8 @@ class PromoBanner extends StatelessWidget {
                             ),
                             TextSpan(
                                 text:
-                                    '\nпідписки безкоштовно протягом\n14-денного пробного періоду!'),
+                                    //'\nпідписки безкоштовно протягом\n14-денного пробного періоду!'),
+                                    localithation.duringFourteenDayTrialLable),
                           ],
                         ),
                       ),
@@ -83,7 +87,7 @@ class PromoBanner extends StatelessWidget {
                                 28), // Устанавливаем минимальную ширину в 0
                             //shrinkWrap: true, // Разрешаем кнопке сжиматься по ширине
                             fixedSize: Size(149, 28),
-                            backgroundColor: Color(0xFF8300B2),
+                            backgroundColor: Color(0xFF9601CC),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
@@ -93,7 +97,8 @@ class PromoBanner extends StatelessWidget {
                                 EdgeInsets.zero, // Убираем внутренние отступы
                           ),
                           child: Text(
-                            'Спробувати',
+                            localithation
+                                .trySubscribeButtonLable, //'Спробувати',
                             style: TextStyle(
                               fontSize: 15, // Размер шрифта можно настроить
                               fontFamily: 'SFProText-Bold.ttf',
@@ -119,7 +124,7 @@ class PromoBanner extends StatelessWidget {
               right:
                   -10, // Отступ справа (можно настроить по своему усмотрению)
               child: SvgPicture.asset(
-                'asset/icon/grape.svg',
+                'asset/icon/light_theme/grape.svg',
                 width: 63,
                 height: 88,
                 //fit: BoxFit.contain,

@@ -32,8 +32,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "aboutUsLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Про нас"),
         "accountQuestion":
             MessageLookupByLibrary.simpleMessage("Вже маєте акаунт?"),
+        "callbackLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Зворотній зв\'язок"),
         "confirmEmailMessage": m0,
         "confirmPasswordChangeButton":
             MessageLookupByLibrary.simpleMessage("Підвердити зміну пароля"),
@@ -42,17 +46,34 @@ class MessageLookup extends MessageLookupByLibrary {
         "createAccount": MessageLookupByLibrary.simpleMessage("Створити зараз"),
         "credentialAlreadyInUse": MessageLookupByLibrary.simpleMessage(
             "Аккаунт вже використовується"),
+        "currentPlanLable":
+            MessageLookupByLibrary.simpleMessage("Поточний план"),
+        "displayLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Дисплей"),
+        "duringFourteenDayTrialLable": MessageLookupByLibrary.simpleMessage(
+            "\nпідписки безкоштовно протягом\n14-денного пробного періоду!"),
         "emailExistError": MessageLookupByLibrary.simpleMessage(
             "Цей електронний лист вже використовується"),
         "emailPlaceholder": MessageLookupByLibrary.simpleMessage("Email"),
         "forgottenPassword":
             MessageLookupByLibrary.simpleMessage("Забули пароль?"),
+        "freePlan": MessageLookupByLibrary.simpleMessage("Безкоштовно"),
+        "helpLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Повідомити про помилку"),
+        "helpTitleList": MessageLookupByLibrary.simpleMessage("Підтримка"),
+        "iconsLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Іконки додатку"),
+        "infoLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Правова інформація"),
+        "infoTitleList": MessageLookupByLibrary.simpleMessage("Інформація"),
         "invalidCharacterEnteredError":
             MessageLookupByLibrary.simpleMessage("Введено недійсний символ"),
         "invalidEmailError":
             MessageLookupByLibrary.simpleMessage("Недійсна пошта"),
         "invalidVerificationCodeError":
             MessageLookupByLibrary.simpleMessage("Невірний код підтвердження"),
+        "langLableCustomList": MessageLookupByLibrary.simpleMessage("Мови"),
+        "logOutLableCustomList": MessageLookupByLibrary.simpleMessage("Вийти"),
         "loginButton": MessageLookupByLibrary.simpleMessage("Увійти"),
         "loginLink": MessageLookupByLibrary.simpleMessage("Увійти"),
         "loginSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -65,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Новий пароль"),
         "noAccountQuestion":
             MessageLookupByLibrary.simpleMessage("Не маєте акаунту?"),
+        "notificationLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Повідомлення"),
         "oopsTitle":
             MessageLookupByLibrary.simpleMessage("Ой, щось пішло не так"),
         "passwordLowercaseError": MessageLookupByLibrary.simpleMessage(
@@ -78,6 +101,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Пароль має містити принаймні одну велику літеру"),
         "passwordsNoMatchError":
             MessageLookupByLibrary.simpleMessage("Паролі не співпадають"),
+        "profilePageTitle": MessageLookupByLibrary.simpleMessage("Профіль"),
+        "questionLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Поширені запитання"),
+        "recomendLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Розповісти другу!"),
+        "recomendTitleList":
+            MessageLookupByLibrary.simpleMessage("Рекомендація"),
         "registerButton": MessageLookupByLibrary.simpleMessage("Створити"),
         "registerLink": MessageLookupByLibrary.simpleMessage("Зареєструватися"),
         "registerSubtitle":
@@ -100,10 +130,18 @@ class MessageLookup extends MessageLookupByLibrary {
             "Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку."),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Код підтвердження"),
+        "starLableCustomList":
+            MessageLookupByLibrary.simpleMessage("Оцінити додаток"),
+        "systemTitleList": MessageLookupByLibrary.simpleMessage("Система"),
+        "testAllFunctionLable":
+            MessageLookupByLibrary.simpleMessage("Спробуйте всі функції"),
         "tryAgainButton":
             MessageLookupByLibrary.simpleMessage("Спробувати знову"),
         "tryAgainMessage":
             MessageLookupByLibrary.simpleMessage("Спробуйте знову через"),
+        "trySubscribeButtonLable":
+            MessageLookupByLibrary.simpleMessage("Спробувати"),
+        "unknownPlan": MessageLookupByLibrary.simpleMessage("Невідомий"),
         "userDisabledError":
             MessageLookupByLibrary.simpleMessage("Користувач заблокований"),
         "userNoVerifiedError":

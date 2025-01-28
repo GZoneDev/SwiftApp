@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:get_it/get_it.dart';
 import 'package:receptico/common/valitation/template_validate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receptico/core/authorization/authorization.dart';
 import 'package:receptico/core/bloc/bloc_route_interface.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -216,7 +214,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
 
       //TODO: need refactor
       if (isVerified) {
-        await GetIt.I<IAuthorization>().logOut();
+        //await GetIt.I<IAuthorization>().logOut();
         emit(AuthEmailVerifiedSuccess());
         return;
       }
