@@ -62,10 +62,18 @@
   "@passwordsNoMatchError": {},
   "invalidEmailError": "Недійсна пошта",
   "@invalidEmailError": {},
-  "minPasswordLengError": "Пароль має бути не менше {min} символів",
-  "@minPasswordLengError": {
+  "minLineLengError": "Довжина рядка має бути не меньше {min} символів",
+  "@minLineLengError": {
     "placeholders": {
       "min": {
+        "type": "int"
+      }
+    }
+  },
+  "maxLineLengError": "Довжина рядка має бути не більше{max} символів",
+  "@maxLineLengError": {
+    "placeholders": {
+      "max": {
         "type": "int"
       }
     }

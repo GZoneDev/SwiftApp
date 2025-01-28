@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -11,9 +12,9 @@ import 'package:receptico/core/FirebaseUserService/FirebaseUserManager.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/features/auth/service/auth_email_service.dart';
 import 'package:receptico/features/auth/service/auth_google_service.dart';
-import 'package:receptico/features/profile/bloc/profile/profile_bloc.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:receptico/features/auth/service/auth_user_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:receptico/core/UI/theme/theme_adapter.dart';
 import 'package:receptico/core/UI/theme/theme_provider.dart';
@@ -23,13 +24,10 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:receptico/app.dart';
-import 'package:receptico/core/router/router.dart';
 import 'package:receptico/features/auth/bloc/bloc.dart';
-import 'package:receptico/features/auth/service/auth_email_service.dart';
-import 'package:receptico/features/auth/service/auth_google_service.dart';
+import 'package:receptico/features/profile/bloc/profile/profile_bloc.dart';
 
 import 'features/auth/service/implement/implement.dart';
 import 'firebase_options.dart';
@@ -56,11 +54,17 @@ Future<void> main() async {
   FlutterError.onError =
       (details) => GetIt.I<Talker>().handle(details.exception, details.stack);
 
-  runZonedGuarded(() async {
+  await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+    final userService = AuthUserServiceFirebaseFirestoreImpl(
+      firestore: FirebaseFirestore.instance,
+      loger: talker,
+    );
+
     await Hive.initFlutter();
     Hive.registerAdapter(EThemeAdapter());
 
@@ -68,29 +72,35 @@ Future<void> main() async {
     final settingsBox = await Hive.openBox(settingsBoxName);
 
     final googleSingIn = GoogleSignIn();
-    final passwordRestoreTimerService = TimerServiceImpl();
-    final registerTimerService = TimerServiceImpl();
     final routerGuard = RouterGuard(authorization);
     final authEmail = AuthEmailServiceFirebaseImpl(
+      userService: userService,
       auth: FirebaseAuth.instance,
       loger: talker,
     );
+    final authValidationService = AuthValidationServiceImpl();
     final authGoogle = AuthGoogleServiceFirebaseImpl(
+      userService: userService,
       auth: FirebaseAuth.instance,
       googleSignIn: googleSingIn,
       loger: talker,
     );
+    final passwordRestoreTimerService = TimerServiceImpl();
+    final registerTimerService = TimerServiceImpl();
+
     final authBloc = AuthBloc(
+      validationService: authValidationService,
       authEmailService: authEmail,
       authGoogleService: authGoogle,
       restoreTimer: passwordRestoreTimerService,
       registerTimer: registerTimerService,
-      loger: talker,
+      loger: GetIt.I<Talker>(),
     );
+
     final timerBloc = TimerBloc(
       restoreTimer: passwordRestoreTimerService,
       registerTimer: registerTimerService,
-      loger: talker,
+      loger: GetIt.I<Talker>(),
     );
     final profileBloc = ProfileBloc(FirebaseUserService());
 
@@ -99,6 +109,7 @@ Future<void> main() async {
 
     GetIt.I.registerSingleton(themeProvider);
     GetIt.I.registerSingleton(localeProvider);
+    GetIt.I.registerSingleton(routeObserver);
     GetIt.I.registerSingleton(routerGuard);
     GetIt.I.registerSingleton<FirebaseAuthManager>(authorization);
     GetIt.I.registerSingleton<AuthEmailService>(authEmail);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/auth/bloc/auth/auth_localization.dart';
 import 'package:receptico/features/auth/common/function/second_to_minute.dart';
 import 'package:receptico/generated/l10n.dart';
 
@@ -25,6 +26,12 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
   bool _isUserOnCurrentPage = false;
 
   @override
+  void initState() {
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     super.dispose();
@@ -33,9 +40,8 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
   void _clearForm() => _emailController.clear();
 
   void _submit() {
-    context
-        .read<AuthBloc>()
-        .add(AuthRestoreEvent(email: _emailController.text));
+    BlocProvider.of<AuthBloc>(context)
+        .add(AuthRestore(email: _emailController.text));
   }
 
   @override
@@ -49,13 +55,13 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
         if (!_isUserOnCurrentPage) return;
 
         switch (state.runtimeType) {
-          case const (AuthClearFailState):
+          case const (AuthClearFail):
             _clearForm();
             break;
 
           case const (AuthSendRestorePasswordEmail):
             popUpDialogWidget(context, localization.sendEmailMessage);
-            context.read<TimerBloc>().add(RestoreTimerStart());
+            BlocProvider.of<TimerBloc>(context).add(RestoreTimerStart());
             break;
         }
       },
@@ -87,8 +93,11 @@ class _RestorePasswordPageState extends State<RestorePasswordPage>
                               margin: EdgeInsets.only(bottom: 22.0),
                               marginWithError: EdgeInsets.only(bottom: 16.0),
                               selector: (state) =>
-                                  _isUserOnCurrentPage && state is AuthFailState
-                                      ? state.errors[EBlocError.email]
+                                  _isUserOnCurrentPage && state is AuthFail
+                                      ? AuthLocalizationHelper.localizate(
+                                          state.email,
+                                          localization,
+                                        )
                                       : null,
                             ),
                             BlocSelector<TimerBloc, TimerState, String?>(

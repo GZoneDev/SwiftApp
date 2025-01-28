@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:receptico/core/UI/theme/themes/theme_dark.dart';
 import 'package:receptico/core/UI/theme/themes/theme_light.dart';
+// ignore: depend_on_referenced_packages
 import 'package:hive/hive.dart';
 
 enum ETheme {

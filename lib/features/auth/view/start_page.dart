@@ -32,7 +32,7 @@ class StartPage extends StatelessWidget {
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthNetworkFailState) {
+        if (state is AuthUnknownFail) {
           router.navigate(const FailRoute());
         }
       },

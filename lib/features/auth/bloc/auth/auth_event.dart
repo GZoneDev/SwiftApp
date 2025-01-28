@@ -2,55 +2,64 @@ part of 'auth_bloc.dart';
 
 abstract class AuthEvent {}
 
-class AuthLoginEvent extends AuthEvent {
+class AuthLogin extends AuthEvent {
   final String email, password;
 
-  AuthLoginEvent({
+  AuthLogin({
     required this.email,
     required this.password,
   });
 }
 
-class AuthRegisterEvent extends AuthEvent {
+class AuthRegister extends AuthEvent {
   final String email, password, username;
 
-  AuthRegisterEvent({
+  AuthRegister({
     required this.email,
     required this.password,
     required this.username,
   });
 }
 
-class AuthRestoreEvent extends AuthEvent {
+class AuthRestore extends AuthEvent {
   final String email;
 
-  AuthRestoreEvent({
+  AuthRestore({
     required this.email,
   });
 }
 
-class AuthRouteEvent extends AuthEvent {}
+class AuthRoute extends AuthEvent {}
 
-class AuthValidateEvent extends AuthEvent {
+abstract class AuthValidate extends AuthEvent {
   final String? value;
 
-  AuthValidateEvent({
+  AuthValidate({
     required this.value,
   });
 }
 
-class AuthEmailValidateEvent extends AuthValidateEvent {
-  AuthEmailValidateEvent({required super.value});
+class AuthEmailValidate extends AuthValidate {
+  AuthEmailValidate({required super.value});
 }
 
-class AuthPasswordValidateEvent extends AuthValidateEvent {
-  AuthPasswordValidateEvent({required super.value});
+class AuthPasswordValidate extends AuthValidate {
+  AuthPasswordValidate({required super.value});
 }
 
-class AuthUsernameValidateEvent extends AuthValidateEvent {
-  AuthUsernameValidateEvent({required super.value});
+class AuthUsernameValidate extends AuthValidate {
+  AuthUsernameValidate({required super.value});
 }
 
-class AuthGoogleSingInEvent extends AuthEvent {}
+class AuthGoogleLogin extends AuthEvent {}
 
-class AuthSendRegisterEmailEvent extends AuthEvent {}
+class AuthAppleLogin extends AuthEvent {}
+
+class AuthSendRegisterEmail extends AuthEvent {
+  final String email, password;
+
+  AuthSendRegisterEmail({
+    required this.email,
+    required this.password,
+  });
+}

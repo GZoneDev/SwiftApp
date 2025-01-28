@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/auth/bloc/auth/auth_localization.dart';
 import 'package:receptico/generated/l10n.dart';
 
 import '../bloc/bloc.dart';
@@ -20,7 +22,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage>
-    with ValidateMixin, ShowTimerDialogueMixin {
+    with ValidateMixin, ShowTimerDialogueMixin, RouteAware {
   final Map<EInput, TextEditingController> _controllers = {
     EInput.username: TextEditingController(),
     EInput.email: TextEditingController(),
@@ -30,9 +32,23 @@ class _RegisterPageState extends State<RegisterPage>
   bool _isUserOnCurrentPage = false;
   bool _isLockInput = false;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
+    GetIt.I<RouteObserver<PageRoute>>()
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
+    _clearForm();
+  }
+
   void _clearForm() {
     if (_isLockInput) {
-      context.read<TimerBloc>().add(RegisterTimerStop());
+      BlocProvider.of<TimerBloc>(context).add(RegisterTimerStop());
       setState(() => _isLockInput = false);
     }
     _controllers.forEach((key, controller) => controller.clear());
@@ -45,17 +61,22 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   void _sendEmail() {
-    context.read<AuthBloc>().add(AuthSendRegisterEmailEvent());
+    BlocProvider.of<AuthBloc>(context).add(
+      AuthSendRegisterEmail(
+        email: _controllers[EInput.email]?.text ?? '',
+        password: _controllers[EInput.password]?.text ?? '',
+      ),
+    );
   }
 
   void _submit() {
-    context.read<AuthBloc>().add(
-          AuthRegisterEvent(
-            username: _controllers[EInput.username]?.text ?? '',
-            email: _controllers[EInput.email]?.text ?? '',
-            password: _controllers[EInput.password]?.text ?? '',
-          ),
-        );
+    BlocProvider.of<AuthBloc>(context).add(
+      AuthRegister(
+        username: _controllers[EInput.username]?.text ?? '',
+        email: _controllers[EInput.email]?.text ?? '',
+        password: _controllers[EInput.password]?.text ?? '',
+      ),
+    );
   }
 
   @override
@@ -84,18 +105,16 @@ class _RegisterPageState extends State<RegisterPage>
         if (!_isUserOnCurrentPage) return;
 
         switch (state.runtimeType) {
-          case const (AuthClearFailState):
+          case const (AuthClearFail):
             _clearForm();
             break;
 
           case const (AuthSendRegisterPasswordEmail):
-            context.read<TimerBloc>().add(RegisterTimerStart());
+            BlocProvider.of<TimerBloc>(context).add(RegisterTimerStart());
             popUpDialogWidget(context, localization.sendEmailMessage);
             break;
 
-          case const (AuthRegisterSuccessState):
-            context.read<TimerBloc>().add(RegisterTimerStart());
-            popUpDialogWidget(context, localization.sendEmailMessage);
+          case const (AuthRegisterSuccess):
             setState(() => _isLockInput = true);
             break;
 
@@ -183,8 +202,11 @@ class _RegisterPageState extends State<RegisterPage>
                               controller: _controllers[EInput.username],
                               onChanged: usernameValidate,
                               selector: (state) =>
-                                  _isUserOnCurrentPage && state is AuthFailState
-                                      ? state.errors[EBlocError.username]
+                                  _isUserOnCurrentPage && state is AuthFail
+                                      ? AuthLocalizationHelper.localizate(
+                                          state.username,
+                                          localization,
+                                        )
                                       : null,
                             ),
                             SelectorTextInputWidget(
@@ -192,8 +214,11 @@ class _RegisterPageState extends State<RegisterPage>
                               controller: _controllers[EInput.email],
                               onChanged: emailValidate,
                               selector: (state) =>
-                                  _isUserOnCurrentPage && state is AuthFailState
-                                      ? state.errors[EBlocError.email]
+                                  _isUserOnCurrentPage && state is AuthFail
+                                      ? AuthLocalizationHelper.localizate(
+                                          state.email,
+                                          localization,
+                                        )
                                       : null,
                             ),
                             SelectorPasswordInputWidget(
@@ -201,8 +226,11 @@ class _RegisterPageState extends State<RegisterPage>
                               controller: _controllers[EInput.password],
                               onChanged: passwordValidate,
                               selector: (state) =>
-                                  _isUserOnCurrentPage && state is AuthFailState
-                                      ? state.errors[EBlocError.password]
+                                  _isUserOnCurrentPage && state is AuthFail
+                                      ? AuthLocalizationHelper.localizate(
+                                          state.password,
+                                          localization,
+                                        )
                                       : null,
                             ),
                             SizedBox(

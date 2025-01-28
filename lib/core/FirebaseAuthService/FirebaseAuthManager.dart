@@ -15,6 +15,7 @@ abstract interface class FirebaseAuthManager {
     required String birthday,
     required String gender,
   });
+
   Future<Map<String, dynamic>?> getUserData(String uid);
   Future<void> updateUserData({
     required String uid,

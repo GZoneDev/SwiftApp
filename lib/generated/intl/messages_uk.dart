@@ -23,11 +23,13 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(email) =>
       "Якщо обліковий запис “${email}” існує, на електронну пошту буде надіслано інструкцію з підтвердження пошти.";
 
-  static String m1(min) => "Пароль має бути не менше ${min} символів";
+  static String m1(max) => "Довжина рядка має бути не більше${max} символів";
 
-  static String m2(min) => "Ім’я не може бути меньшим ніж ${min} символів";
+  static String m2(min) => "Довжина рядка має бути не меньше ${min} символів";
 
-  static String m3(email) =>
+  static String m3(min) => "Ім’я не може бути меньшим ніж ${min} символів";
+
+  static String m4(email) =>
       "Якщо обліковий запис “${email}” існує, на електронну пошту буде надіслано інструкцію з відновлення паролю.";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -79,8 +81,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginSubtitle": MessageLookupByLibrary.simpleMessage(
             "Увійдіть до облікового запису"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("Вхід"),
-        "minPasswordLengError": m1,
-        "minUsernameLengError": m2,
+        "maxLineLengError": m1,
+        "minLineLengError": m2,
+        "minUsernameLengError": m3,
         "namePlaceholder": MessageLookupByLibrary.simpleMessage("Ім’я"),
         "newPasswordPlaceholder":
             MessageLookupByLibrary.simpleMessage("Новий пароль"),
@@ -115,7 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "registerTitle": MessageLookupByLibrary.simpleMessage("Реєстрація"),
         "requiredError":
             MessageLookupByLibrary.simpleMessage("Поле не має бути пустим"),
-        "restoreEmailMessage": m3,
+        "restoreEmailMessage": m4,
         "restorePasswordButton":
             MessageLookupByLibrary.simpleMessage("Відновлення паролю"),
         "restorePasswordSubtitle": MessageLookupByLibrary.simpleMessage(

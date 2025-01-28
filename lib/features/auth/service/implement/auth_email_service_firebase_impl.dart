@@ -1,23 +1,32 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:receptico/features/auth/service/auth_email_service.dart';
+import 'package:receptico/features/auth/service/auth_user_service.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class AuthEmailServiceFirebaseImpl implements AuthEmailService {
+  final AuthUserService userService;
   final FirebaseAuth auth;
   final Talker loger;
 
   AuthEmailServiceFirebaseImpl({
+    required this.userService,
     required this.auth,
     required this.loger,
   });
 
   @override
-  Future<AuthError> resendVerificationEmail() async {
+  Future<AuthError> sendVerificationEmail(String email, String password) async {
     try {
-      final user = auth.currentUser;
+      final credential = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final user = credential.user;
       if (user != null && !user.emailVerified) {
         await user.sendEmailVerification();
+        auth.signOut();
 
         loger.log('Verification email resent to: ${user.email}');
         return AuthError.success;
@@ -38,18 +47,26 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
   }
 
   @override
-  Future<AuthError> registerWithEmail(
-      final String email, final String password) async {
+  Future<AuthError> registerEmail(
+    String username,
+    String email,
+    String password,
+  ) async {
     try {
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      await credential.user?.sendEmailVerification();
+      if (credential.user != null) {
+        userService.create(credential.user!.uid, username, email);
+        loger.log('User not found after register: ${credential.user?.email}');
+        //TODO: need return fail
+      }
+
+      auth.signOut();
 
       loger.log('User registered: ${credential.user?.email}');
-      loger.log('Verification email sent to: ${credential.user?.email}');
 
       return AuthError.success;
     } on FirebaseAuthException catch (e) {
@@ -62,13 +79,20 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
   }
 
   @override
-  Future<AuthError> loginWithEmail(
+  Future<AuthError> loginEmail(
       final String email, final String password) async {
     try {
       final credential = await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      final isVerified = credential.user?.emailVerified ?? false;
+
+      if (!isVerified) {
+        auth.signOut();
+        return AuthError.userNoVerified;
+      }
+
       loger.log('User signed in: ${credential.user?.email}');
       return AuthError.success;
     } on FirebaseAuthException catch (e) {
@@ -93,17 +117,5 @@ class AuthEmailServiceFirebaseImpl implements AuthEmailService {
       loger.error('Error sent password reset email: $e');
       return AuthError.unknown;
     }
-  }
-
-  @override
-  Future<bool> isEmailVerified() async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      await user.reload();
-      return FirebaseAuth.instance.currentUser?.emailVerified ?? false;
-    }
-
-    return false;
   }
 }

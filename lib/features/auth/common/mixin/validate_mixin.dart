@@ -6,21 +6,21 @@ import '../../bloc/auth/auth_bloc.dart';
 mixin ValidateMixin<T extends StatefulWidget> on State<T> {
   String? usernameValidate(String? value) {
     context.read<AuthBloc>().add(
-          AuthUsernameValidateEvent(value: value),
+          AuthUsernameValidate(value: value),
         );
     return value;
   }
 
   String? emailValidate(String? value) {
     context.read<AuthBloc>().add(
-          AuthEmailValidateEvent(value: value),
+          AuthEmailValidate(value: value),
         );
     return value;
   }
 
   String? passwordValidate(String? value) {
     context.read<AuthBloc>().add(
-          AuthPasswordValidateEvent(value: value),
+          AuthPasswordValidate(value: value),
         );
     return value;
   }

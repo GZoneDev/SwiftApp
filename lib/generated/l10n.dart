@@ -330,13 +330,23 @@ class S {
     );
   }
 
-  /// `Password must be at least {min} characters long`
-  String minPasswordLengError(int min) {
+  /// `The string must be at least {min} characters long`
+  String minLineLengError(int min) {
     return Intl.message(
-      'Password must be at least $min characters long',
-      name: 'minPasswordLengError',
+      'The string must be at least $min characters long',
+      name: 'minLineLengError',
       desc: '',
       args: [min],
+    );
+  }
+
+  /// `The string length must be no more than {max} characters.`
+  String maxLineLengError(int max) {
+    return Intl.message(
+      'The string length must be no more than $max characters.',
+      name: 'maxLineLengError',
+      desc: '',
+      args: [max],
     );
   }
 

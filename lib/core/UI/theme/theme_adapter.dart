@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:hive/hive.dart';
 import 'package:receptico/core/UI/theme/theme_provider.dart';
 

@@ -1,309 +1,267 @@
 import 'dart:async';
 
-import 'package:receptico/common/valitation/template_validate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receptico/core/bloc/bloc_route_interface.dart';
-import 'package:receptico/generated/l10n.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:equatable/equatable.dart';
 
 import '../../service/service.dart';
-import '../../service/timer_service.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-enum EBlocError {
+enum _EBlocError {
   email,
   username,
   password,
-  confirmPassword,
 }
 
 EventTransformer<E> throttle<E>(Duration duration) {
   return (events, mapper) => events.throttleTime(duration).flatMap(mapper);
 }
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> implements IBlocRoute {
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   static const waitTime = 60;
-  late S _localization;
   final Talker loger;
   final AuthEmailService authEmailService;
   final AuthGoogleService authGoogleService;
+  final AuthValidationService validationService;
   final TimerService restoreTimer;
   final TimerService registerTimer;
 
-  final Map<EBlocError, String?> _errors = <EBlocError, String?>{};
+  final Map<_EBlocError, String> _errors = <_EBlocError, String>{};
 
   AuthBloc({
     required this.authEmailService,
     required this.authGoogleService,
+    required this.validationService,
     required this.restoreTimer,
     required this.registerTimer,
     required this.loger,
-  }) : super(AuthInitialState()) {
-    on<AuthUsernameValidateEvent>(_usernameValidate);
-    on<AuthEmailValidateEvent>(_emailValidate);
-    on<AuthPasswordValidateEvent>(_passwordValidate);
+  }) : super(AuthInitial()) {
+    on<AuthUsernameValidate>(_usernameValidate);
+    on<AuthEmailValidate>(_emailValidate);
+    on<AuthPasswordValidate>(_passwordValidate);
 
-    on<AuthLoginEvent>(
+    on<AuthLogin>(
       _login,
       transformer: throttle(const Duration(milliseconds: 500)),
     );
-    on<AuthRegisterEvent>(
+    on<AuthRegister>(
       _register,
-      transformer: throttle(const Duration(milliseconds: 500)),
+      transformer: throttle(const Duration(seconds: 2)),
     );
-    on<AuthRestoreEvent>(
+    on<AuthRestore>(
       _sendRestorePasswordEmail,
       transformer: throttle(const Duration(milliseconds: 500)),
     );
-    on<AuthSendRegisterEmailEvent>(
+    on<AuthSendRegisterEmail>(
       _sendVerificationEmail,
       transformer: throttle(const Duration(milliseconds: 500)),
     );
 
-    on<AuthRouteEvent>(_routing);
-    on<AuthGoogleSingInEvent>(
+    on<AuthRoute>(_routing);
+    on<AuthGoogleLogin>(
       _googleLogin,
+      transformer: throttle(const Duration(milliseconds: 500)),
+    );
+
+    on<AuthAppleLogin>(
+      _appleLogin,
       transformer: throttle(const Duration(milliseconds: 500)),
     );
   }
 
   FutureOr<void> _usernameValidate(
-      AuthUsernameValidateEvent event, Emitter<AuthState> emit) {
-    final errorMessage =
-        TemplateValidate.usernameValidate(event.value, _localization);
-    _emitFail(EBlocError.username, errorMessage, emit);
+      AuthUsernameValidate event, Emitter<AuthState> emit) {
+    final errorMessage = validationService.usernameValidate(event.value);
+    _setError(_EBlocError.username, errorMessage?.name);
+    _emitFail(emit);
   }
 
   FutureOr<void> _emailValidate(
-      AuthEmailValidateEvent event, Emitter<AuthState> emit) {
-    final errorMessage =
-        TemplateValidate.emailValidate(event.value, _localization);
-    _emitFail(EBlocError.email, errorMessage, emit);
+      AuthEmailValidate event, Emitter<AuthState> emit) {
+    final errorMessage = validationService.emailValidate(event.value);
+    _setError(_EBlocError.email, errorMessage?.name);
+    _emitFail(emit);
   }
 
   FutureOr<void> _passwordValidate(
-      AuthPasswordValidateEvent event, Emitter<AuthState> emit) {
-    final errorMessage =
-        TemplateValidate.passwordValidate(event.value, _localization);
-    _emitFail(EBlocError.password, errorMessage, emit);
+      AuthPasswordValidate event, Emitter<AuthState> emit) {
+    final errorMessage = validationService.passwordValidate(event.value);
+    _setError(_EBlocError.password, errorMessage?.name);
+    _emitFail(emit);
   }
 
-  FutureOr<void> _routing(AuthRouteEvent event, Emitter<AuthState> emit) {
+  FutureOr<void> _routing(AuthRoute event, Emitter<AuthState> emit) {
     _errors.clear();
-    emit(AuthClearFailState());
+    emit(AuthClearFail());
   }
 
-  FutureOr<void> _login(AuthLoginEvent event, Emitter<AuthState> emit) async {
-    final errorEmail =
-        TemplateValidate.emailValidate(event.email, _localization);
-    final errorPassword =
-        TemplateValidate.passwordValidate(event.password, _localization);
+  FutureOr<void> _login(AuthLogin event, Emitter<AuthState> emit) async {
+    final errorEmail = validationService.emailValidate(event.email);
+    final errorPassword = validationService.passwordValidate(event.password);
 
-    _emitFail(EBlocError.email, errorEmail, emit);
-    _emitFail(EBlocError.password, errorPassword, emit);
+    _setError(_EBlocError.email, errorEmail?.name);
+    _setError(_EBlocError.password, errorPassword?.name);
 
     if (_errors.isNotEmpty) {
-      emit(AuthFailState(errors: _errors));
+      _emitFail(emit);
       return;
     }
 
-    emit(AuthLoadingState());
+    emit(AuthLoading());
 
     final result =
-        await authEmailService.loginWithEmail(event.email, event.password);
+        await authEmailService.loginEmail(event.email, event.password);
 
-    if (!result.isSuccess) {
-      _throwFail(result, _localization, emit);
+    result.isSuccess ? emit(AuthLoginSuccess()) : _throwFail(result, emit);
+  }
+
+  FutureOr<void> _register(AuthRegister event, Emitter<AuthState> emit) async {
+    if (registerTimer.isRunning) return;
+
+    final errorUsername = validationService.usernameValidate(event.username);
+    final errorEmail = validationService.emailValidate(event.email);
+    final errorPassword = validationService.passwordValidate(event.password);
+
+    _setError(_EBlocError.username, errorUsername?.name);
+    _setError(_EBlocError.email, errorEmail?.name);
+    _setError(_EBlocError.password, errorPassword?.name);
+
+    if (_errors.isNotEmpty) {
+      _emitFail(emit);
       return;
     }
 
-    final isVerified = await authEmailService.isEmailVerified();
+    emit(AuthLoading());
 
-    isVerified
-        ? emit(AuthLoginSuccessState())
-        : _emitFail(EBlocError.email, _localization.userNoVerifiedError, emit);
-  }
+    final result = await authEmailService.registerEmail(
+      event.username,
+      event.email,
+      event.password,
+    );
 
-  FutureOr<void> _register(
-      AuthRegisterEvent event, Emitter<AuthState> emit) async {
-    if (registerTimer.isWaiting) return;
-
-    try {
-      final errorUsername =
-          TemplateValidate.usernameValidate(event.username, _localization);
-      final errorEmail =
-          TemplateValidate.emailValidate(event.email, _localization);
-      final errorPassword =
-          TemplateValidate.passwordValidate(event.password, _localization);
-
-      _emitFail(EBlocError.username, errorUsername, emit);
-      _emitFail(EBlocError.email, errorEmail, emit);
-      _emitFail(EBlocError.password, errorPassword, emit);
-
-      if (_errors.isNotEmpty) return;
-
-      emit(AuthLoadingState());
-
-      final result =
-          await authEmailService.registerWithEmail(event.email, event.password);
-
-      if (result.isSuccess) {
-        emit(AuthRegisterSuccessState());
-        await registerTimer.wait(waitTime);
-        final isVerify = await _waitEmailVerification();
-        if (isVerify) emit(AuthEmailVerifiedSuccess());
-      } else {
-        _throwFail(result, _localization, emit);
-      }
-    } catch (e) {
-      loger.error(e);
-      emit(AuthLoadedState());
-    }
-  }
-
-  Future<bool> _waitEmailVerification() async {
-    await for (var _ in registerTimer.stream) {
-      final isVerificated = await authEmailService.isEmailVerified();
-      if (isVerificated) {
-        registerTimer.stop();
-        return true;
-      }
+    if (!result.isSuccess) {
+      _throwFail(result, emit);
+      return;
     }
 
-    return false;
+    emit(AuthRegisterSuccess());
+    add(AuthSendRegisterEmail(email: event.email, password: event.password));
   }
 
   FutureOr<void> _sendRestorePasswordEmail(
-      AuthRestoreEvent event, Emitter<AuthState> emit) async {
-    if (restoreTimer.isWaiting) return;
+      AuthRestore event, Emitter<AuthState> emit) async {
+    if (restoreTimer.isRunning) return;
+
+    final errorEmail = validationService.emailValidate(event.email);
+
+    _setError(_EBlocError.email, errorEmail?.name);
+
+    if (_errors.isNotEmpty) {
+      _emitFail(emit);
+      return;
+    }
+
+    emit(AuthLoading());
+
+    final result = await authEmailService.sendResetPasswordEmail(event.email);
 
     try {
-      final errorEmail =
-          TemplateValidate.emailValidate(event.email, _localization);
-
-      _emitFail(EBlocError.email, errorEmail, emit);
-
-      if (_errors.isNotEmpty) return;
-
-      emit(AuthLoadingState());
-
-      final result = await authEmailService.sendResetPasswordEmail(event.email);
-
       if (result.isSuccess) {
         emit(AuthSendRestorePasswordEmail());
         restoreTimer.wait(waitTime);
       } else {
-        _throwFail(result, _localization, emit);
+        _throwFail(result, emit);
       }
     } catch (e) {
       loger.error(e);
-      emit(AuthLoadedState());
+      emit(AuthLoaded());
     }
   }
 
   FutureOr<void> _sendVerificationEmail(
-      AuthSendRegisterEmailEvent event, Emitter<AuthState> emit) async {
-    if (registerTimer.isWaiting) return;
+      AuthSendRegisterEmail event, Emitter<AuthState> emit) async {
+    if (registerTimer.isRunning) return;
 
-    emit(AuthLoadingState());
+    emit(AuthLoading());
     try {
-      final isVerified = await authEmailService.isEmailVerified();
+      final result = await authEmailService.sendVerificationEmail(
+          event.email, event.password);
 
-      //TODO: need refactor
-      if (isVerified) {
-        //await GetIt.I<IAuthorization>().logOut();
+      if (result == AuthError.emailAlreadyInUse) {
         emit(AuthEmailVerifiedSuccess());
         return;
       }
 
-      final result = await authEmailService.resendVerificationEmail();
       if (result.isSuccess) {
         emit(AuthSendRegisterPasswordEmail());
         await registerTimer.wait(waitTime);
-        final isVerify = await _waitEmailVerification();
-        if (isVerify) emit(AuthEmailVerifiedSuccess());
       } else {
-        _throwFail(result, _localization, emit);
+        _throwFail(result, emit);
       }
     } catch (e) {
       loger.error(e);
-      emit(AuthLoadedState());
+      emit(AuthLoaded());
     }
   }
 
   FutureOr<void> _googleLogin(
-      AuthGoogleSingInEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoadingState());
+      AuthGoogleLogin event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
 
     final result = await authGoogleService.signInWithGoogle();
 
-    result ? emit(AuthLoginSuccessState()) : emit(AuthLoadedState());
+    result ? emit(AuthLoginSuccess()) : emit(AuthLoaded());
   }
 
-  void updateLocalization(S localization) {
-    _localization = localization;
+  void _setError(_EBlocError type, String? message) {
+    if (_errors[type] == message) return;
+    message == null ? _errors.remove(type) : _errors[type] = message;
   }
 
-  @override
-  //void routeEvent() => add(AuthRouteEvent());
-
-  void routeEvent() => emit(AuthLoginSuccessState());
-
-  void _emitFail(
-      final EBlocError type, final String? message, Emitter<AuthState> emit) {
-    if (_errors[type] != message) {
-      message == null ? _errors.remove(type) : _errors[type] = message;
-      emit(AuthFailState(errors: _errors));
-    }
+  void _emitFail(Emitter<AuthState> emit) {
+    emit(AuthFail(
+      email: _errors[_EBlocError.email],
+      password: _errors[_EBlocError.password],
+      username: _errors[_EBlocError.username],
+    ));
   }
 
-  void _throwFail(AuthError error, S localization, Emitter<AuthState> emit) {
-    final errorMapping = {
-      AuthError.userDisabled: () =>
-          _emitFail(EBlocError.email, localization.userDisabledError, emit),
-      AuthError.userNotFound: () =>
-          _emitFail(EBlocError.email, localization.userNotFoundError, emit),
-      AuthError.resetUserNotFound: () =>
-          _emitFail(EBlocError.email, localization.userNotFoundError, emit),
-      AuthError.invalidCredential: () =>
-          _emitFail(EBlocError.email, localization.userNotFoundError, emit),
-      AuthError.wrongPassword: () =>
-          _emitFail(EBlocError.password, localization.wrongPasswordError, emit),
-      AuthError.emailAlreadyInUse: () =>
-          _emitFail(EBlocError.email, localization.emailExistError, emit),
-      AuthError.invalidEmail: () =>
-          _emitFail(EBlocError.email, localization.invalidEmailError, emit),
-      AuthError.resetInvalidEmail: () =>
-          _emitFail(EBlocError.email, localization.invalidEmailError, emit),
-      AuthError.weakPassword: () =>
-          _emitFail(EBlocError.password, localization.weakPasswordError, emit),
-      AuthError.invalidVerificationId: () =>
-          _emitFail(EBlocError.email, localization.userNoVerifiedError, emit),
-      AuthError.credentialAlreadyInUse: () => _emitFail(
-          EBlocError.email, localization.credentialAlreadyInUse, emit),
-      AuthError.operationNotAllowed: () => emit(AuthNetworkFailState()),
-      AuthError.networkRequestFailed: () => emit(AuthNetworkFailState()),
-      AuthError.internalError: () => emit(AuthNetworkFailState()),
-      AuthError.unknown: () => emit(AuthNetworkFailState()),
-    };
+  FutureOr<void> _appleLogin(
+      AuthAppleLogin event, Emitter<AuthState> emit) async {
+    //emit(AuthLoading());
+    //TODO: add apple login
+    //final result = false;
 
-    final unimplementedErrors = {
-      AuthError.quotaExceeded,
-      AuthError.tooManyRequests,
-      AuthError.requiresRecentLogin,
-      AuthError.invalidVerificationCode,
-      AuthError.phoneOperationNotAllowed,
-    };
+    //result ? emit(AuthLoginSuccess()) : emit(AuthLoaded());
+  }
 
-    if (error == AuthError.success) return;
-
-    if (errorMapping.containsKey(error)) {
-      errorMapping[error]?.call();
-    } else if (unimplementedErrors.contains(error)) {
-      throw UnimplementedError('Handle error: $error');
+  void _throwFail(AuthError error, Emitter<AuthState> emit) {
+    switch (error) {
+      case AuthError.success:
+        break;
+      case AuthError.userNoVerified:
+      case AuthError.userDisabled:
+      case AuthError.userNotFound:
+      case AuthError.resetUserNotFound:
+      case AuthError.invalidCredential:
+      case AuthError.emailAlreadyInUse:
+      case AuthError.invalidEmail:
+      case AuthError.resetInvalidEmail:
+      case AuthError.invalidVerificationId:
+      case AuthError.credentialAlreadyInUse:
+        _setError(_EBlocError.email, error.name);
+        _emitFail(emit);
+        break;
+      case AuthError.weakPassword:
+      case AuthError.wrongPassword:
+        _setError(_EBlocError.password, error.name);
+        _emitFail(emit);
+        break;
+      default:
+        emit(AuthUnknownFail());
     }
   }
 }

@@ -1,23 +1,53 @@
+import 'dart:async';
 import 'package:receptico/features/auth/service/timer_service.dart';
 
 class TimerServiceImpl implements TimerService {
-  @override
-  // TODO: implement isWaiting
-  bool get isWaiting => throw UnimplementedError();
+  StreamController<int>? _timerController;
+  Timer? _timer;
+  bool _isRunning = false;
 
-  @override
-  Future<void> stop() {
-    // TODO: implement stop
-    throw UnimplementedError();
+  TimerServiceImpl();
+
+  Future<void> _startTimer(int remainingSeconds) async {
+    _isRunning = true;
+    _timerController = StreamController<int>.broadcast();
+    _timerController!.add(remainingSeconds);
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (remainingSeconds > 0) {
+        _timerController!.add(--remainingSeconds);
+      } else {
+        timer.cancel();
+        _timerController?.close();
+        _isRunning = false;
+      }
+    });
   }
 
   @override
-  // TODO: implement stream
-  Stream<int> get stream => throw UnimplementedError();
+  Future<void> wait(int seconds) async {
+    if (_timerController != null && !_timerController!.isClosed) {
+      throw Exception('Timer is already running');
+    }
+
+    await _startTimer(seconds);
+  }
 
   @override
-  Future<void> wait(int seconds) {
-    // TODO: implement wait
-    throw UnimplementedError();
+  Future<void> stop() async {
+    _timer?.cancel();
+    _timerController?.close();
+    _timerController = null;
   }
+
+  @override
+  Stream<int> get stream {
+    if (_timerController == null) {
+      throw Exception('Timer is not initialized');
+    }
+    return _timerController!.stream;
+  }
+
+  @override
+  bool get isRunning => _isRunning;
 }

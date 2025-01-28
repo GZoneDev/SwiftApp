@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/auth/bloc/auth/auth_localization.dart';
 import 'package:receptico/generated/l10n.dart';
 import 'package:receptico/core/UI/theme.dart';
 
@@ -21,7 +23,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage>
-    with ValidateMixin, ShowTimerDialogueMixin {
+    with ValidateMixin, ShowTimerDialogueMixin, RouteAware {
   final Map<EInput, TextEditingController> _controllers = {
     EInput.email: TextEditingController(),
     EInput.password: TextEditingController(),
@@ -30,21 +32,44 @@ class _LoginPageState extends State<LoginPage>
   bool _isUserOnCurrentPage = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
+    GetIt.I<RouteObserver<PageRoute>>()
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
+    _clearForm();
+  }
+
+  @override
+  void initState() {
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
+    super.initState();
+  }
+
+  @override
   void dispose() {
+    GetIt.I<RouteObserver<PageRoute>>().unsubscribe(this);
     _controllers.forEach((key, controller) => controller.dispose());
     super.dispose();
   }
 
-  void _clearForm() =>
-      _controllers.forEach((key, controller) => controller.clear());
+  void _clearForm() {
+    _controllers.forEach((key, controller) => controller.clear());
+    BlocProvider.of<AuthBloc>(context).add(AuthRoute());
+  }
 
   void _submit() {
-    context.read<AuthBloc>().add(
-          AuthLoginEvent(
-            email: _controllers[EInput.email]?.text ?? '',
-            password: _controllers[EInput.password]?.text ?? '',
-          ),
-        );
+    BlocProvider.of<AuthBloc>(context).add(
+      AuthLogin(
+        email: _controllers[EInput.email]?.text ?? '',
+        password: _controllers[EInput.password]?.text ?? '',
+      ),
+    );
   }
 
   @override
@@ -58,18 +83,10 @@ class _LoginPageState extends State<LoginPage>
         if (!_isUserOnCurrentPage) return;
 
         switch (state.runtimeType) {
-          case const (AuthClearFailState):
-            _clearForm();
-            break;
-
-          case const (AuthLoginSuccessState):
+          case const (AuthLoginSuccess):
             // TODO: Update routing to the profile page
+            _clearForm();
             router.navigateNamed('/');
-            break;
-
-          case const (AuthEmailVerifiedSuccess):
-            popUpDialogWidget(context,
-                'Пошту успішно підтверджено, спробуйте авторизуватися');
             break;
         }
       },
@@ -96,8 +113,11 @@ class _LoginPageState extends State<LoginPage>
                         controller: _controllers[EInput.email],
                         onChanged: emailValidate,
                         selector: (state) =>
-                            _isUserOnCurrentPage && state is AuthFailState
-                                ? state.errors[EBlocError.email]
+                            _isUserOnCurrentPage && state is AuthFail
+                                ? AuthLocalizationHelper.localizate(
+                                    state.email,
+                                    localization,
+                                  )
                                 : null,
                       ),
                       SelectorPasswordInputWidget(
@@ -106,8 +126,11 @@ class _LoginPageState extends State<LoginPage>
                         onChanged: passwordValidate,
                         margin: EdgeInsets.only(bottom: 22.0),
                         selector: (state) =>
-                            _isUserOnCurrentPage && state is AuthFailState
-                                ? state.errors[EBlocError.password]
+                            _isUserOnCurrentPage && state is AuthFail
+                                ? AuthLocalizationHelper.localizate(
+                                    state.password,
+                                    localization,
+                                  )
                                 : null,
                         helpWidget: Container(
                           margin: EdgeInsets.only(right: 8),
@@ -144,16 +167,15 @@ class _LoginPageState extends State<LoginPage>
                             IconButtonWidget(
                               assetPath: context.assetPath.appleLogo,
                               onPressed: () {
-                                // TODO: need create apple sign in
-                                debugPrint('Not created!');
+                                BlocProvider.of<AuthBloc>(context)
+                                    .add(AuthAppleLogin());
                               },
                             ),
                           IconButtonWidget(
                             assetPath: context.assetPath.googleLogo,
                             onPressed: () {
-                              context
-                                  .read<AuthBloc>()
-                                  .add(AuthGoogleSingInEvent());
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(AuthGoogleLogin());
                             },
                           ),
                         ],

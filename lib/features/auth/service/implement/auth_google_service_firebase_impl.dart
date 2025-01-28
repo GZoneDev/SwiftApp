@@ -1,17 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:receptico/features/auth/service/auth_google_service.dart';
+import 'package:receptico/features/auth/service/auth_user_service.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class AuthGoogleServiceFirebaseImpl implements AuthGoogleService {
   final FirebaseAuth auth;
   final GoogleSignIn googleSignIn;
   final Talker loger;
+  final AuthUserService userService;
 
   AuthGoogleServiceFirebaseImpl({
     required this.loger,
     required this.googleSignIn,
     required this.auth,
+    required this.userService,
   });
 
   @override
@@ -36,6 +39,11 @@ class AuthGoogleServiceFirebaseImpl implements AuthGoogleService {
       final User? user = userCredential.user;
 
       loger.log("Signed in as: ${user?.displayName}");
+
+      if (user != null) {
+        userService.create(user.uid, user.displayName, user.email);
+      }
+
       return true;
     } catch (e) {
       loger.error("Error during Google sign-in: $e");
