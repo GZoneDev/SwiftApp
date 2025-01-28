@@ -1,11 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receptico/core/UI/theme.dart';
 import 'package:receptico/core/router/router.dart';
 import 'package:receptico/generated/l10n.dart';
 
-import '../bloc/auth_bloc.dart';
+import '../bloc/bloc.dart';
 import '../common/enum.dart';
+import '../common/function/second_to_minute.dart';
 import '../common/mixin.dart';
 import '../widget/widget.dart';
 
@@ -21,12 +23,20 @@ class _RegisterPageState extends State<RegisterPage>
     with ValidateMixin, ShowTimerDialogueMixin {
   final Map<EInput, TextEditingController> _controllers = {
     EInput.username: TextEditingController(),
-    EInput.emailOrPhone: TextEditingController(),
+    EInput.email: TextEditingController(),
     EInput.password: TextEditingController(),
   };
 
-  void _clearForm() =>
-      _controllers.forEach((key, controller) => controller.clear());
+  bool _isUserOnCurrentPage = false;
+  bool _isLockInput = false;
+
+  void _clearForm() {
+    if (_isLockInput) {
+      context.read<TimerBloc>().add(RegisterTimerStop());
+      setState(() => _isLockInput = false);
+    }
+    _controllers.forEach((key, controller) => controller.clear());
+  }
 
   @override
   void dispose() {
@@ -34,15 +44,15 @@ class _RegisterPageState extends State<RegisterPage>
     super.dispose();
   }
 
-  void _submit() {
-    usernameValidate(_controllers[EInput.username]?.text);
-    emailValidate(_controllers[EInput.emailOrPhone]?.text);
-    passwordValidate(_controllers[EInput.password]?.text);
+  void _sendEmail() {
+    context.read<AuthBloc>().add(AuthSendRegisterEmailEvent());
+  }
 
+  void _submit() {
     context.read<AuthBloc>().add(
           AuthRegisterEvent(
             username: _controllers[EInput.username]?.text ?? '',
-            email: _controllers[EInput.emailOrPhone]?.text ?? '',
+            email: _controllers[EInput.email]?.text ?? '',
             password: _controllers[EInput.password]?.text ?? '',
           ),
         );
@@ -52,19 +62,46 @@ class _RegisterPageState extends State<RegisterPage>
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     final localization = S.of(context);
+    final disableBorder =
+        Theme.of(context).inputDecorationTheme.border?.copyWith(
+              borderSide: Theme.of(context)
+                  .inputDecorationTheme
+                  .border
+                  ?.borderSide
+                  .copyWith(color: context.color.background.inputReadonly.safe),
+            );
+    final disableTextFieldDecoration = InputDecoration(
+      filled: true,
+      fillColor: context.color.background.inputReadonly.safe,
+      contentPadding: Theme.of(context).inputDecorationTheme.contentPadding,
+      enabledBorder: disableBorder,
+      focusedBorder: disableBorder,
+    );
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        _isUserOnCurrentPage = router.current.name == RegisterRoute.name;
+
+        if (!_isUserOnCurrentPage) return;
+
         switch (state.runtimeType) {
           case const (AuthClearFailState):
             _clearForm();
             break;
 
-          case const (AuthRegisterSuccessState):
-            router.navigate(const SendEmailRoute());
+          case const (AuthSendRegisterPasswordEmail):
+            context.read<TimerBloc>().add(RegisterTimerStart());
+            popUpDialogWidget(context, localization.sendEmailMessage);
             break;
 
-          case const (AuthShowWaitMessageState):
-            showTimedDialog(context);
+          case const (AuthRegisterSuccessState):
+            context.read<TimerBloc>().add(RegisterTimerStart());
+            popUpDialogWidget(context, localization.sendEmailMessage);
+            setState(() => _isLockInput = true);
+            break;
+
+          case const (AuthEmailVerifiedSuccess):
+            router.navigate(const LoginRoute());
+            _clearForm();
             break;
         }
       },
@@ -79,43 +116,112 @@ class _RegisterPageState extends State<RegisterPage>
                 height: 430,
                 child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       TitleWidget(
                         title: localization.registerTitle,
                         subtitle: localization.registerSubtitle,
                       ),
                       const SizedBox(height: 13),
-                      SelectorTextInputWidget(
-                        placeholder: localization.namePlaceholder,
-                        controller: _controllers[EInput.username],
-                        selector: (state) => state.errors?[EBlocError.username],
-                        onChanged: usernameValidate,
-                      ),
-                      SelectorTextInputWidget(
-                        placeholder: localization.emailPlaceholder,
-                        controller: _controllers[EInput.emailOrPhone],
-                        selector: (state) => state.errors?[EBlocError.email],
-                        onChanged: emailValidate,
-                      ),
-                      SelectorPasswordInputWidget(
-                        placeholder: localization.passwordPlaceholder,
-                        controller: _controllers[EInput.password],
-                        selector: (state) => state.errors?[EBlocError.password],
-                        onChanged: passwordValidate,
-                      ),
-                      SizedBox(
-                        height: 50,
-                        child: TextButton(
-                          onPressed: _submit,
-                          child: Text(localization.registerButton),
+                      if (_isLockInput)
+                        Column(
+                          spacing: 16,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextFormField(
+                              controller: _controllers[EInput.username],
+                              readOnly: true,
+                              decoration: disableTextFieldDecoration,
+                            ),
+                            TextFormField(
+                              controller: _controllers[EInput.email],
+                              readOnly: true,
+                              decoration: disableTextFieldDecoration,
+                            ),
+                            PasswordInputWidget(
+                              controller: _controllers[EInput.password],
+                              decoration: disableTextFieldDecoration,
+                              margin: EdgeInsets.only(bottom: 8),
+                              readOnly: true,
+                            ),
+                            BlocSelector<TimerBloc, TimerState, String?>(
+                              selector: (state) => state is RegisterTimerUpdated
+                                  ? secondToMinute(state.remainingSeconds)
+                                  : null,
+                              builder: (context, time) {
+                                if (time == null) {
+                                  return SizedBox(
+                                    height: 40,
+                                    child: TextButton(
+                                      onPressed: _sendEmail,
+                                      child: Text(
+                                        localization.sendAgainButton,
+                                      ),
+                                    ),
+                                  );
+                                }
+
+                                return Center(
+                                  child: Text(
+                                    time,
+                                    style: context.font.title2Bold
+                                        ?.copyWith(
+                                            color:
+                                                context.color.font.timer.safe)
+                                        .safe,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ),
+                      if (!_isLockInput)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SelectorTextInputWidget(
+                              placeholder: localization.namePlaceholder,
+                              controller: _controllers[EInput.username],
+                              onChanged: usernameValidate,
+                              selector: (state) =>
+                                  _isUserOnCurrentPage && state is AuthFailState
+                                      ? state.errors[EBlocError.username]
+                                      : null,
+                            ),
+                            SelectorTextInputWidget(
+                              placeholder: localization.emailPlaceholder,
+                              controller: _controllers[EInput.email],
+                              onChanged: emailValidate,
+                              selector: (state) =>
+                                  _isUserOnCurrentPage && state is AuthFailState
+                                      ? state.errors[EBlocError.email]
+                                      : null,
+                            ),
+                            SelectorPasswordInputWidget(
+                              placeholder: localization.passwordPlaceholder,
+                              controller: _controllers[EInput.password],
+                              onChanged: passwordValidate,
+                              selector: (state) =>
+                                  _isUserOnCurrentPage && state is AuthFailState
+                                      ? state.errors[EBlocError.password]
+                                      : null,
+                            ),
+                            SizedBox(
+                              height: 40,
+                              child: TextButton(
+                                onPressed: _submit,
+                                child: Text(localization.registerButton),
+                              ),
+                            ),
+                          ],
+                        ),
                       const SizedBox(height: 16),
                       FooterWidget(
                         text: localization.accountQuestion,
                         linkText: localization.loginLink,
-                        onTab: () => router.navigate(const LoginRoute()),
+                        onTab: () {
+                          router.navigate(const LoginRoute());
+                          _clearForm();
+                        },
                       ),
                     ],
                   ),

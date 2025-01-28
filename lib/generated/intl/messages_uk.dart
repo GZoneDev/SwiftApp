@@ -126,6 +126,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Повернутися до входу"),
         "sendAgainButton":
             MessageLookupByLibrary.simpleMessage("Надіслати знову"),
+        "sendEmailMessage": MessageLookupByLibrary.simpleMessage(
+            "Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку."),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Код підтвердження"),
         "starLableCustomList":

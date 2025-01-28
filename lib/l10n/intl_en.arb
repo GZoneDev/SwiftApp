@@ -147,9 +147,9 @@
   "iconsLableCustomList": "Application icons",
   "@iconsLableCustomList": {},
   "helpTitleList": "Support",
-  "@helpTitleList":{},
+  "@helpTitleList": {},
   "callbackLableCustomList": "Feedback",
-  "@callbackLableCustomList":{},
+  "@callbackLableCustomList": {},
   "helpLableCustomList": "Report an error",
   "@helpLableCustomList": {},
   "questionLableCustomList": "Frequently asked questions",
@@ -161,11 +161,13 @@
   "starLableCustomList": "Rate the app",
   "@starLableCustomList": {},
   "infoTitleList": "Information",
-  "@infoTitleList":{},
+  "@infoTitleList": {},
   "aboutUsLableCustomList": "About us",
   "@aboutUsLableCustomList": {},
   "infoLableCustomList": "Legal information",
   "@infoLableCustomList": {},
   "logOutLableCustomList": "Log out",
-  "@logOutLableCustomList": {}
+  "@logOutLableCustomList": {},
+  "sendEmailMessage": "We have sent you an email. Please check your email.",
+  "@sendEmailMessage": {}
 }

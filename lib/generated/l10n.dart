@@ -769,6 +769,16 @@ class S {
       args: [],
     );
   }
+
+  /// `We have sent you an email. Please check your email.`
+  String get sendEmailMessage {
+    return Intl.message(
+      'We have sent you an email. Please check your email.',
+      name: 'sendEmailMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

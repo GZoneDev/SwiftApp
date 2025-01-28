@@ -128,6 +128,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "returnToLoginLink":
             MessageLookupByLibrary.simpleMessage("Return to login"),
         "sendAgainButton": MessageLookupByLibrary.simpleMessage("Send again"),
+        "sendEmailMessage": MessageLookupByLibrary.simpleMessage(
+            "We have sent you an email. Please check your email."),
         "smsCodePlaceholder":
             MessageLookupByLibrary.simpleMessage("Confirmation code"),
         "starLableCustomList":

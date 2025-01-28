@@ -86,25 +86,6 @@ class RestorePasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [SendEmailPage]
-class SendEmailRoute extends PageRouteInfo<void> {
-  const SendEmailRoute({List<PageRouteInfo>? children})
-      : super(
-          SendEmailRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SendEmailRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const SendEmailPage();
-    },
-  );
-}
-
-/// generated route for
 /// [StartPage]
 class StartRoute extends PageRouteInfo<void> {
   const StartRoute({List<PageRouteInfo>? children})
@@ -119,25 +100,6 @@ class StartRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const StartPage();
-    },
-  );
-}
-
-/// generated route for
-/// [TempLogoutPage]
-class TempLogoutRoute extends PageRouteInfo<void> {
-  const TempLogoutRoute({List<PageRouteInfo>? children})
-      : super(
-          TempLogoutRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'TempLogoutRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const TempLogoutPage();
     },
   );
 }

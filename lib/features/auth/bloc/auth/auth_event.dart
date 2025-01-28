@@ -47,26 +47,10 @@ class AuthPasswordValidateEvent extends AuthValidateEvent {
   AuthPasswordValidateEvent({required super.value});
 }
 
-class AuthConfirmPasswordValidateEvent extends AuthValidateEvent {
-  final String? confirmValue;
-  AuthConfirmPasswordValidateEvent({
-    required this.confirmValue,
-    required super.value,
-  });
-}
-
 class AuthUsernameValidateEvent extends AuthValidateEvent {
   AuthUsernameValidateEvent({required super.value});
 }
 
 class AuthGoogleSingInEvent extends AuthEvent {}
 
-class AuthSendRegisterEmailEvent extends AuthEvent {
-  final String email;
-  AuthSendRegisterEmailEvent(this.email);
-}
-
-class AuthSendRestoreEmailEvent extends AuthEvent {
-  final String email;
-  AuthSendRestoreEmailEvent(this.email);
-}
+class AuthSendRegisterEmailEvent extends AuthEvent {}

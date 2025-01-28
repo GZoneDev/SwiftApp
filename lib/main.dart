@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,10 +14,16 @@ import 'package:receptico/features/profile/bloc/profile/profile_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:receptico/app.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'features/auth/bloc/auth_bloc.dart';
+import 'package:receptico/core/router/router.dart';
+import 'package:receptico/features/auth/bloc/bloc.dart';
+import 'package:receptico/features/auth/service/auth_email_service.dart';
+import 'package:receptico/features/auth/service/auth_google_service.dart';
+
+import 'features/auth/service/implement/implement.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -47,20 +54,39 @@ Future<void> main() async {
     );
 
     final authorization = FirebaseAuthService(talker);
+    final googleSingIn = GoogleSignIn();
+    final passwordRestoreTimerService = TimerServiceImpl();
+    final registerTimerService = TimerServiceImpl();
     final routerGuard = RouterGuard(authorization);
-    final authEmail = AuthEmailService();
-    final authGoogle = AuthGoogleService();
+    final authEmail = AuthEmailServiceFirebaseImpl(
+      auth: FirebaseAuth.instance,
+      loger: talker,
+    );
+    final authGoogle = AuthGoogleServiceFirebaseImpl(
+      auth: FirebaseAuth.instance,
+      googleSignIn: googleSingIn,
+      loger: talker,
+    );
     final authBloc = AuthBloc(
       authEmailService: authEmail,
       authGoogleService: authGoogle,
+      restoreTimer: passwordRestoreTimerService,
+      registerTimer: registerTimerService,
+      loger: talker,
+    );
+    final timerBloc = TimerBloc(
+      restoreTimer: passwordRestoreTimerService,
+      registerTimer: registerTimerService,
+      loger: talker,
     );
     final profileBloc = ProfileBloc(FirebaseUserService());
 
-    GetIt.I.registerSingleton<FirebaseAuthManager>(authorization);
-    GetIt.I.registerSingleton<IAuthEmailService>(authEmail);
-    GetIt.I.registerSingleton<IAuthGoogleService>(authGoogle);
-    GetIt.I.registerSingleton(authBloc);
     GetIt.I.registerSingleton(routerGuard);
+    GetIt.I.registerSingleton<FirebaseAuthManager>(authorization);
+    GetIt.I.registerSingleton<AuthEmailService>(authEmail);
+    GetIt.I.registerSingleton<AuthGoogleService>(authGoogle);
+    GetIt.I.registerSingleton(authBloc);
+    GetIt.I.registerSingleton(timerBloc);
     GetIt.I.registerSingleton(profileBloc);
 
     runApp(const App());

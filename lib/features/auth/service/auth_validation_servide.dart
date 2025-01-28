@@ -1,16 +1,22 @@
 import 'package:receptico/common/valitation/validation_builder.dart';
 import 'package:receptico/generated/l10n.dart';
 
-class TemplateValidate {
-  static const int minPasswordLeng = 6;
+abstract interface class IAuthValidation {
+  String? emailValidate(String? value);
+}
 
-  static ValidationBuilder _email(S localization) {
+class AuthValidationService {
+  static const minPasswordLeng = 6;
+
+  AuthValidationService();
+
+  ValidationBuilder _email(S localization) {
     return ValidationBuilder()
         .required(localization.requiredError)
         .email(localization.invalidEmailError);
   }
 
-  static ValidationBuilder _password(S localization) {
+  ValidationBuilder _password(S localization) {
     return ValidationBuilder()
         .required(localization.requiredError)
         .minLength(
@@ -22,24 +28,24 @@ class TemplateValidate {
             localization.invalidCharacterEnteredError);
   }
 
-  static ValidationBuilder _username(S localization) {
+  ValidationBuilder _username(S localization) {
     return ValidationBuilder().required(localization.requiredError).minLength(
         minPasswordLeng, localization.minUsernameLengError(minPasswordLeng));
   }
 
-  static String? emailValidate(String? value, S localization) {
+  String? emailValidate(String? value, S localization) {
     final validateEmail = _email(localization).build();
     final result = validateEmail(value ?? '');
     return result;
   }
 
-  static String? passwordValidate(String? value, S localization) {
+  String? passwordValidate(String? value, S localization) {
     final validatePassword = _password(localization).build();
     final result = validatePassword(value ?? '');
     return result;
   }
 
-  static String? usernameValidate(String? value, S localization) {
+  String? usernameValidate(String? value, S localization) {
     final validateUsername = _username(localization).build();
     final result = validateUsername(value ?? '');
     return result;

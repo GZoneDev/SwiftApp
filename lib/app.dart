@@ -26,7 +26,6 @@ class _AppState extends State<App> {
   @override
   void dispose() {
     _appRouter.dispose();
-    //GetIt.I<AuthBloc>()
     super.dispose();
   }
 
@@ -39,6 +38,7 @@ class _AppState extends State<App> {
         return MultiBlocProvider(
           providers: [
             BlocProvider<AuthBloc>(create: (_) => GetIt.I<AuthBloc>()),
+            BlocProvider<TimerBloc>(create: (_) => GetIt.I<TimerBloc>()),
             BlocProvider<ProfileBloc>(create: (_) => GetIt.I<ProfileBloc>()),
             // Add BLoC .....
           ],

@@ -147,9 +147,9 @@
   "iconsLableCustomList": "Іконки додатку",
   "@iconsLableCustomList": {},
   "helpTitleList": "Підтримка",
-  "@helpTitleList":{},
+  "@helpTitleList": {},
   "callbackLableCustomList": "Зворотній зв'язок",
-  "@callbackLableCustomList":{},
+  "@callbackLableCustomList": {},
   "helpLableCustomList": "Повідомити про помилку",
   "@helpLableCustomList": {},
   "questionLableCustomList": "Поширені запитання",
@@ -161,11 +161,13 @@
   "starLableCustomList": "Оцінити додаток",
   "@starLableCustomList": {},
   "infoTitleList": "Інформація",
-  "@infoTitleList":{},
+  "@infoTitleList": {},
   "aboutUsLableCustomList": "Про нас",
   "@aboutUsLableCustomList": {},
   "infoLableCustomList": "Правова інформація",
   "@infoLableCustomList": {},
   "logOutLableCustomList": "Вийти",
-  "@logOutLableCustomList": {}
+  "@logOutLableCustomList": {},
+  "sendEmailMessage": "Ми надіслали вам електронний лист. Будь ласка, перевірте свою поштову скриньку.",
+  "@sendEmailMessage": {}
 }
